@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Scrabble.Models;
+using System.Collections.Generic;
 using System.Text.Encodings.Web;
 
 namespace Scrabble.Controllers

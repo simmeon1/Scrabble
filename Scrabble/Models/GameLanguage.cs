@@ -1,6 +1,6 @@
 ﻿namespace Scrabble.Models
 {
-    public class GameLanguages
+    public abstract class GameLanguages
     {
         public enum Language
         {

@@ -2,7 +2,13 @@
 {
     public class BoardTile
     {
-        public BoardTileType BoardTileType { get; set; }
+        public BoardTileTypes.Type BoardTileType { get; set; }
         public CharTile LetterTile { get; set; }
+
+        public BoardTile ()
+        {
+            LetterTile = null;
+            BoardTileType = BoardTileTypes.Type.None;
+        }
     }
 }

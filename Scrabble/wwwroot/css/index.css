@@ -1,0 +1,24 @@
+#board {
+    display: grid;
+    width: 50%;
+    float: right;
+}
+
+#player {
+    float: left;
+}
+
+.grid-item {
+    border: 1px solid rgba(0, 0, 0, 1);
+    font-size: 200%;
+    text-align: center;
+    float: left;
+}
+
+.currently-selected-tile {
+    background-color: darkgrey;
+}
+
+.currently-foreseen-tile {
+    background-color: lightgray;
+}

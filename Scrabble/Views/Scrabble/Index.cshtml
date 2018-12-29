@@ -3,43 +3,42 @@
     ViewData["Title"] = "Scrabble";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/index.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/functions.js"></script>
+</head>
+
 <style>
-    #board {
-        display: grid;
-    }
 
     .grid-item {
-        border: 1px solid rgba(0, 0, 0, 0.8);
-        font-size: 30px;
-        text-align: center;
-        float: left;
-        width: @(Model.Board.IntToCSSWidth(Model.Board.Rows))%;</style>
+        width: @(Model.Board.IntToCSSWidth(Model.Board.Columns))%;
+</style>
 
-<h1> @(Model.Board.IntToCSSWidth(Model.Board.Rows))</h1>
-<div id="board">
-    <div id="row">
-        <div class="grid-item">1</div>
-        <div class="grid-item">2</div>
-        <div class="grid-item">3</div>
-        <div class="grid-item">4</div>
-        <div class="grid-item">5</div>
-        <div class="grid-item">6</div>
-        <div class="grid-item">7</div>
-        <div class="grid-item">8</div>
-        <div class="grid-item">9</div>
-        <div class="grid-item">0</div>
-        <div class="grid-item">1</div>
-        <div class="grid-item">2</div>
-        <div class="grid-item">3</div>
-        <div class="grid-item">4</div>
-        <div class="grid-item">5</div>
+<div id="game">
+    <div id="player">
+        <div id="rack"><h1>@(Model.CurrentPlayer.Rack.ToString())</h1></div>
+        <div>
+            <p id="startingWordPosition">None</p>
+            <input id="wordInput" type="text">
+        </div>
+    </div>
+    <div id="board">
+        @for (int i = 0; i < Model.Board.Rows; i++)
+        {
+            <div id="row-@(i+1)">
+                @for (int j = 0; j < Model.Board.Columns; j++)
+                {
+                    <div id="tile-@(((i+1)*Model.Board.Columns)+j)" class="grid-item">&nbsp;&nbsp;</div>
+                }
+            </div>
+        }
     </div>
 </div>
-
-<h2>@Html.DisplayFor(model => model.Pouch.PouchTiles)</h2>
-<h2>
-    @foreach (Player p in Model.PlayerData)
-    {
-        <h1>@p.Rack.ToString()</h1>
-    }
-</h2>
+@*<h2>@Html.DisplayFor(model => model.Pouch.PouchTiles)</h2>
+    <h2>
+        @foreach (Player p in Model.PlayerData)
+        {
+            <h1>@p.Rack.ToString()</h1>
+        }
+    </h2>*@

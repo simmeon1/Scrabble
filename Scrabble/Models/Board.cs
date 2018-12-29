@@ -19,7 +19,19 @@
 
         public string IntToCSSWidth (int measurement)
         {
-            return ((1.0 / measurement) * 100) + "".Replace(',','.');
+            string temp = "";
+            temp = ((1.0 / measurement) * 100) + "";
+            temp = temp.Replace(',', '.');
+            return temp;
+        }
+
+        public void SetBoardTileType(BoardTileTypes.Type type, int[] tileIds)
+        {
+            for (int i = 0; i < tileIds.Length; i++)
+            {
+                int tileId = tileIds[i];
+                BoardTiles[tileId % 10][tileId / 10].BoardTileType = type;
+            }
         }
     }
 }
