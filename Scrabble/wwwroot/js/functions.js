@@ -25,8 +25,9 @@ $(document).ready(function () {
             e.preventDefault();
             return;
         }
+        var inputLetter = String.fromCharCode(e.which);
         var rack = $("#rack").text();
-        inputLetters = $(this).val() + String.fromCharCode(e.which);
+        inputLetters = $(this).val() + inputLetter;
         inputLetters = inputLetters.toUpperCase();
         for (var i = 0; i < inputLetters.length; i++) {
             if (originalRackTemp.includes(inputLetters[i])) {
@@ -38,22 +39,11 @@ $(document).ready(function () {
             }
         }
         $("#rack").text(originalRackTemp);
-        /*var inputLetter = inputLetters[inputLetters.length - 1];
-        if (inputLetter != undefined) {
-            inputLetter = inputLetter.toUpperCase();
-        } else {
-            inputLetter = " ";
-        }*/
-
-        /*
-         Change board updates to completely refresh on text input, click on active tile to change direction
          
-         
-         
-         */
         activeTile.text(inputLetter);
+        activeTile.toggleClass("filled");
         activeTile = activeTile.next("div .grid-item");
-        activeTile.trigger("click");
+        activeTile.trigger("selectNextTile");
         if (rack.includes(inputLetter)) {
             $("#rack").text(rack.replace(inputLetter, "_"));
         }
@@ -67,11 +57,24 @@ $(document).ready(function () {
         }
     });
 
-    $('.grid-item').on('click', function (e) {
+    $('.grid-item').on('selectNextTile', function (e) {
         activeTile = $(this);
         $(".grid-item").removeClass("currently-selected-tile");
         $(".grid-item").removeClass("currently-foreseen-tile");
         $(this).toggleClass("currently-selected-tile");
         $(this).next("div .grid-item").toggleClass("currently-foreseen-tile");
     });
+
+    $('.grid-item').on('click', function (e) {
+        activeTile = $(this);
+        $('#wordInput').val("");
+        $("#rack").text(originalRack);
+        $(".grid-item").html('&nbsp;&nbsp;');
+        $(".grid-item").removeClass("currently-selected-tile");
+        $(".grid-item").removeClass("currently-foreseen-tile");
+        $(".grid-item").removeClass("filled");
+        $(this).toggleClass("currently-selected-tile");
+        $(this).next("div .grid-item").toggleClass("currently-foreseen-tile");
+    });
+
 });

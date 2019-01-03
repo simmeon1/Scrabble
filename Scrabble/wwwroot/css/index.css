@@ -22,3 +22,7 @@
 .currently-foreseen-tile {
     background-color: lightgray;
 }
+
+#rack {
+    font-size: 30px;
+}
