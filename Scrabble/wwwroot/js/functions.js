@@ -5,21 +5,34 @@ $(document).ready(function () {
     });
 
     var originalRack = $("#rack").text();
+    var originalActiveTile = null;
     var activeTile = null;
     var inputLetters = "";
+    var wordLimit = 0;
     $('#wordInput').on('keydown', function (e) {
         var originalRackTemp = originalRack;
         $('#inputErrors').text("");
+
         if (activeTile == null) {
             $('#inputErrors').text("Please select tile");
             e.preventDefault();
             return;
         }
+       
+
         if (e.keyCode == 8) {
             $(this).val("");
             $("#rack").text(originalRack);
+            originalActiveTile.trigger("click");
             return;
         }
+
+        if (wordLimit < 0) {
+            $('#inputErrors').text("Cannot put more characters.");
+            e.preventDefault();
+            return;
+        }
+
         if (e.keyCode < 65 || e.keyCode > 90) {
             $('#inputErrors').text("Please use only letters");
             e.preventDefault();
@@ -42,6 +55,7 @@ $(document).ready(function () {
          
         activeTile.text(inputLetter);
         activeTile.toggleClass("filled");
+        wordLimit = wordLimit - 1;
         activeTile = activeTile.next("div .grid-item");
         activeTile.trigger("selectNextTile");
         if (rack.includes(inputLetter)) {
@@ -58,7 +72,7 @@ $(document).ready(function () {
     });
 
     $('.grid-item').on('selectNextTile', function (e) {
-        activeTile = $(this);
+        activeTile = $(this);       
         $(".grid-item").removeClass("currently-selected-tile");
         $(".grid-item").removeClass("currently-foreseen-tile");
         $(this).toggleClass("currently-selected-tile");
@@ -66,7 +80,9 @@ $(document).ready(function () {
     });
 
     $('.grid-item').on('click', function (e) {
+        originalActiveTile = $(this);
         activeTile = $(this);
+        wordLimit = $(this).nextAll().length;
         $('#wordInput').val("");
         $("#rack").text(originalRack);
         $(".grid-item").html('&nbsp;&nbsp;');
