@@ -9,6 +9,8 @@ $(document).ready(function () {
     var activeTile = null;
     var inputLetters = "";
     var wordLimit = 0;
+    var typeOfPlay = "horizontalPlay";
+
     $('#wordInput').on('keydown', function (e) {
         var originalRackTemp = originalRack;
         $('#inputErrors').text("");
@@ -17,13 +19,12 @@ $(document).ready(function () {
             $('#inputErrors').text("Please select tile");
             e.preventDefault();
             return;
-        }
-       
+        }      
 
         if (e.keyCode == 8) {
             $(this).val("");
             $("#rack").text(originalRack);
-            originalActiveTile.trigger("click");
+            originalActiveTile.trigger("click", [typeOfPlay]);
             return;
         }
 
@@ -54,9 +55,15 @@ $(document).ready(function () {
         $("#rack").text(originalRackTemp);
          
         activeTile.text(inputLetter);
-        activeTile.toggleClass("filled");
+        //activeTile.toggleClass("filled");
         wordLimit = wordLimit - 1;
-        activeTile = activeTile.next("div .grid-item");
+        if (typeOfPlay == "verticalPlay") {
+            var index = activeTile.index();
+            activeTile = activeTile.parent().next("div").children("div .grid-item").eq(index);
+        }
+        else {
+            activeTile = activeTile.next("div .grid-item");
+        }
         activeTile.trigger("selectNextTile");
         if (rack.includes(inputLetter)) {
             $("#rack").text(rack.replace(inputLetter, "_"));
@@ -76,21 +83,49 @@ $(document).ready(function () {
         $(".grid-item").removeClass("currently-selected-tile");
         $(".grid-item").removeClass("currently-foreseen-tile");
         $(this).toggleClass("currently-selected-tile");
-        $(this).next("div .grid-item").toggleClass("currently-foreseen-tile");
+        if (typeOfPlay == "horizontalPlay") {
+            $(this).next("div .grid-item").toggleClass("currently-foreseen-tile");
+        } else {
+            var index = $(this).index();
+            $(this).parent().next("div").children("div .grid-item").eq(index).toggleClass("currently-foreseen-tile");
+        }    
     });
 
-    $('.grid-item').on('click', function (e) {
+    $('.grid-item').on('click', function (e, param) {
+        $(".grid-item").removeClass("currently-selected-tile");
+        $(".grid-item").removeClass("currently-foreseen-tile");
+        if (param != undefined) {
+            typeOfPlay = param;
+        }
+        else if (originalActiveTile != null) {
+            if ($(this).attr('id') == originalActiveTile.attr('id')) {
+                if (typeOfPlay == "verticalPlay") {
+                    typeOfPlay = "horizontalPlay";
+                } else {
+                    typeOfPlay = "verticalPlay";
+                }
+            } else {
+                typeOfPlay = "horizontalPlay";
+            }
+        }
         originalActiveTile = $(this);
         activeTile = $(this);
-        wordLimit = $(this).nextAll().length;
+        $(this).toggleClass("currently-selected-tile"); 
+        if (typeOfPlay == "horizontalPlay") {
+            wordLimit = $(this).nextAll().length;
+            $(".grid-item").removeClass("currently-foreseen-tile");
+            $(this).next("div .grid-item").toggleClass("currently-foreseen-tile");          
+        } else {
+            wordLimit = $(this).parent().nextAll().length;           
+            $(".grid-item").removeClass("currently-foreseen-tile");
+            var index = $(this).index();
+            $(this).parent().next("div").children("div .grid-item").eq(index).toggleClass("currently-foreseen-tile");
+        }    
         $('#wordInput').val("");
         $("#rack").text(originalRack);
         $(".grid-item").html('&nbsp;&nbsp;');
-        $(".grid-item").removeClass("currently-selected-tile");
-        $(".grid-item").removeClass("currently-foreseen-tile");
-        $(".grid-item").removeClass("filled");
-        $(this).toggleClass("currently-selected-tile");
-        $(this).next("div .grid-item").toggleClass("currently-foreseen-tile");
+        $("#wordInput").focus();
+        //$(".grid-item").removeClass("filled");              
     });
 
 });

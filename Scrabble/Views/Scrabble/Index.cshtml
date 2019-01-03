@@ -30,7 +30,7 @@
             <div id="row-@(i+1)">
                 @for (int j = 0; j < Model.Board.Columns; j++)
                 {
-                    <div id="tile-@(((i+1)*Model.Board.Columns)+j)" class="grid-item">&nbsp;&nbsp;</div>
+                    <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item">&nbsp;&nbsp;</div>
                 }
             </div>
         }
