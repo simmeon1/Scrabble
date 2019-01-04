@@ -26,3 +26,7 @@
 #rack {
     font-size: 30px;
 }
+
+.locked {
+    background-color: yellow;
+}

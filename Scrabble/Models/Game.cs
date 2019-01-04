@@ -18,7 +18,7 @@ namespace Scrabble.Models
             int rackSize, int rows, int columns)
         {
             GameLanguage = language.ToString();
-            WordDictionary = new WordDictionary(GameLanguage);
+            WordDictionary = new WordDictionary(language);
             Pouch = new Pouch(WordDictionary);
             RackSize = rackSize;
             PlayerData = new List<Player>();

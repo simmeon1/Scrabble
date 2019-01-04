@@ -6,9 +6,9 @@ namespace Scrabble.Models
     public class WordDictionary
     {
         public List<CharTile> LetterTiles { get; set; }
-        public WordDictionary (string gameLanguage)
+        public WordDictionary (GameLanguages.Language language)
         {
-            if (gameLanguage.Equals(GameLanguages.Language.English.ToString()))
+            if (language == GameLanguages.Language.English)
             {
                 LetterTiles = new List<CharTile>();
                 {
