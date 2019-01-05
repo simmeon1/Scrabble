@@ -1,15 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Scrabble.Models
 {
     public class Board
     {
+        public int ID { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
         public List<BoardTile> BoardTiles { get; set; }
 
         public Board()
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             Rows = 0;
             Columns = 0;
             BoardTiles = new List<BoardTile>();
@@ -24,6 +28,8 @@ namespace Scrabble.Models
 
         public Board (int rows, int columns)
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             Rows = rows;
             Columns = columns;
             BoardTiles = new List<BoardTile>();

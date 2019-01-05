@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Scrabble.Models
@@ -10,6 +11,8 @@ namespace Scrabble.Models
 
         public WordDictionary()
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             LetterTiles = new List<CharTile>();
             {
                 LetterTiles.AddRange(Enumerable.Repeat(new CharTile('*', 0), 2).ToList());
@@ -45,6 +48,8 @@ namespace Scrabble.Models
 
         public WordDictionary(GameLanguages.Language language)
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             if (language == GameLanguages.Language.English)
             {
                 LetterTiles = new List<CharTile>();

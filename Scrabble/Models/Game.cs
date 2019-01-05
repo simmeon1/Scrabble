@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Scrabble.Models
 {
@@ -15,6 +16,8 @@ namespace Scrabble.Models
 
         public Game()
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             GameLanguage = GameLanguages.Language.English;
             WordDictionary = new WordDictionary(GameLanguage);
             Pouch = new Pouch(WordDictionary);
@@ -27,6 +30,8 @@ namespace Scrabble.Models
         public Game (GameLanguages.Language gameLanguage,
             int rackSize, int rows, int columns)
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             GameLanguage = gameLanguage;
             WordDictionary = new WordDictionary(GameLanguage);
             Pouch = new Pouch(WordDictionary);

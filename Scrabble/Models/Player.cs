@@ -1,8 +1,10 @@
-﻿namespace Scrabble.Models
+﻿using System;
+
+namespace Scrabble.Models
 {
     public class Player
     {
-        //public int ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public bool IsHuman { get; set; }
         public Rack Rack { get; set; }
@@ -11,6 +13,8 @@
 
         public Player()
         {
+            Random rnd = new Random();
+            ID = rnd.Next(1, 5000);
             Name = "Simeon";
             IsHuman = true;
             Rack = new Rack(7);
@@ -18,9 +22,9 @@
             Pouch = new Pouch(new WordDictionary(GameLanguages.Language.English));
         }
 
-        public Player (string id, bool isHuman, Rack rack, int score, Pouch pouch)
+        public Player (string name, bool isHuman, Rack rack, int score, Pouch pouch)
         {
-            Name = id;
+            Name = name;
             IsHuman = isHuman;
             Rack = rack;
             Score = score;
