@@ -9,20 +9,23 @@
         public CharTile LetterTile { get; set; }
         public WordDictionary WordDictionary { get; set; }
 
-        /*public BoardTile ()
+        public BoardTile ()
         {
-
+            BoardLocationX = -1;
+            BoardLocationY = -1;
+            ID = "" + BoardLocationX + "&" + BoardLocationY;
+            WordDictionary = new WordDictionary(GameLanguages.Language.English);
             LetterTile = null;
             BoardTileType = BoardTileTypes.Type.None;
-        }*/
+        }
 
-        public BoardTile(int x, int y, CharTile c = null)
+        public BoardTile(int boardLocationX, int boardLocationY, CharTile letterTile = null)
         {
-            BoardLocationX = x;
-            BoardLocationY = y;
-            ID = "" + x + "&" + y;
+            BoardLocationX = boardLocationX;
+            BoardLocationY = boardLocationY;
+            ID = "" + BoardLocationX + "&" + BoardLocationY;
             WordDictionary = new WordDictionary(GameLanguages.Language.English);
-            LetterTile = c;
+            LetterTile = letterTile;
             BoardTileType = BoardTileTypes.Type.None;
         }
     }

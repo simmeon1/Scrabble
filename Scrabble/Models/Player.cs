@@ -2,12 +2,21 @@
 {
     public class Player
     {
-        public int ID { get; set; }
+        //public int ID { get; set; }
         public string Name { get; set; }
         public bool IsHuman { get; set; }
         public Rack Rack { get; set; }
         public int Score { get; set; }
         public Pouch Pouch { get; set; }
+
+        public Player()
+        {
+            Name = "Simeon";
+            IsHuman = true;
+            Rack = new Rack(7);
+            Score = 0;
+            Pouch = new Pouch(new WordDictionary(GameLanguages.Language.English));
+        }
 
         public Player (string id, bool isHuman, Rack rack, int score, Pouch pouch)
         {

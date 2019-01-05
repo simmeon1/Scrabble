@@ -13,11 +13,22 @@ namespace Scrabble.Models
         public int RackSize { get; set; }
         public Player CurrentPlayer { get; set; }
 
-        public Game (GameLanguages.Language language,
+        public Game()
+        {
+            GameLanguage = GameLanguages.Language.English;
+            WordDictionary = new WordDictionary(GameLanguage);
+            Pouch = new Pouch(WordDictionary);
+            RackSize = 7;
+            Players = new List<Player>();
+            Board = new Board(15, 15);
+            CurrentPlayer = null;
+        }
+
+        public Game (GameLanguages.Language gameLanguage,
             int rackSize, int rows, int columns)
         {
-            GameLanguage = language;
-            WordDictionary = new WordDictionary(language);
+            GameLanguage = gameLanguage;
+            WordDictionary = new WordDictionary(GameLanguage);
             Pouch = new Pouch(WordDictionary);
             RackSize = rackSize;
             Players = new List<Player>();

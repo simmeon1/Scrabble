@@ -7,6 +7,12 @@ namespace Scrabble.Models
         public int RackSize { get; set; }
         public List<CharTile> RackTiles { get; set; }
 
+        public Rack()
+        {
+            RackTiles = new List<CharTile>();
+            RackSize = 7;
+        }
+
         public Rack (int size)
         {
             RackTiles = new List<CharTile>();

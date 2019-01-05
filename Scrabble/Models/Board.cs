@@ -8,14 +8,28 @@ namespace Scrabble.Models
         public int Columns { get; set; }
         public List<BoardTile> BoardTiles { get; set; }
 
+        public Board()
+        {
+            Rows = 0;
+            Columns = 0;
+            BoardTiles = new List<BoardTile>();
+            for (int i = 0; i < Rows; i++)
+            {
+                for (int j = 0; j < Columns; j++)
+                {
+                    BoardTiles.Add(new BoardTile(i, j));
+                }
+            }
+        }
+
         public Board (int rows, int columns)
         {
             Rows = rows;
             Columns = columns;
             BoardTiles = new List<BoardTile>();
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < Rows; i++)
             {
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < Columns; j++)
                 {
                     BoardTiles.Add(new BoardTile(i, j));
                 }               

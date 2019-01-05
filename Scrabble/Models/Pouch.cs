@@ -6,6 +6,12 @@ namespace Scrabble.Models
     public class Pouch
     {
         public List<CharTile> PouchTiles { get; set; }
+
+        public Pouch()
+        {
+            PouchTiles = new WordDictionary(GameLanguages.Language.English).LetterTiles;
+        }
+
         public Pouch(WordDictionary wordDictionary)
         {
             PouchTiles = wordDictionary.LetterTiles;

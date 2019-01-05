@@ -5,6 +5,12 @@
         public char Letter { get; set; }
         public int Score { get; set; }
 
+        public CharTile()
+        {
+            Letter = '.';
+            Score = 0;
+        }
+
         public CharTile(char letter, int score)
         {
             Letter = letter;
