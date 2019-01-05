@@ -2,7 +2,8 @@
 {
     public class Player
     {
-        public string Id { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
         public bool IsHuman { get; set; }
         public Rack Rack { get; set; }
         public int Score { get; set; }
@@ -10,7 +11,7 @@
 
         public Player (string id, bool isHuman, Rack rack, int score, Pouch pouch)
         {
-            Id = id;
+            Name = id;
             IsHuman = isHuman;
             Rack = rack;
             Score = score;

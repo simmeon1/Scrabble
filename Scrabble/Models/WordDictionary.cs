@@ -5,7 +5,9 @@ namespace Scrabble.Models
 {
     public class WordDictionary
     {
+        public int ID { get; set; }
         public List<CharTile> LetterTiles { get; set; }
+
         public WordDictionary (GameLanguages.Language language)
         {
             if (language == GameLanguages.Language.English)

@@ -2,20 +2,27 @@
 {
     public class BoardTile
     {
+        public string ID { get; set; }
+        public int BoardLocationX { get; set; }
+        public int BoardLocationY { get; set; }
         public BoardTileTypes.Type BoardTileType { get; set; }
         public CharTile LetterTile { get; set; }
         public WordDictionary WordDictionary { get; set; }
 
-        public BoardTile ()
+        /*public BoardTile ()
         {
+
             LetterTile = null;
             BoardTileType = BoardTileTypes.Type.None;
-        }
+        }*/
 
-        public BoardTile(char c, int score)
+        public BoardTile(int x, int y, CharTile c = null)
         {
+            BoardLocationX = x;
+            BoardLocationY = y;
+            ID = "" + x + "&" + y;
             WordDictionary = new WordDictionary(GameLanguages.Language.English);
-            LetterTile = new CharTile(c, score);
+            LetterTile = c;
             BoardTileType = BoardTileTypes.Type.None;
         }
     }

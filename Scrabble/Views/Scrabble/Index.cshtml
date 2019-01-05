@@ -24,22 +24,23 @@
         <div id="inputErrors"></div>
     </div>
     <div id="board">
-        @for (int i = 0; i < Model.Board.Rows; i++)
+        @{BoardTile[,] boardAs2DArray = Model.Board.ConvertTo2DArray(); }
+        @for (int i = 0; i < boardAs2DArray.GetLength(0); i++)
         {
-        <div id="row-@(i+1)">
-            @for (int j = 0; j < Model.Board.Columns; j++)
-            {
+            <div id="row-@(i+1)">
+                @for (int j = 0; j < boardAs2DArray.GetLength(1); j++)
+                {
 
-                @if (Model.Board.BoardTiles[i][j] != null && Model.Board.BoardTiles[i][j].LetterTile != null)
-                {
-                    <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item locked">@Model.Board.BoardTiles[i][j].LetterTile.Letter</div>
+                    @if (boardAs2DArray[i,j] != null && boardAs2DArray[i,j].LetterTile != null)
+                    {
+                        <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item locked">@boardAs2DArray[i,j].LetterTile.Letter</div>
+                    }
+                    else
+                    {
+                        <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item">&nbsp; &nbsp;</div>
+                    }
                 }
-                else
-                {
-                    <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item">&nbsp; &nbsp;</div>
-                }
-            }
-        </div>
+            </div>
         }
     </div>
 </div>
