@@ -10,9 +10,9 @@ namespace Scrabble.Models
 
         public Pouch()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
-            PouchTiles = new WordDictionary(GameLanguages.Language.English).LetterTiles;
+            PouchTiles = new WordDictionary(Language.English).LetterTiles;*/
         }
 
         public Pouch(WordDictionary wordDictionary)

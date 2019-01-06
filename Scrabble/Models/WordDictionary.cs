@@ -11,7 +11,7 @@ namespace Scrabble.Models
 
         public WordDictionary()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             LetterTiles = new List<CharTile>();
             {
@@ -43,14 +43,14 @@ namespace Scrabble.Models
                 LetterTiles.AddRange(Enumerable.Repeat(new CharTile('Y', 4), 2).ToList());
                 LetterTiles.AddRange(Enumerable.Repeat(new CharTile('Z', 10), 1).ToList());
 
-            };
+            };*/
         }
 
-        public WordDictionary(GameLanguages.Language language)
+        public WordDictionary(Language language)
         {
             Random rnd = new Random();
             ID = rnd.Next(1, 5000);
-            if (language == GameLanguages.Language.English)
+            if (language == Language.English)
             {
                 LetterTiles = new List<CharTile>();
                 {

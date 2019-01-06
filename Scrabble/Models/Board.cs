@@ -8,11 +8,12 @@ namespace Scrabble.Models
         public int ID { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
+        public WordDictionary WordDictionary { get; set; }
         public List<BoardTile> BoardTiles { get; set; }
 
         public Board()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             Rows = 0;
             Columns = 0;
@@ -23,15 +24,16 @@ namespace Scrabble.Models
                 {
                     BoardTiles.Add(new BoardTile(i, j));
                 }
-            }
+            }*/
         }
 
-        public Board (int rows, int columns)
+        public Board (int rows, int columns, WordDictionary wordDictionary)
         {
             Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             Rows = rows;
             Columns = columns;
+            WordDictionary = wordDictionary;
             BoardTiles = new List<BoardTile>();
             for (int i = 0; i < Rows; i++)
             {

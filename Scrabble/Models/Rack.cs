@@ -11,10 +11,10 @@ namespace Scrabble.Models
 
         public Rack()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             RackTiles = new List<CharTile>();
-            RackSize = 7;
+            RackSize = 7;*/
         }
 
         public Rack (int size)

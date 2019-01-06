@@ -1,10 +1,8 @@
 ﻿namespace Scrabble.Models
 {
-    public abstract class BoardTileTypes
+    public enum BoardTileType
     {
-        public enum Type
-        {
-            None, DL, TL, DW, TW, Start
-        }
+        None, DL, TL, DW, TW, Start
     }
+
 }

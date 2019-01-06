@@ -13,13 +13,13 @@ namespace Scrabble.Models
 
         public Player()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             Name = "Simeon";
             IsHuman = true;
             Rack = new Rack(7);
             Score = 0;
-            Pouch = new Pouch(new WordDictionary(GameLanguages.Language.English));
+            Pouch = pouch;*/
         }
 
         public Player (string name, bool isHuman, Rack rack, int score, Pouch pouch)

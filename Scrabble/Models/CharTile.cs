@@ -10,16 +10,16 @@ namespace Scrabble.Models
 
         public CharTile()
         {
-            Random rnd = new Random();
+            /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             Letter = '.';
-            Score = 0;
+            Score = 0;*/
         }
 
         public CharTile(char letter, int score)
         {
             Random rnd = new Random();
-            ID = rnd.Next(1, 5000);
+            ID = letter - 0;
             Letter = letter;
             Score = score;
         }
