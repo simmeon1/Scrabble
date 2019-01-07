@@ -16,7 +16,7 @@
 
 <div id="game">
     <div id="player">
-        <div id="rack">@(Model.Player.Rack.ToString())</div>
+        <div id="rack">@(Model.CurrentPlayer.Rack.ToString())</div>
         <div>
             <p id="startingWordPosition">None</p>
             <input id="wordInput" type="text">
@@ -31,9 +31,9 @@
                 @for (int j = 0; j < boardAs2DArray.GetLength(1); j++)
                 {
 
-                    @if (boardAs2DArray[i,j] != null && boardAs2DArray[i,j].LetterTile != null)
+                    @if (boardAs2DArray[i,j] != null && boardAs2DArray[i,j].CharTile != null)
                     {
-                        <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item locked">@boardAs2DArray[i,j].LetterTile.Letter</div>
+                        <div id="tile-@(((i)*Model.Board.Columns)+j+1)" class="grid-item locked">@boardAs2DArray[i,j].CharTile.Letter</div>
                     }
                     else
                     {
