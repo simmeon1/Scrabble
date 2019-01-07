@@ -1,4 +1,6 @@
-﻿namespace Scrabble.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Scrabble.Models
 {
     public class BoardTile
     {
@@ -8,9 +10,11 @@
         public BoardTileType BoardTileType { get; set; }
 
         public int BoardID { get; set; }
+        [ForeignKey("BoardID")]
         public Board Board { get; set; }
 
         public int LetterTileID { get; set; }
+        [ForeignKey("LetterTileID")]
         public CharTile LetterTile { get; set; }
 
         public BoardTile ()

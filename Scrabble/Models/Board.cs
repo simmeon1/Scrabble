@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Scrabble.Models
 {
@@ -10,9 +11,11 @@ namespace Scrabble.Models
         public int Columns { get; set; }      
 
         public int GameID { get; set; }
+        [ForeignKey("GameID")]
         public Game Game { get; set; }
 
         public int WordDictionaryID { get; set; }
+        [ForeignKey("WordDictionaryID")]
         public WordDictionary WordDictionary { get; set; }
 
         public List<BoardTile> BoardTiles { get; set; }

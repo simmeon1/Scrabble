@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Scrabble.Models
 {
@@ -9,18 +10,22 @@ namespace Scrabble.Models
         public Language GameLanguage { get; set; }
         public int RackSize { get; set; }
 
-        public int CurrentPlayerID { get; set; }
-        public Player CurrentPlayer { get; set; }
+        public int PlayerID { get; set; }
+        [ForeignKey("PlayerID")]
+        public Player Player { get; set; }
 
         public List<Player> Players { get; set; }
 
         public int WordDictionaryID { get; set; }
+        [ForeignKey("WordDictionaryID")]
         public WordDictionary WordDictionary { get; set; }
 
         public int BoardID { get; set; }
+        [ForeignKey("BoardID")]
         public Board Board { get; set; }
 
         public int PouchID { get; set; }
+        [ForeignKey("PouchID")]
         public Pouch Pouch { get; set; }
 
         public Game()
@@ -47,15 +52,15 @@ namespace Scrabble.Models
             RackSize = rackSize;
             Players = new List<Player>();
             Board = new Board(rows, columns, WordDictionary);
-            CurrentPlayer = null;
+            Player = null;
         }
 
         public void AddPlayer (string id, bool isHuman)
         {
-            if (CurrentPlayer == null)
+            if (Player == null)
             {
                 Players.Add(new Player(id, isHuman, new Rack(RackSize), 0, Pouch));
-                CurrentPlayer = Players[0];
+                Player = Players[0];
             }
             Players.Add(new Player(id, isHuman, new Rack(RackSize), 0, Pouch));
         }
