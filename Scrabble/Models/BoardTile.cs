@@ -13,9 +13,9 @@ namespace Scrabble.Models
         [ForeignKey("BoardID")]
         public Board Board { get; set; }
 
-        public int LetterTileID { get; set; }
-        [ForeignKey("LetterTileID")]
-        public CharTile LetterTile { get; set; }
+        public int CharTileID { get; set; }
+        [ForeignKey("CharTileID")]
+        public CharTile CharTile { get; set; }
 
         public BoardTile ()
         {
@@ -27,13 +27,13 @@ namespace Scrabble.Models
             BoardTileType = BoardTileTypes.Type.None;*/
         }
 
-        public BoardTile(int boardLocationX, int boardLocationY, CharTile letterTile = null)
+        public BoardTile(int boardLocationX, int boardLocationY, CharTile charTile = null)
         {
             BoardLocationX = boardLocationX;
             BoardLocationY = boardLocationY;
             ID = "" + BoardLocationX + "&" + BoardLocationY;
             //WordDictionary = new WordDictionary(Language.English);
-            LetterTile = letterTile;
+            CharTile = charTile;
             BoardTileType = BoardTileType.None;
         }
     }

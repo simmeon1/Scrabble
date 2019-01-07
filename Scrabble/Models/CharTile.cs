@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Scrabble.Models
@@ -12,6 +13,8 @@ namespace Scrabble.Models
         public int WordDictionaryID { get; set; }
         [ForeignKey("WordDictionaryID")]
         public WordDictionary WordDictionary { get; set; }
+
+        public List<BoardTile> BoardTiles { get; set; }
 
         public CharTile()
         {

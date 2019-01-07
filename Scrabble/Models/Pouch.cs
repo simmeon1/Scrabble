@@ -14,6 +14,8 @@ namespace Scrabble.Models
         [ForeignKey("GameID")]
         public Game Game { get; set; }
 
+        public List<Player> Players { get; set; }
+
         public Pouch()
         {
             /*Random rnd = new Random();

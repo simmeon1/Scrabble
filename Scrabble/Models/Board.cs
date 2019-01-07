@@ -14,9 +14,9 @@ namespace Scrabble.Models
         [ForeignKey("GameID")]
         public Game Game { get; set; }
 
-        public int WordDictionaryID { get; set; }
+        /*public int WordDictionaryID { get; set; }
         [ForeignKey("WordDictionaryID")]
-        public WordDictionary WordDictionary { get; set; }
+        public WordDictionary WordDictionary { get; set; }*/
 
         public List<BoardTile> BoardTiles { get; set; }
 

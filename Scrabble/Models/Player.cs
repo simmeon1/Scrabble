@@ -19,6 +19,8 @@ namespace Scrabble.Models
         [ForeignKey("PouchID")]
         public Pouch Pouch { get; set; }
 
+        public List<Game> Games { get; set; }
+
         /*public int GameID { get; set; }
         public Game Game { get; set; }*/
 
