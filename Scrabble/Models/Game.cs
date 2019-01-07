@@ -5,14 +5,23 @@ namespace Scrabble.Models
 {
     public class Game
     {
-        public int ID { get; set; }
-        public List<Player> Players { get; set; }
-        public Board Board { get; set; }
+        public int ID { get; set; }             
         public Language GameLanguage { get; set; }
-        public WordDictionary WordDictionary { get; set; }
-        public Pouch Pouch { get; set; }
         public int RackSize { get; set; }
+
+        public int CurrentPlayerID { get; set; }
         public Player CurrentPlayer { get; set; }
+
+        public List<Player> Players { get; set; }
+
+        public int WordDictionaryID { get; set; }
+        public WordDictionary WordDictionary { get; set; }
+
+        public int BoardID { get; set; }
+        public Board Board { get; set; }
+
+        public int PouchID { get; set; }
+        public Pouch Pouch { get; set; }
 
         public Game()
         {

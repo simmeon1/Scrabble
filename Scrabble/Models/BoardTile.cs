@@ -6,8 +6,12 @@
         public int BoardLocationX { get; set; }
         public int BoardLocationY { get; set; }
         public BoardTileType BoardTileType { get; set; }
+
+        public int BoardID { get; set; }
+        public Board Board { get; set; }
+
+        public int LetterTileID { get; set; }
         public CharTile LetterTile { get; set; }
-        //public WordDictionary WordDictionary { get; set; }
 
         public BoardTile ()
         {

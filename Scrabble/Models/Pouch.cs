@@ -6,7 +6,11 @@ namespace Scrabble.Models
     public class Pouch
     {
         public int ID { get; set; }
+
         public List<CharTile> PouchTiles { get; set; }
+
+        public int GameID { get; set; }
+        public Game Game { get; set; }
 
         public Pouch()
         {

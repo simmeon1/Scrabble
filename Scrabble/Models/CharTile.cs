@@ -8,6 +8,9 @@ namespace Scrabble.Models
         public char Letter { get; set; }
         public int Score { get; set; }
 
+        public int WordDictionaryID { get; set; }
+        public WordDictionary WordDictionary { get; set; }
+
         public CharTile()
         {
             /*Random rnd = new Random();

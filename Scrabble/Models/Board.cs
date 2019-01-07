@@ -7,8 +7,14 @@ namespace Scrabble.Models
     {
         public int ID { get; set; }
         public int Rows { get; set; }
-        public int Columns { get; set; }
+        public int Columns { get; set; }      
+
+        public int GameID { get; set; }
+        public Game Game { get; set; }
+
+        public int WordDictionaryID { get; set; }
         public WordDictionary WordDictionary { get; set; }
+
         public List<BoardTile> BoardTiles { get; set; }
 
         public Board()
