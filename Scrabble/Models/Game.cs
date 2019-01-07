@@ -10,9 +10,11 @@ namespace Scrabble.Models
         public Language GameLanguage { get; set; }
         public int RackSize { get; set; }
 
-        public int PlayerID { get; set; }
-        [ForeignKey("PlayerID")]
-        public Player Player { get; set; }
+        [NotMapped]
+        public int CurrentPlayerID { get; set; }
+        //[ForeignKey("CurrentPlayerID")]
+        [NotMapped]
+        public Player CurrentPlayer { get; set; }
 
         public List<Player> Players { get; set; }
 
@@ -52,15 +54,15 @@ namespace Scrabble.Models
             RackSize = rackSize;
             Players = new List<Player>();
             Board = new Board(rows, columns, WordDictionary);
-            Player = null;
+            CurrentPlayer = null;
         }
 
         public void AddPlayer (string id, bool isHuman)
         {
-            if (Player == null)
+            if (CurrentPlayer == null)
             {
                 Players.Add(new Player(id, isHuman, new Rack(RackSize), 0, Pouch));
-                Player = Players[0];
+                CurrentPlayer = Players[0];
             }
             Players.Add(new Player(id, isHuman, new Rack(RackSize), 0, Pouch));
         }

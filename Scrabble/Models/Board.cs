@@ -36,13 +36,13 @@ namespace Scrabble.Models
             }*/
         }
 
-        public Board (int rows, int columns, WordDictionary wordDictionary)
+        public Board (int rows, int columns, WordDictionary wordDictionary = null)
         {
             Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             Rows = rows;
             Columns = columns;
-            WordDictionary = wordDictionary;
+            //WordDictionary = wordDictionary;
             BoardTiles = new List<BoardTile>();
             for (int i = 0; i < Rows; i++)
             {
