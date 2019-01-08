@@ -32,3 +32,8 @@ C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Scrabble.pdb
 C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Scrabble.csproj.CopyComplete
 C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Scrabble\Index.g.cshtml.cs
 C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Scrabble\Welcome.g.cshtml.cs
+C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Games\Create.g.cshtml.cs
+C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Games\Delete.g.cshtml.cs
+C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Games\Details.g.cshtml.cs
+C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Games\Edit.g.cshtml.cs
+C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Games\Index.g.cshtml.cs
