@@ -1,7 +1,17 @@
-﻿namespace Scrabble.Models
+﻿//namespace Scrabble.Models
+//{
+//    public enum BoardTileType
+//    {
+//        None, DL, TL, DW, TW, Start
+//    }
+//}
+
+namespace Scrabble.Models
 {
-    public enum BoardTileType
+    public class BoardTileType
     {
-        None, DL, TL, DW, TW, Start
+        public int ID { get; set; }
+
+        public string Type { get; set; }
     }
 }

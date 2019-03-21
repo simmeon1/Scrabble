@@ -49,7 +49,7 @@ namespace Scrabble.Models
             };*/
         }
 
-        public WordDictionary(Language language)
+        /*public WordDictionary(Language language)
         {
             Random rnd = new Random();
             ID = rnd.Next(1, 5000);
@@ -86,6 +86,6 @@ namespace Scrabble.Models
                     LetterTiles.AddRange(Enumerable.Repeat(new CharTile('Z', 10), 1).ToList());
                 }
             };
-        }
+        }*/
     }
 }

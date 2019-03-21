@@ -5,8 +5,40 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190320180525_Initial.cs" />
+    <Compile Remove="Migrations\20190320180525_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320201245_Initial.cs" />
+    <Compile Remove="Migrations\20190320201245_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320205050_Initial.cs" />
+    <Compile Remove="Migrations\20190320205050_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320205911_Initial.cs" />
+    <Compile Remove="Migrations\20190320205911_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320210356_Initial.cs" />
+    <Compile Remove="Migrations\20190320210356_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320212709_Initial.cs" />
+    <Compile Remove="Migrations\20190320212709_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320213558_Initial.cs" />
+    <Compile Remove="Migrations\20190320213558_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190320213628_Initial.cs" />
+    <Compile Remove="Migrations\20190320213628_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190321113419_Initial.cs" />
+    <Compile Remove="Migrations\20190321113419_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190321114118_Initial.cs" />
+    <Compile Remove="Migrations\20190321114118_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190321115338_Initial.cs" />
+    <Compile Remove="Migrations\20190321115338_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190321132011_Initial.cs" />
+    <Compile Remove="Migrations\20190321132011_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190321132854_Initial.cs" />
+    <Compile Remove="Migrations\20190321132854_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190321134108_Initial.cs" />
+    <Compile Remove="Migrations\20190321134108_Initial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 

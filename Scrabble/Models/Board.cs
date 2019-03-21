@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Scrabble.Models
 {
@@ -12,20 +13,20 @@ namespace Scrabble.Models
 
         public int GameID { get; set; }
         [ForeignKey("GameID")]
-        public Game Game { get; set; }
+        public virtual Game Game { get; set; }
 
         /*public int WordDictionaryID { get; set; }
         [ForeignKey("WordDictionaryID")]
         public WordDictionary WordDictionary { get; set; }*/
 
-        public List<BoardTile> BoardTiles { get; set; }
+        public virtual ICollection<BoardTile> BoardTiles { get; set; }
 
-        public Board()
+        /*public Board()
         {
-            /*Random rnd = new Random();
+            Random rnd = new Random();
             ID = rnd.Next(1, 5000);
-            Rows = 0;
-            Columns = 0;
+            Rows = 15;
+            Columns = 15;
             BoardTiles = new List<BoardTile>();
             for (int i = 0; i < Rows; i++)
             {
@@ -33,10 +34,10 @@ namespace Scrabble.Models
                 {
                     BoardTiles.Add(new BoardTile(i, j));
                 }
-            }*/
-        }
+            }
+        }*/
 
-        public Board (int rows, int columns, WordDictionary wordDictionary = null)
+        /*public Board (int rows, int columns, WordDictionary wordDictionary = null)
         {
             Random rnd = new Random();
             ID = rnd.Next(1, 5000);
@@ -51,12 +52,14 @@ namespace Scrabble.Models
                     BoardTiles.Add(new BoardTile(i, j));
                 }               
             }
-        }
+        }*/
 
         public BoardTile[,] ConvertTo2DArray ()
         {
-            BoardTile[,] array = new BoardTile[Rows,Columns];
-            foreach (var boardTile in BoardTiles)
+            List<BoardTile> boardTilesList = BoardTiles.ToList();
+            int indexOfLastBoardTile = boardTilesList.Count - 1;
+            BoardTile[,] array = new BoardTile[boardTilesList[indexOfLastBoardTile].BoardLocationX + 1, boardTilesList[indexOfLastBoardTile].BoardLocationY + 1];
+            foreach (var boardTile in boardTilesList)
             {
                 array[boardTile.BoardLocationX, boardTile.BoardLocationY] = boardTile;
             }

@@ -4,27 +4,30 @@ namespace Scrabble.Models
 {
     public class BoardTile
     {
-        public string ID { get; set; }
+        public int ID { get; set; }
         public int BoardLocationX { get; set; }
         public int BoardLocationY { get; set; }
-        public BoardTileType BoardTileType { get; set; }
+
+        public int BoardTileTypeID { get; set; }
+        [ForeignKey("BoardTileTypeID")]
+        public virtual BoardTileType BoardTileType { get; set; }
 
         public int BoardID { get; set; }
         [ForeignKey("BoardID")]
-        public Board Board { get; set; }
+        public virtual Board Board { get; set; }
 
-        public int CharTileID { get; set; }
+        public int? CharTileID { get; set; }
         [ForeignKey("CharTileID")]
-        public CharTile CharTile { get; set; }
+        public virtual CharTile CharTile { get; set; }
 
-        public BoardTile ()
+        /*public BoardTile ()
         {
             /*BoardLocationX = -1;
             BoardLocationY = -1;
             ID = "" + BoardLocationX + "&" + BoardLocationY;
             //WordDictionary = new WordDictionary(Language.English);
             LetterTile = null;
-            BoardTileType = BoardTileTypes.Type.None;*/
+            BoardTileType = BoardTileTypes.Type.None;
         }
 
         public BoardTile(int boardLocationX, int boardLocationY, CharTile charTile = null)
@@ -35,6 +38,6 @@ namespace Scrabble.Models
             //WordDictionary = new WordDictionary(Language.English);
             CharTile = charTile;
             BoardTileType = BoardTileType.None;
-        }
+        }*/
     }
 }

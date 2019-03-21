@@ -1,11 +1,26 @@
 #board {
-    display: grid;
-    width: 50%;
-    float: right;
+    /*display: grid;*/
+    width: 700px;
+    overflow: auto;
+    margin: 0 auto;
+    /*float: right;*/
+}
+
+#game {
+    width: 70%;
+    overflow: auto;
+    margin: 0 auto;
 }
 
 #player {
-    float: left;
+    /*float: left;*/
+    /*width: 30%;*/
+    margin: 0 auto;
+}
+
+#rack, #controls {
+    font-size: 30px;
+    text-align: center;
 }
 
 .grid-item {
@@ -15,16 +30,30 @@
     float: left;
 }
 
+.rack_chartile {
+    font-size: 40px;
+}
+
+.btn-default, .btn-secondary {
+    border-color: black;
+}
+
+.board_chartile {
+    width: 100%;
+    border-color: black;
+    font-size: 18px;
+}
+
+.rack_chartile span {
+    font-size: 20px;
+}
+
 .currently-selected-tile {
     background-color: darkgrey;
 }
 
 .currently-foreseen-tile {
     background-color: lightgray;
-}
-
-#rack {
-    font-size: 30px;
 }
 
 .locked {
