@@ -34,28 +34,52 @@
     font-size: 40px;
 }
 
-.btn-default, .btn-secondary {
+.btn-default, .btn-secondary, .btn-warning {
     border-color: black;
 }
 
 .board_chartile {
     width: 100%;
     border-color: black;
+    color: black;
+    /*font-size: 18px;*/
+   
+}
+
+.board_chartile_letter {
     font-size: 18px;
 }
 
-.rack_chartile span {
+.board_chartile_score {
+    font-size: 10px;
+}
+
+.rack_chartile_score {
     font-size: 20px;
 }
 
 .currently-selected-tile {
-    background-color: darkgrey;
+    /*background-color: darkgrey;*/
+    border: 1px yellow;
 }
 
 .currently-foreseen-tile {
     background-color: lightgray;
 }
 
-.locked {
-    background-color: yellow;
+.DoubleLetter {
+    background-color: lightblue;
+}
+.TripleLetter {
+    background-color: royalblue;
+}
+.DoubleWord {
+    background-color: orange;
+}
+.TripleWord {
+    background-color: orangered;
+}
+
+.Start {
+    background-color: plum;
 }

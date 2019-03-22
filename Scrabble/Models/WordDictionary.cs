@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Scrabble.Models
@@ -8,12 +9,15 @@ namespace Scrabble.Models
     {
         public int ID { get; set; }
 
-        public List<CharTile> LetterTiles { get; set; }
+        public int GameLanguageID { get; set; }
+        [ForeignKey("GameLanguageID")]
+        public virtual GameLanguage GameLanguage { get; set; }
 
-        public List<Game> Games { get; set; }
+        public virtual ICollection<CharTile> CharTiles { get; set; }
+        public virtual ICollection<Game> Games { get; set; }
 
-        public WordDictionary()
-        {
+        //public WordDictionary()
+        //{
             /*Random rnd = new Random();
             ID = rnd.Next(1, 5000);
             LetterTiles = new List<CharTile>();
@@ -47,7 +51,7 @@ namespace Scrabble.Models
                 LetterTiles.AddRange(Enumerable.Repeat(new CharTile('Z', 10), 1).ToList());
 
             };*/
-        }
+        //}
 
         /*public WordDictionary(Language language)
         {

@@ -19,7 +19,7 @@ $(document).ready(function () {
                     $("#" + rack_chartile).toggleClass("btn-default"); 
                     $("#" + rack_chartile).toggleClass("btn-secondary"); 
                 }
-                activeTile.html("<button id=board_" + this.id + " class='btn btn-warning board_chartile'>" + $(this).find('.rack_charTile_letter:first').text() + "<span class='small'>" + $(this).find('.rack_charTile_score:first').text() + "</span></button>");
+                activeTile.html("<button id=board_" + this.id + " class='btn btn-warning board_chartile'><span class='board_chartile_letter'>" + $(this).find('.rack_charTile_letter:first').text() + "</span><span class='board_chartile_score small'>" + $(this).find('.rack_charTile_score:first').text() + "</span></button>");
                 $(this).toggleClass("btn-default");   
                 $(this).toggleClass("btn-secondary");               
             }
@@ -63,12 +63,12 @@ $(document).ready(function () {
         activeTile = $(this);
         $(".grid-item").removeClass("currently-selected-tile");
         $(this).toggleClass("currently-selected-tile");
-        console.log(activeTile.attr("id"));
+        //console.log(activeTile.attr("id"));
         $(".grid-item").removeClass("currently-foreseen-tile");
         var tileCoordinates = activeTile.attr("id").split("_");
         var x = parseInt(tileCoordinates[1]);
         var y = parseInt(tileCoordinates[2]);
-        console.log(tileCoordinates);
+        //console.log(tileCoordinates);
         switch (directionOfPlay) {
             case "up":
                 foreseenTile = $('#tile_' + (x - 1) + "_" + y);
@@ -83,8 +83,8 @@ $(document).ready(function () {
                 foreseenTile = $('#tile_' + x + "_" + (y + 1));
                 break;
         }
-        console.log(directionOfPlay);
-        console.log(foreseenTile.attr("id"));
+        //console.log(directionOfPlay);
+        //console.log(foreseenTile.attr("id"));
         foreseenTile.toggleClass("currently-foreseen-tile");
         //alert(activeTile);
         //if (activeTile.html().length == 1) {
@@ -100,6 +100,57 @@ $(document).ready(function () {
             var index = $(this).index();
             $(this).parent().next("div").children("div .grid-item").eq(index).toggleClass("currently-foreseen-tile");
         }*/
+    });
+
+    $(document).on("click", "#submit", function () {
+        var rowsUsed = [];
+        var columnsUsed = [];
+        var submission = [];
+        $('*[id*=board_rack_chartile]:visible').each(function () {
+            var tileCoordinates = $(this).parent().closest('div').attr('id').split("_");
+            var tileX = tileCoordinates[1];
+            var tileY = tileCoordinates[2];
+            if (!columnsUsed.includes(tileX)) {
+                columnsUsed.push(tileX);
+            }
+            if (!rowsUsed.includes(tileY)) {
+                rowsUsed.push(tileY);
+            }        
+            var charTilesDetails = $(this).attr("id").split("_");
+            var charTileId = charTilesDetails[4];
+            //console.log($(this).attr("id"));
+            //console.log($(this).parent().closest('div').attr('id'));
+            submission.push(tileX + "_" + tileY + "_" + charTileId);
+        });
+        console.log(columnsUsed.length);
+        console.log(rowsUsed.length);
+
+        if ((columnsUsed.length == 1 && rowsUsed.length > 1) || (columnsUsed.length > 1 && rowsUsed.length == 1)) {
+            console.log(submission);
+        } else {
+            console.log("Please use only one row or column.");
+            return;
+        }
+
+        var data = {
+            "playedTiles": submission
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "/Scrabble/Index",
+            data: data
+        }).done(function (view) {
+            //xxx;
+            var viewBody = view.substring(
+                view.lastIndexOf("<body>"),
+                view.lastIndexOf("</body>")
+            );
+            $("body").html(viewBody);
+            console.log(view);
+        }).fail(function (jqXHR, textStatus) {
+           // xxx;
+        });
     });
 
     //var originalRack = $("#rack").text();

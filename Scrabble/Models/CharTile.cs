@@ -14,6 +14,10 @@ namespace Scrabble.Models
         [ForeignKey("GameLanguageID")]
         public virtual GameLanguage GameLanguage { get; set; }
 
+        public int WordDictionaryID { get; set; }
+        [ForeignKey("WordDictionaryID")]
+        public virtual WordDictionary WordDictionary { get; set; }
+
         /*public int WordDictionaryID { get; set; }
         [ForeignKey("WordDictionaryID")]
         public WordDictionary WordDictionary { get; set; }
