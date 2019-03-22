@@ -134,12 +134,19 @@ $(document).ready(function () {
 
         var data = {
             "playedTiles": submission
-        }
+        };
+
+        //var data = {
+        //    "ID": 2,
+        //    "GameID": 1
+        //};
 
         $.ajax({
-            type: 'POST',
-            url: "/Scrabble/Index",
-            data: data
+            url: '/Scrabble/Index',
+            //contentType: "application/json",
+            async: true,
+            type: "POST",
+            data: data,
         }).done(function (view) {
             //xxx;
             var viewBody = view.substring(

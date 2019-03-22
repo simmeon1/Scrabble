@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Scrabble.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -20,20 +22,28 @@ namespace Scrabble.Controllers
 
         public IActionResult Index()
         {
-            /*Game game = new Game(Language.English, 7, 15, 15);
-            game.Board.BoardTiles[10] = (new BoardTile(0, 10, new CharTile('C',3)));
-            game.Board.BoardTiles[25] = (new BoardTile(1, 10, new CharTile('A', 1)));
-            game.Board.BoardTiles[40] = (new BoardTile(2, 10, new CharTile('S', 1)));
-            game.Board.BoardTiles[55] = (new BoardTile(3, 10, new CharTile('H', 4)));*/
-            //game.AddPlayer("Simeon", true);
-            //game.AddPlayer("Dob", true);
-            /*foreach (Player p in game.Players)
-            {
-                p.DrawTilesFromPouch();
-            }*/
-            //Game game = new Game();
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
-            //ScrabbleContext context = new ScrabbleContext();
+            List<KeyValuePair<string, StringValues>> data = null;
+            try {
+                data = Request.Form.ToList();
+            } catch (Exception e)
+            {
+                //continue;
+            }          
+            if (data != null)
+            {
+                var playedTiles = data[0].Value.ToString().Split(",");
+                foreach (string playedTile in playedTiles)
+                {
+                    var tileDetails = playedTile.Split("_");
+                    int tileX = Int32.Parse(tileDetails[0]);
+                    int tileY = Int32.Parse(tileDetails[1]);
+                    int tileCharTile = Int32.Parse(tileDetails[2]);
+                    game.Board.PlayTile(tileX, tileY, tileCharTile);
+                }
+                _scrabbleContext.SaveChanges();
+                //ScrabbleContext context = new ScrabbleContext();
+            }
             return View(game);
         }
 

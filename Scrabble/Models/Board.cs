@@ -21,6 +21,19 @@ namespace Scrabble.Models
 
         public virtual ICollection<BoardTile> BoardTiles { get; set; }
 
+        public void PlayTile (int x, int y, int charTileId)
+        {
+            List<BoardTile> boardTilesList = BoardTiles.ToList();
+            foreach (BoardTile b in boardTilesList)
+            {
+                if (b.BoardLocationX == x && b.BoardLocationY == y)
+                {
+                    b.CharTileID = charTileId;                  
+                }
+            }
+            BoardTiles = boardTilesList;
+        }
+
         /*public Board()
         {
             Random rnd = new Random();
