@@ -304,10 +304,11 @@ namespace Scrabble.Models
            
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 1, PouchID = 1, CharTileID = 1, Count = 5 });
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 2, PouchID = 1, CharTileID = 2, Count = 3 });
-            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 1, RackID = 1, CharTileID = 3, Count = 5 });
-            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 2, RackID = 1, CharTileID = 2, Count = 1 });
-            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 3, RackID = 1, CharTileID = 5, Count = 1 });
-            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 4, RackID = 2, CharTileID = 4, Count = 4 });                               
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 1, RackID = 1, CharTileID = 3, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 2, RackID = 1, CharTileID = 16, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 3, RackID = 1, CharTileID = 10, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 4, RackID = 1, CharTileID = 15, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 5, RackID = 1, CharTileID = 8, Count = 1 });
         }
     }
     

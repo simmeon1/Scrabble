@@ -637,12 +637,14 @@ namespace Scrabble.Migrations
             migrationBuilder.InsertData(
                 table: "Rack_CharTiles",
                 columns: new[] { "ID", "CharTileID", "Count", "RackID" },
-                values: new object[] { 1, 3, 5, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Rack_CharTiles",
-                columns: new[] { "ID", "CharTileID", "Count", "RackID" },
-                values: new object[] { 2, 4, 4, 2 });
+                values: new object[,]
+                {
+                    { 1, 1, 1, 1 },
+                    { 2, 16, 1, 1 },
+                    { 3, 10, 1, 1 },
+                    { 4, 15, 1, 1 },
+                    { 5, 8, 1, 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Boards_GameID",

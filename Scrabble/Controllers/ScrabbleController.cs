@@ -47,6 +47,16 @@ namespace Scrabble.Controllers
             return View(game);
         }
 
+        public void ResetBoard()
+        {
+            Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            foreach (BoardTile t in game.Board.BoardTiles)
+            {
+                t.CharTileID = null;
+            }
+            _scrabbleContext.SaveChanges();
+        }
+
         // 
         // GET: /Scrabble/Welcome/ 
 

@@ -42,12 +42,14 @@
     width: 100%;
     border-color: black;
     color: black;
+    background-color: yellow;
+    padding: 0px 0px 0px 0px;
     /*font-size: 18px;*/
    
 }
 
 .board_chartile_letter {
-    font-size: 18px;
+    font-size: 195%;
 }
 
 .board_chartile_score {
@@ -59,12 +61,21 @@
 }
 
 .currently-selected-tile {
-    /*background-color: darkgrey;*/
-    border: 1px yellow;
+    background-color: lightgray !important;
+    /*border: 1px yellow;*/
+}
+
+.anchor {
+    background-color: lightgreen !important;
+    /*border: 1px yellow;*/
+}
+
+.locked {
+    background-color: yellow;
 }
 
 .currently-foreseen-tile {
-    background-color: lightgray;
+    /*background-color: lightgray;*/
 }
 
 .DoubleLetter {

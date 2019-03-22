@@ -16,19 +16,19 @@ $(document).ready(function () {
                 if (activeTile.html().includes("button")) {
                     var rack_chartile = activeTile.children(":first").attr("id");
                     rack_chartile = rack_chartile.replace("board_", "");
-                    $("#" + rack_chartile).toggleClass("btn-default"); 
-                    $("#" + rack_chartile).toggleClass("btn-secondary"); 
+                    $("#" + rack_chartile).toggleClass("btn-default");
+                    $("#" + rack_chartile).toggleClass("btn-secondary");
                 }
                 activeTile.html("<button id=board_" + this.id + " class='btn btn-warning board_chartile'><span class='board_chartile_letter'>" + $(this).find('.rack_charTile_letter:first').text() + "</span><span class='board_chartile_score small'>" + $(this).find('.rack_charTile_score:first').text() + "</span></button>");
-                $(this).toggleClass("btn-default");   
-                $(this).toggleClass("btn-secondary");               
+                $(this).toggleClass("btn-default");
+                $(this).toggleClass("btn-secondary");
             }
         } else {
             var parentId = $("#board_" + this.id).parent().attr("id");
             $("#board_" + this.id).remove();
             $("#" + parentId).html("&nbsp; &nbsp;");
             $(this).toggleClass("btn-secondary");
-            $(this).toggleClass("btn-default");  
+            $(this).toggleClass("btn-default");
         }
     });
 
@@ -60,6 +60,9 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".grid-item", function () {
+        if ($(this).hasClass("locked")) {
+            return;
+        }
         activeTile = $(this);
         $(".grid-item").removeClass("currently-selected-tile");
         $(this).toggleClass("currently-selected-tile");
@@ -103,6 +106,19 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#submit", function () {
+        var startTile = $('div[class*="Start"]');
+        if (startTile.length == 1) {
+            var startTileCoordinates = $("body").find(".Start").first().attr("id").split("_");
+            var startTileX = parseInt(startTileCoordinates[1]);
+            var startTileY = parseInt(startTileCoordinates[2]);
+            if (startTile.has('.board_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY).has('.board_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1)).has('.board_chartile').length == 1) {
+                console.log("#tile_" + (startTileX - 1) + "_" + startTileY);
+                console.log("#tile_" + startTileX + "_" + (startTileY - 1));
+                $("#statusMessage").html("Invalid starting move.");
+                return;
+            }
+        }
+
         var rowsUsed = [];
         var columnsUsed = [];
         var submission = [];
@@ -115,20 +131,20 @@ $(document).ready(function () {
             }
             if (!rowsUsed.includes(tileY)) {
                 rowsUsed.push(tileY);
-            }        
+            }
             var charTilesDetails = $(this).attr("id").split("_");
             var charTileId = charTilesDetails[4];
             //console.log($(this).attr("id"));
             //console.log($(this).parent().closest('div').attr('id'));
             submission.push(tileX + "_" + tileY + "_" + charTileId);
         });
-        console.log(columnsUsed.length);
-        console.log(rowsUsed.length);
+        //console.log(columnsUsed.length);
+        //console.log(rowsUsed.length);
 
-        if ((columnsUsed.length == 1 && rowsUsed.length > 1) || (columnsUsed.length > 1 && rowsUsed.length == 1)) {
-            console.log(submission);
+        if ((columnsUsed.length == 1 && rowsUsed.length >= 1) || (columnsUsed.length >= 1 && rowsUsed.length == 1)) {
+            //console.log(submission);
         } else {
-            console.log("Please use only one row or column.");
+            $("#statusMessage").html("Please use only one row or column.");
             return;
         }
 
@@ -153,10 +169,38 @@ $(document).ready(function () {
                 view.lastIndexOf("<body>"),
                 view.lastIndexOf("</body>")
             );
+            $("#statusMessage").html("Success");
             $("body").html(viewBody);
-            console.log(view);
+            $("body").removeClass("Start");
+            //console.log(view);
         }).fail(function (jqXHR, textStatus) {
-           // xxx;
+            // xxx;
+        });
+    });
+
+    $(document).on("click", "#showAnchors", function () {
+        $('*[id*=tile_]:visible').each(function () {
+            if ($(this).hasClass("locked")) {
+                var tileCoordinates = $(this).attr('id').split("_");
+                var tileX = parseInt(tileCoordinates[1]);
+                var tileY = parseInt(tileCoordinates[2]);
+                var tileOnLeft = ($("#tile_" + (tileX - 1) + "_" + tileY));
+                var tileOnTop = ($("#tile_" + tileX + "_" + (tileY - 1)));
+                var tileOnRight = ($("#tile_" + (tileX + 1) + "_" + tileY));
+                var tileOnBottom = ($("#tile_" + tileX + "_" + (tileY + 1)));
+                if (tileOnLeft != null && !(tileOnLeft.hasClass("locked"))) {
+                    if (!tileOnLeft.hasClass("anchor")) { tileOnLeft.toggleClass("anchor"); }
+                }
+                if (tileOnTop != null && !(tileOnTop.hasClass("locked"))) {
+                    if (!tileOnTop.hasClass("anchor")) { tileOnTop.toggleClass("anchor"); }
+                }
+                if (tileOnRight != null && !(tileOnRight.hasClass("locked"))) {
+                    if (!tileOnRight.hasClass("anchor")) { tileOnRight.toggleClass("anchor"); }
+                }
+                if (tileOnBottom != null && !(tileOnBottom.hasClass("locked"))) {
+                    if (!tileOnBottom.hasClass("anchor")) { tileOnBottom.toggleClass("anchor"); }
+                }
+            }
         });
     });
 

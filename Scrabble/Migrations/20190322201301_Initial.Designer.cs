@@ -10,7 +10,7 @@ using Scrabble.Models;
 namespace Scrabble.Migrations
 {
     [DbContext(typeof(ScrabbleContext))]
-    [Migration("20190322114333_Initial")]
+    [Migration("20190322201301_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -553,8 +553,11 @@ namespace Scrabble.Migrations
                     b.ToTable("Rack_CharTiles");
 
                     b.HasData(
-                        new { ID = 1, CharTileID = 3, Count = 5, RackID = 1 },
-                        new { ID = 2, CharTileID = 4, Count = 4, RackID = 2 }
+                        new { ID = 1, CharTileID = 1, Count = 1, RackID = 1 },
+                        new { ID = 2, CharTileID = 16, Count = 1, RackID = 1 },
+                        new { ID = 3, CharTileID = 10, Count = 1, RackID = 1 },
+                        new { ID = 4, CharTileID = 15, Count = 1, RackID = 1 },
+                        new { ID = 5, CharTileID = 8, Count = 1, RackID = 1 }
                     );
                 });
 
