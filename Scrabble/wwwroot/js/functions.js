@@ -108,14 +108,18 @@ $(document).ready(function () {
     $(document).on("click", "#submit", function () {
         var startTile = $('div[class*="Start"]');
         if (startTile.length == 1) {
-            var startTileCoordinates = $("body").find(".Start").first().attr("id").split("_");
-            var startTileX = parseInt(startTileCoordinates[1]);
-            var startTileY = parseInt(startTileCoordinates[2]);
-            if (startTile.has('.board_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY).has('.board_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1)).has('.board_chartile').length == 1) {
-                console.log("#tile_" + (startTileX - 1) + "_" + startTileY);
-                console.log("#tile_" + startTileX + "_" + (startTileY - 1));
-                $("#statusMessage").html("Invalid starting move.");
-                return;
+            if (!startTile.hasClass("locked")) {
+                var startTileCoordinates = $("body").find(".Start").first().attr("id").split("_");
+                var startTileX = parseInt(startTileCoordinates[1]);
+                var startTileY = parseInt(startTileCoordinates[2]);
+                if (startTile.has('.board_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY).has('.board_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1)).has('.board_chartile').length == 1) {
+                    console.log("#tile_" + (startTileX - 1) + "_" + startTileY);
+                    console.log("#tile_" + startTileX + "_" + (startTileY - 1));
+                    $("#statusMessage").html("Invalid starting move.");
+                    return;
+                }
+            } else {
+                startTile.removeClass("Start");
             }
         }
 
@@ -146,6 +150,21 @@ $(document).ready(function () {
         } else {
             $("#statusMessage").html("Please use only one row or column.");
             return;
+        }
+
+        var anchorUsed = false;
+        $("#anchors").trigger("click");
+        $('*[class*=anchor]:visible').each(function () {
+            if ($(this).has('.board_chartile').length == 1) {
+                anchorUsed = true;
+            }
+        });
+
+        if (!anchorUsed) {
+            if (!startTile.hasClass("Start")) {
+                $("#statusMessage").html("Anchor not used.");
+                return;
+            }
         }
 
         var data = {
