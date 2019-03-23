@@ -155,6 +155,16 @@ $(document).ready(function () {
         filledTilesCoordinates = filledTilesCoordinates.sort(function (a, b) { return a - b });
         var startOfPlay = filledTilesCoordinates[0];
         var endOfPlay = filledTilesCoordinates[filledTilesCoordinates.length - 1];
+        var startOfPlayAncestor = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + (startOfPlay - 1)) : $("#tile_" + (startOfPlay - 1) + "_" + secondaryCoordinate);
+        while (startOfPlayAncestor.hasClass("locked")) {
+            startOfPlay = startOfPlay - 1;
+            startOfPlayAncestor = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + (startOfPlay - 1)) : $("#tile_" + (startOfPlay - 1) + "_" + secondaryCoordinate);
+        }
+        var endOfPlaySuccessor = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + (endOfPlay + 1)) : $("#tile_" + (endOfPlay + 1) + "_" + secondaryCoordinate);
+        while (endOfPlaySuccessor.hasClass("locked")) {
+            endOfPlay = endOfPlay + 1;
+            endOfPlaySuccessor = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + (endOfPlay + 1)) : $("#tile_" + (endOfPlay + 1) + "_" + secondaryCoordinate);
+        }
         for (var i = startOfPlay; i <= endOfPlay; i++) {
             //var tile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + i) : $("#tile_" + i + "_" + secondaryCoordinate);
             var tile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + i) : $("#tile_" + i + "_" + secondaryCoordinate);
@@ -166,7 +176,7 @@ $(document).ready(function () {
                     //} else {
                     //    typeOfPlay == "horizontal" ? submission.push(secondaryCoordinate + "_" + i + "_" + charTileId) : submission.push(i + "_" + secondaryCoordinate + "_" + charTileId);
                     //}
-                }                       
+                }
             }
             //var boardTileDetails = tile.attr("id").split("_");
             //var boardTileX = boardTileDetails[1];
@@ -179,7 +189,7 @@ $(document).ready(function () {
             } else {
                 boardCharTileId = boardCharTileDetails[2];
             }
-            typeOfPlay == "horizontal" ? submission.push(secondaryCoordinate + "_" + i + "_" + boardCharTileId) : submission.push(i + "_" + secondaryCoordinate + "_" + boardCharTileId);    
+            typeOfPlay == "horizontal" ? submission.push(secondaryCoordinate + "_" + i + "_" + boardCharTileId) : submission.push(i + "_" + secondaryCoordinate + "_" + boardCharTileId);
         }
 
         if (!playIsConnected) {
