@@ -120,18 +120,37 @@ $(document).ready(function () {
             }
         }
 
+        var anchorUsed = false;
+        showAnchors(true);
+        $('*[class*=anchor]:visible').each(function () {
+            if ($(this).has('.board_rack_chartile').length == 1) {
+                anchorUsed = true;
+            }
+            showAnchors(false);
+        });
+
+        if (!anchorUsed) {
+            if (!startTile.hasClass("Start")) {
+                updateStatusMessage("Anchor not used.", "danger");
+                //if (anchorsShown) {
+                //    $("#showAnchors").trigger("click");
+                //}
+                return;
+            }
+        }
+
         var rowsUsed = [];
         var columnsUsed = [];
         var submission = [];
         $('*[id*=board_rack_chartile]:visible').each(function () {
             var tileCoordinates = $(this).parent().closest('div').attr('id').split("_");
-            var tileX = parseInt(tileCoordinates[1]);
-            var tileY = parseInt(tileCoordinates[2]);
-            if (!columnsUsed.includes(tileX)) {
-                columnsUsed.push(tileX);
+            var rowIndex = parseInt(tileCoordinates[1]); //13
+            var columnIndex = parseInt(tileCoordinates[2]); //5
+            if (!columnsUsed.includes(columnIndex)) {
+                columnsUsed.push(columnIndex);
             }
-            if (!rowsUsed.includes(tileY)) {
-                rowsUsed.push(tileY);
+            if (!rowsUsed.includes(rowIndex)) {
+                rowsUsed.push(rowIndex);
             }
             var charTilesDetails = $(this).attr("id").split("_");
             var charTileId = charTilesDetails[4];
@@ -147,14 +166,42 @@ $(document).ready(function () {
             updateStatusMessage("Please use only one row or column.", "danger");
             return;
         }
-
-        var filledTilesCoordinates = columnsUsed.length > 1 ? columnsUsed : rowsUsed;
-        var typeOfPlay = columnsUsed.length > 1 ? "vertical" : "horizontal";
-        var secondaryCoordinate = columnsUsed.length == 1 ? columnsUsed[0] : rowsUsed[0];
+        var filledTilesMainCoordinates = [];
+        var typeOfPlay = "";
+        var secondaryCoordinate = 0;
+        if (columnsUsed.length == 1 && rowsUsed.length == 1) {
+            var rowIndex = parseInt(rowsUsed[0]);
+            var columnIndex = parseInt(columnsUsed[0]);
+            var tile = $("#tile_" + rowIndex + "_" + columnIndex);
+            if (($("#tile_" + rowIndex + "_" + (columnIndex + 1)).hasClass("locked") || $("#tile_" + rowIndex + "_" + (columnIndex - 1)).hasClass("locked"))
+                && (!$("#tile_" + (rowIndex + 1) + "_" + columnIndex).hasClass("locked") && !$("#tile_" + (rowIndex - 1) + "_" + columnIndex).hasClass("locked"))) {
+                filledTilesMainCoordinates = columnsUsed;
+                typeOfPlay = "horizontal";
+                secondaryCoordinate = rowsUsed[0];
+            } else if ((!$("#tile_" + rowIndex + "_" + (columnIndex + 1)).hasClass("locked") && !$("#tile_" + rowIndex + "_" + (columnIndex - 1)).hasClass("locked"))
+                && ($("#tile_" + (rowIndex + 1) + "_" + columnIndex).hasClass("locked") || $("#tile_" + (rowIndex - 1) + "_" + columnIndex).hasClass("locked"))) {
+                filledTilesMainCoordinates = rowsUsed;
+                typeOfPlay = "vertical";
+                secondaryCoordinate = columnsUsed[0];
+            } else {
+                alert("cant do this");
+                return;
+                //filledTilesMainCoordinates = columnsUsed;
+                //typeOfPlay = "horizontal";
+                //secondaryCoordinate = rowsUsed[0];
+            }
+        } else {
+            filledTilesMainCoordinates = columnsUsed.length > rowsUsed.length ? columnsUsed : rowsUsed;
+            typeOfPlay = columnsUsed.length > rowsUsed.length ? "horizontal" : "vertical";
+            secondaryCoordinate = columnsUsed.length > rowsUsed.length ? rowsUsed[0] : columnsUsed[0];
+        }
+        //filledTilesMainCoordinates = columnsUsed.length > 1 ? columnsUsed : rowsUsed;
+        //var typeOfPlay = filledTilesMainCoordinates == rowsUsed ? "vertical" : "horizontal";
+        //var secondaryCoordinate = filledTilesMainCoordinates == rowsUsed ? columnsUsed[0] : rowsUsed[0];
         var playIsConnected = true;
-        filledTilesCoordinates = filledTilesCoordinates.sort(function (a, b) { return a - b });
-        var startOfPlay = filledTilesCoordinates[0];
-        var endOfPlay = filledTilesCoordinates[filledTilesCoordinates.length - 1];
+        filledTilesMainCoordinates = filledTilesMainCoordinates.sort(function (a, b) { return a - b });
+        var startOfPlay = filledTilesMainCoordinates[0];
+        var endOfPlay = filledTilesMainCoordinates[filledTilesMainCoordinates.length - 1];
         var startOfPlayAncestor = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + (startOfPlay - 1)) : $("#tile_" + (startOfPlay - 1) + "_" + secondaryCoordinate);
         while (startOfPlayAncestor.hasClass("locked")) {
             startOfPlay = startOfPlay - 1;
@@ -195,26 +242,7 @@ $(document).ready(function () {
         if (!playIsConnected) {
             updateStatusMessage("Play is not connected.", "danger");
             return;
-        }
-
-        var anchorUsed = false;
-        showAnchors(true);
-        $('*[class*=anchor]:visible').each(function () {
-            if ($(this).has('.board_rack_chartile').length == 1) {
-                anchorUsed = true;
-            }
-            showAnchors(false);
-        });
-
-        if (!anchorUsed) {
-            if (!startTile.hasClass("Start")) {
-                updateStatusMessage("Anchor not used.", "danger");
-                //if (anchorsShown) {
-                //    $("#showAnchors").trigger("click");
-                //}
-                return;
-            }
-        }
+        }       
 
         var data = {
             "playedTiles": submission
