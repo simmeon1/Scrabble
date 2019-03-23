@@ -34,7 +34,7 @@ namespace Scrabble.Models
         {
             modelBuilder.Entity<GameLanguage>().HasData(new GameLanguage { ID = 1, Language = "English" });
             modelBuilder.Entity<WordDictionary>().HasData(new WordDictionary { ID = 1, GameLanguageID = 1 });
-            modelBuilder.Entity<Game>().HasData(new Game { ID = 1, GameLanguageID = 1, BoardID = 1, PouchID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<Game>().HasData(new Game { ID = 1, GameLanguageID = 1, BoardID = 1, PouchID = 1, WordDictionaryID = 1, Log = "Enjoy the game!" });
             modelBuilder.Entity<Board>().HasData(new Board { ID = 1, Rows = 15, Columns = 15, GameID = 1 });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 1, Type = "Normal" });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 2, Type = "DoubleLetter" });

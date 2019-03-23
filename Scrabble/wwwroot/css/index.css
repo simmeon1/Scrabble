@@ -1,13 +1,26 @@
 #board {
     /*display: grid;*/
-    width: 700px;
+    width: 70%;
     overflow: auto;
     margin: 0 auto;
-    /*float: right;*/
+    float: right;
 }
 
+#output {
+    /*display: grid;*/
+    width: 28%;
+    overflow: auto;
+    margin: 0 auto;
+    float: left;
+}
+
+#gameAndOutput {
+    overflow: auto;
+}
+
+
 #game {
-    width: 70%;
+    width: 80%;
     overflow: auto;
     margin: 0 auto;
 }
@@ -47,7 +60,7 @@
     border-color: black;
     color: black;
     background-color: yellow;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     /*font-size: 18px;*/
    
 }

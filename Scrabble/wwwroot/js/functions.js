@@ -5,6 +5,8 @@ $(document).ready(function () {
     var directionOfPlay = "right";
     var anchorsShown = false;
 
+    $("#output").height($("#board").height());
+
     $(document).on("click", ".rack_chartile", function () {
         if (!$(this).hasClass("btn-secondary")) {
             if (activeTile == "") {
@@ -205,6 +207,7 @@ $(document).ready(function () {
             animateHtmlUpdates($("body"), viewBody);
             //$("body").html(viewBody);
             $("body").removeClass("Start");
+            $("#output").height($("#board").height());
             //console.log(view);
         }).fail(function (jqXHR, textStatus) {
             // xxx;
@@ -217,7 +220,11 @@ $(document).ready(function () {
 
     function updateStatusMessage(message, type) {
         $('#statusMessage').fadeOut(200, function () {
-            $('#statusMessage').html("<span class='text-" + type + "'>" + message + "</span>").fadeIn(200);
+            $('#output').removeClass();
+            $('#output').addClass("panel panel-" + type);
+            $("#statusMessage").html("<span>" + message + "</span>");
+            $('#statusMessage').fadeIn(200);
+            //$('#output').html("<span>" + message + "</span>").fadeIn(200);
         });
     }
 

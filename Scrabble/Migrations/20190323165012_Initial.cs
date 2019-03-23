@@ -89,7 +89,8 @@ namespace Scrabble.Migrations
                     GameLanguageID = table.Column<int>(nullable: false),
                     BoardID = table.Column<int>(nullable: false),
                     PouchID = table.Column<int>(nullable: false),
-                    WordDictionaryID = table.Column<int>(nullable: false)
+                    WordDictionaryID = table.Column<int>(nullable: false),
+                    Log = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -361,8 +362,8 @@ namespace Scrabble.Migrations
 
             migrationBuilder.InsertData(
                 table: "Games",
-                columns: new[] { "ID", "BoardID", "GameLanguageID", "PouchID", "WordDictionaryID" },
-                values: new object[] { 1, 1, 1, 1, 1 });
+                columns: new[] { "ID", "BoardID", "GameLanguageID", "Log", "PouchID", "WordDictionaryID" },
+                values: new object[] { 1, 1, 1, "Enjoy the game!", 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "Boards",
@@ -639,7 +640,7 @@ namespace Scrabble.Migrations
                 columns: new[] { "ID", "CharTileID", "Count", "RackID" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, 1 },
+                    { 1, 3, 1, 1 },
                     { 2, 16, 1, 1 },
                     { 3, 10, 1, 1 },
                     { 4, 15, 1, 1 },

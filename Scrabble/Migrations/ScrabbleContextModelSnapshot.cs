@@ -385,6 +385,8 @@ namespace Scrabble.Migrations
 
                     b.Property<int>("GameLanguageID");
 
+                    b.Property<string>("Log");
+
                     b.Property<int>("PouchID");
 
                     b.Property<int>("WordDictionaryID");
@@ -398,7 +400,7 @@ namespace Scrabble.Migrations
                     b.ToTable("Games");
 
                     b.HasData(
-                        new { ID = 1, BoardID = 1, GameLanguageID = 1, PouchID = 1, WordDictionaryID = 1 }
+                        new { ID = 1, BoardID = 1, GameLanguageID = 1, Log = "Enjoy the game!", PouchID = 1, WordDictionaryID = 1 }
                     );
                 });
 
@@ -551,7 +553,7 @@ namespace Scrabble.Migrations
                     b.ToTable("Rack_CharTiles");
 
                     b.HasData(
-                        new { ID = 1, CharTileID = 1, Count = 1, RackID = 1 },
+                        new { ID = 1, CharTileID = 3, Count = 1, RackID = 1 },
                         new { ID = 2, CharTileID = 16, Count = 1, RackID = 1 },
                         new { ID = 3, CharTileID = 10, Count = 1, RackID = 1 },
                         new { ID = 4, CharTileID = 15, Count = 1, RackID = 1 },

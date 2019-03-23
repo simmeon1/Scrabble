@@ -37,6 +37,8 @@ namespace Scrabble.Models
         [ForeignKey("WordDictionaryID")]
         public virtual WordDictionary WordDictionary { get; set; }
 
+        public string Log { get; set; }
+
         /*public int Pouch_CharTileID { get; set; }
         [ForeignKey("Pouch_CharTileID")]
         public virtual Pouch_CharTile Pouch_CharTile { get; set; }*/
