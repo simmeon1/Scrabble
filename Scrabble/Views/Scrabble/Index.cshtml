@@ -83,14 +83,20 @@
 
                             @if (boardAs2DArray[i, j] != null && boardAs2DArray[i, j].CharTile != null)
                             {
-                                <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item locked">
-                                    <span>@boardAs2DArray[i, j].CharTile.Letter</span>
-                                    <span class="board_chartile_score">@boardAs2DArray[i, j].CharTile.Score</span>
+                                <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item locked @(boardAs2DArray[i,j].BoardTileType.Type)">
+                                    <div id="board_chartile_@(boardAs2DArray[i,j].CharTileID)" class="filled">
+                                        <span>@boardAs2DArray[i, j].CharTile.Letter</span>
+                                        <span class="board_chartile_score">@boardAs2DArray[i, j].CharTile.Score</span>
+                                    </div>                                  
                                 </div>
                             }
                             else
                             {
-                                <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item @(boardAs2DArray[i,j].BoardTileType.Type)">&nbsp; &nbsp;</div>
+                                <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item @(boardAs2DArray[i,j].BoardTileType.Type)">
+                                    <span id="board_chartile_0">
+                                        &nbsp; &nbsp;
+                                    </span>  
+                                </div>
                             }
                         }
                     </div>

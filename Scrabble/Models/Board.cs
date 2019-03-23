@@ -21,14 +21,27 @@ namespace Scrabble.Models
 
         public virtual ICollection<BoardTile> BoardTiles { get; set; }
 
-        public void PlayTile (int x, int y, int charTileId)
+        public void PlayTile (int x, int y, int charTileId, List<BoardTile> usedBoardTiles)
         {
             List<BoardTile> boardTilesList = BoardTiles.ToList();
             foreach (BoardTile b in boardTilesList)
             {
                 if (b.BoardLocationX == x && b.BoardLocationY == y)
                 {
-                    b.CharTileID = charTileId;                  
+                    b.CharTileID = charTileId;
+                    usedBoardTiles.Add(b);
+                    //switch (b.BoardTileType)
+                    //{
+                    //    case "DoubleLetter":
+                    //        Console.WriteLine("Case 1");
+                    //        break;
+                    //    case "TripleLetter":
+                    //        Console.WriteLine("Case 1");
+                    //        break;
+                    //    default:
+                    //        currentScoreOfMove += char
+                    //        break;
+                    //}
                 }
             }
             BoardTiles = boardTilesList;

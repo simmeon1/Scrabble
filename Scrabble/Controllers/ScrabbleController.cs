@@ -24,25 +24,72 @@ namespace Scrabble.Controllers
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
             List<KeyValuePair<string, StringValues>> data = null;
-            try {
+            try
+            {
                 data = Request.Form.ToList();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 //continue;
-            }          
-            if (data != null)
+            }
+            if (data == null)
+            {
+                //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
+            }
+            else
             {
                 var playedTiles = data[0].Value.ToString().Split(",");
+                var currentScoreOfMove = 0;
+                var doubleWordTilesUsed = 0;
+                var tripleWordTilesUsed = 0;
+                var usedBoardTiles = new List<BoardTile>();
+                var playedWord = "";
                 foreach (string playedTile in playedTiles)
                 {
                     var tileDetails = playedTile.Split("_");
                     int tileX = Int32.Parse(tileDetails[0]);
                     int tileY = Int32.Parse(tileDetails[1]);
-                    int tileCharTile = Int32.Parse(tileDetails[2]);
-                    game.Board.PlayTile(tileX, tileY, tileCharTile);
+                    int tileCharTileId = Int32.Parse(tileDetails[2]);
+                    playedWord += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Letter;
+                    game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
+                    //currentScoreOfMove += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Score;
                 }
+                foreach (BoardTile b in usedBoardTiles)
+                {
+                    switch (b.BoardTileType.Type)
+                    {
+                        case "DoubleLetter":
+                            currentScoreOfMove += b.CharTile.Score * 2;
+                            break;
+                        case "TripleLetter":
+                            currentScoreOfMove += b.CharTile.Score * 3;
+                            break;
+                        case "DoubleWord":
+                            doubleWordTilesUsed += 1;
+                            currentScoreOfMove += b.CharTile.Score;
+                            break;
+                        case "TripleWord":
+                            tripleWordTilesUsed += 1;
+                            currentScoreOfMove += b.CharTile.Score;
+                            break;
+                        default:
+                            currentScoreOfMove += b.CharTile.Score;
+                            break;
+                    }
+                }
+                for (int i = 0; i < doubleWordTilesUsed; i++)
+                {
+                    currentScoreOfMove *= 2;
+                }
+                for (int i = 0; i < tripleWordTilesUsed; i++)
+                {
+                    currentScoreOfMove *= 3;
+                }
+                playedWord = playedWord.ToUpper();
+                game.Log += "\nPlayer played " + playedWord + " for " + currentScoreOfMove + " points.";
                 _scrabbleContext.SaveChanges();
                 //ScrabbleContext context = new ScrabbleContext();
+
             }
             return View(game);
         }
@@ -54,6 +101,7 @@ namespace Scrabble.Controllers
             {
                 t.CharTileID = null;
             }
+            game.Log = "Enjoy the game!";
             _scrabbleContext.SaveChanges();
         }
 

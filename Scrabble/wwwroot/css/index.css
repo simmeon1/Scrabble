@@ -1,6 +1,7 @@
 #board {
     /*display: grid;*/
     width: 70%;
+    min-width: 600px;
     overflow: auto;
     margin: 0 auto;
     float: right;
@@ -88,7 +89,7 @@
 }
 
 .locked {
-    background-color: yellow;
+    background-color: yellow !important;
 }
 
 .currently-foreseen-tile {

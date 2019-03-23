@@ -105,10 +105,11 @@ $(document).ready(function () {
         var startTile = $('div[class*="Start"]');
         if (startTile.length == 1) {
             if (!startTile.hasClass("locked")) {
-                var startTileCoordinates = $("body").find(".Start").first().attr("id").split("_");
-                var startTileX = parseInt(startTileCoordinates[1]);
-                var startTileY = parseInt(startTileCoordinates[2]);
-                if (startTile.has('.board_rack_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY).has('.board_rack_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1)).has('.board_rack_chartile').length == 1) {
+                var startTileDetails = $("body").find(".Start").first().attr("id").split("_");
+                var startTileX = parseInt(startTileDetails[1]);
+                var startTileY = parseInt(startTileDetails[2]);
+                var startTileCharTileId = parseInt(startTileDetails[3]);
+                if (startTile.has('.board_rack_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY + "_" + startTileCharTileId).has('.board_rack_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1) + "_" + startTileCharTileId).has('.board_rack_chartile').length == 1) {
                     console.log("#tile_" + (startTileX - 1) + "_" + startTileY);
                     console.log("#tile_" + startTileX + "_" + (startTileY - 1));
                     updateStatusMessage("Invalid starting move.", "danger");
@@ -135,8 +136,7 @@ $(document).ready(function () {
             var charTilesDetails = $(this).attr("id").split("_");
             var charTileId = charTilesDetails[4];
             //console.log($(this).attr("id"));
-            //console.log($(this).parent().closest('div').attr('id'));
-            submission.push(tileX + "_" + tileY + "_" + charTileId);
+            //console.log($(this).parent().closest('div').attr('id'));            
         });
         //console.log(columnsUsed.length);
         //console.log(rowsUsed.length);
@@ -156,13 +156,30 @@ $(document).ready(function () {
         var startOfPlay = filledTilesCoordinates[0];
         var endOfPlay = filledTilesCoordinates[filledTilesCoordinates.length - 1];
         for (var i = startOfPlay; i <= endOfPlay; i++) {
+            //var tile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + i) : $("#tile_" + i + "_" + secondaryCoordinate);
             var tile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + i) : $("#tile_" + i + "_" + secondaryCoordinate);
+            console.log(tile.attr("id"));
             if (!tile.has('.board_rack_chartile').length == 1) {
                 if (!tile.hasClass("locked")) {
                     playIsConnected = false;
                     break;
-                }
+                    //} else {
+                    //    typeOfPlay == "horizontal" ? submission.push(secondaryCoordinate + "_" + i + "_" + charTileId) : submission.push(i + "_" + secondaryCoordinate + "_" + charTileId);
+                    //}
+                }                       
             }
+            //var boardTileDetails = tile.attr("id").split("_");
+            //var boardTileX = boardTileDetails[1];
+            //var boardTileY = boardTileDetails[2];
+            var boardCharTileId = "";
+            var boardCharTile = tile.children().first();
+            var boardCharTileDetails = boardCharTile.attr("id").split("_");
+            if (boardCharTile.is("button")) {
+                boardCharTileId = boardCharTileDetails[4];
+            } else {
+                boardCharTileId = boardCharTileDetails[2];
+            }
+            typeOfPlay == "horizontal" ? submission.push(secondaryCoordinate + "_" + i + "_" + boardCharTileId) : submission.push(i + "_" + secondaryCoordinate + "_" + boardCharTileId);    
         }
 
         if (!playIsConnected) {
@@ -231,6 +248,7 @@ $(document).ready(function () {
     function animateHtmlUpdates(jqueryObject, message) {
         jqueryObject.fadeOut(200, function () {
             jqueryObject.html(message).fadeIn(200);
+            //$("#output").height($("#board").height());
         });
     }
 
