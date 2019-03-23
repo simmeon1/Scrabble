@@ -57,11 +57,12 @@
                     @*<button id="goLeft" class="btn btn-default btn-lg changeDirection"><span class="glyphicon glyphicon-arrow-right"></span></button>*@
                     <button id="showAnchors" class="btn btn-default btn-lg"><span>Anchors</span></button>
                     <button id="submit" class="btn btn-default btn-lg"><span>Submit</span></button>
+                    <button id="clearPlacements" class="btn btn-default btn-lg"><span>Clear</span></button>
                 </p>
 
             </div>
             <div>
-                <p>
+                <p class="text-center">
                     <span id="statusMessage">Message will show here.</span>
                 </p>
             </div>
@@ -71,7 +72,7 @@
             @{BoardTile[,] boardAs2DArray = Model.Board.ConvertTo2DArray(); }
             @for (int i = 0; i < boardAs2DArray.GetLength(0); i++)
             {
-                <div id="row-@(i+1)">
+                <div id="row-@(i+1)" class="board_row">
                     @for (int j = 0; j < boardAs2DArray.GetLength(1); j++)
                     {
 
