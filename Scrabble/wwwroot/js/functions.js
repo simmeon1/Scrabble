@@ -19,7 +19,7 @@ $(document).ready(function () {
                     $("#" + rack_chartile).toggleClass("btn-default");
                     $("#" + rack_chartile).toggleClass("btn-secondary");
                 }
-                activeTile.html("<button id=board_" + this.id + " class='btn btn-warning board_chartile'><span class='board_chartile_letter'>" + $(this).find('.rack_charTile_letter:first').text() + "</span><span class='board_chartile_score small'>" + $(this).find('.rack_charTile_score:first').text() + "</span></button>");
+                activeTile.html("<button id=board_" + this.id + " class='btn btn-warning board_rack_chartile'><span class='board_rack_chartile_letter'>" + $(this).find('.rack_charTile_letter:first').text() + "</span><span class='board_rack_chartile_score small'>" + $(this).find('.rack_charTile_score:first').text() + "</span></button>");
                 $(this).toggleClass("btn-default");
                 $(this).toggleClass("btn-secondary");
             }
@@ -112,7 +112,7 @@ $(document).ready(function () {
                 var startTileCoordinates = $("body").find(".Start").first().attr("id").split("_");
                 var startTileX = parseInt(startTileCoordinates[1]);
                 var startTileY = parseInt(startTileCoordinates[2]);
-                if (startTile.has('.board_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY).has('.board_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1)).has('.board_chartile').length == 1) {
+                if (startTile.has('.board_rack_chartile').length == 0 || $("#tile_" + (startTileX - 1) + "_" + startTileY).has('.board_rack_chartile').length == 1 || $("#tile_" + startTileX + "_" + (startTileY - 1)).has('.board_rack_chartile').length == 1) {
                     console.log("#tile_" + (startTileX - 1) + "_" + startTileY);
                     console.log("#tile_" + startTileX + "_" + (startTileY - 1));
                     $("#statusMessage").html("Invalid starting move.");
@@ -128,8 +128,8 @@ $(document).ready(function () {
         var submission = [];
         $('*[id*=board_rack_chartile]:visible').each(function () {
             var tileCoordinates = $(this).parent().closest('div').attr('id').split("_");
-            var tileX = tileCoordinates[1];
-            var tileY = tileCoordinates[2];
+            var tileX = parseInt(tileCoordinates[1]);
+            var tileY = parseInt(tileCoordinates[2]);
             if (!columnsUsed.includes(tileX)) {
                 columnsUsed.push(tileX);
             }
@@ -152,10 +152,32 @@ $(document).ready(function () {
             return;
         }
 
+        var filledTilesCoordinates = columnsUsed.length > 1 ? columnsUsed : rowsUsed;
+        var typeOfPlay = columnsUsed.length > 1 ? "vertical" : "horizontal";
+        var secondaryCoordinate = columnsUsed.length == 1 ? columnsUsed[0] : rowsUsed[0];
+        var playIsConnected = true;
+        filledTilesCoordinates.sort();
+        var startOfPlay = filledTilesCoordinates[0];
+        var endOfPlay = filledTilesCoordinates[filledTilesCoordinates.length - 1];
+        for (var i = startOfPlay; i <= endOfPlay; i++) {
+            var tile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryCoordinate + "_" + i) : $("#tile_" + i + "_" + secondaryCoordinate);
+            if (!tile.has('.board_rack_chartile').length == 1) {
+                if (!tile.hasClass("locked")) {
+                    playIsConnected = false;
+                    break;
+                }
+            }
+        }
+
+        if (!playIsConnected) {
+            $("#statusMessage").html("Play is not connected.");
+            return;
+        }
+
         var anchorUsed = false;
-        $("#anchors").trigger("click");
+        $("#showAnchors").trigger("click");
         $('*[class*=anchor]:visible').each(function () {
-            if ($(this).has('.board_chartile').length == 1) {
+            if ($(this).has('.board_rack_chartile').length == 1) {
                 anchorUsed = true;
             }
         });
@@ -166,6 +188,20 @@ $(document).ready(function () {
                 return;
             }
         }
+
+        //var filledTiles = $(".grid-item").has('.board_rack_chartile');
+        //var filledXs = [];
+        //var filledYs = [];
+        //filledTiles.each(function () {
+        //    var tileCoordinates = $(this).attr('id').split("_");
+        //    var tileX = parseInt(tileCoordinates[1]);
+        //    var tileY = parseInt(tileCoordinates[2]);
+        //    filledXs.push(tileX);
+        //    filledYs.push(tileY);
+        //});
+
+
+
 
         var data = {
             "playedTiles": submission
