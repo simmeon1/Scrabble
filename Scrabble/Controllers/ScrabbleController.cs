@@ -37,6 +37,13 @@ namespace Scrabble.Controllers
             }
             else
             {
+                var anchors = game.Board.GetAnchors();
+                var playedWords = Helpers.Helper.GetPlayedWords(data);
+                var playedRackTiles = Helpers.Helper.GetPlayedRackTiles(playedWords);
+                if (!game.Board.CheckIfAnchorIsUsed(playedRackTiles))
+                {
+                    return StatusCode(400, "Anchor is not used.");
+                }
                 var result = Helpers.Helper.GetWordScores(game, data);
                 if (result.StatusCode != 200)
                 {

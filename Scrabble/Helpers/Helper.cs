@@ -97,15 +97,35 @@ namespace Scrabble.Helpers
             }
             return score;
         }
-        public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data) {
+        public static List<string> GetPlayedWords(List<KeyValuePair<string, StringValues>> data)
+        {
             List<string> playedWords = new List<string>();
-            string logBuilder = "Player" + game.GetPlayerAtHand().ID + " played ";
             foreach (KeyValuePair<string, StringValues> wordData in data)
             {
                 playedWords.Add(wordData.Value);
             }
+            return playedWords;
+        }
+        public static List<string> GetPlayedRackTiles(List<string> playedWords)
+        {
             var usedRackTiles = new List<string>();
-            //var playedWords = data[0].Value.ToString().Split(",");              
+            foreach (string word in playedWords)
+            {
+                var playedTiles = word.Split(",");
+                foreach (string tile in playedTiles)
+                {
+                    if (tile.Contains("_rack") && !usedRackTiles.Contains(tile))
+                    {
+                        usedRackTiles.Add(tile);
+                    }
+                }
+            }
+            return usedRackTiles;
+        }
+        public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data) {
+            List<string> playedWords = GetPlayedWords(data);
+            var usedRackTiles = GetPlayedRackTiles(playedWords);
+            string logBuilder = "Player" + game.GetPlayerAtHand().ID + " played ";            
             for (int i = 0; i < playedWords.Count; i++)
             {
                 var playedWord = playedWords[i];
@@ -119,22 +139,22 @@ namespace Scrabble.Helpers
                     int tileX = Int32.Parse(tileDetails[0]);
                     int tileY = Int32.Parse(tileDetails[1]);
                     int tileCharTileId = Int32.Parse(tileDetails[2]);
-                    bool tileIsFromRackAndNotAlreadyUsed = false;
-                    if (tileDetails.Length == 4 && tileDetails[3] == "rack")
-                    {
-                        if (!usedRackTiles.Any(tile => tile == playedTile))
-                        {
-                            tileIsFromRackAndNotAlreadyUsed = true;
-                            usedRackTiles.Add(playedTile);
-                        }
-                    }
+                    //bool tileIsFromRackAndNotAlreadyUsed = false;
+                    //if (tileDetails.Length == 4 && tileDetails[3] == "rack")
+                    //{
+                    //    if (!usedRackTiles.Any(tile => tile == playedTile))
+                    //    {
+                    //        tileIsFromRackAndNotAlreadyUsed = true;
+                    //        usedRackTiles.Add(playedTile);
+                    //    }
+                    //}
                     playedWordString += game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault().Letter;
                     game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
-                    if (tileIsFromRackAndNotAlreadyUsed)
-                    {
-                        game.GetPlayerAtHand().Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault());
-                        game.GetPlayerAtHand().Rack.DrawFromPouch();
-                    }
+                    //if (tileIsFromRackAndNotAlreadyUsed)
+                    //{
+                    //    //game.GetPlayerAtHand().Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault());
+                    //    //game.GetPlayerAtHand().Rack.DrawFromPouch();
+                    //}
                 }
 
                 if (!CheckWordValidity(playedWordString, true))

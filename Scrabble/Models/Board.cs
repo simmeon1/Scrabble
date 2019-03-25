@@ -15,10 +15,6 @@ namespace Scrabble.Models
         [ForeignKey("GameID")]
         public virtual Game Game { get; set; }
 
-        /*public int WordDictionaryID { get; set; }
-        [ForeignKey("WordDictionaryID")]
-        public WordDictionary WordDictionary { get; set; }*/
-
         public virtual ICollection<BoardTile> BoardTiles { get; set; }
 
         public void PlayTile (int x, int y, int charTileId, List<BoardTile> usedBoardTiles)
@@ -35,39 +31,6 @@ namespace Scrabble.Models
             BoardTiles = boardTilesList;
         }
 
-        /*public Board()
-        {
-            Random rnd = new Random();
-            ID = rnd.Next(1, 5000);
-            Rows = 15;
-            Columns = 15;
-            BoardTiles = new List<BoardTile>();
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    BoardTiles.Add(new BoardTile(i, j));
-                }
-            }
-        }*/
-
-        /*public Board (int rows, int columns, WordDictionary wordDictionary = null)
-        {
-            Random rnd = new Random();
-            ID = rnd.Next(1, 5000);
-            Rows = rows;
-            Columns = columns;
-            //WordDictionary = wordDictionary;
-            BoardTiles = new List<BoardTile>();
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    BoardTiles.Add(new BoardTile(i, j));
-                }               
-            }
-        }*/
-
         public BoardTile[,] ConvertTo2DArray ()
         {
             List<BoardTile> boardTilesList = BoardTiles.ToList();
@@ -80,6 +43,63 @@ namespace Scrabble.Models
             return array;
         }
 
+        public bool[,] GetAnchors()
+        {
+            BoardTile[,] boardArray = ConvertTo2DArray();
+            bool[,] arrayWithAnchors = new bool[Rows, Columns];
+            for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
+            {
+                for (int j = 0; j < arrayWithAnchors.GetLength(1); j++)
+                {
+                    arrayWithAnchors[i, j] = false;
+                }
+            }
+            for (int i = 0; i < boardArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < boardArray.GetLength(1); j++)
+                {
+                    if (boardArray[i,j].CharTile != null)
+                    {
+                        if (i > 0 && boardArray[i-1, j].CharTile == null)
+                        {
+                            arrayWithAnchors[i - 1, j] = true;
+                        }
+                        if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
+                        {
+                            arrayWithAnchors[i + 1, j] = true;
+                        }
+                        if (j > 0 && boardArray[i, j - 1].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j - 1] = true;
+                        }
+                        if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j + 1] = true;
+                        }
+                    }
+
+                }
+            }
+            return arrayWithAnchors;
+        }
+
+        public bool CheckIfAnchorIsUsed (List<string> playedRackTiles)
+        {
+            foreach (var tile in playedRackTiles)
+            {
+                var tileDetails = tile.Split("_");
+                int tileX = Int32.Parse(tileDetails[0]);
+                int tileY = Int32.Parse(tileDetails[1]);
+                int tileCharTileId = Int32.Parse(tileDetails[2]);
+                var anchors = GetAnchors();
+                if (anchors[tileX, tileY] == true)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public string IntToCSSWidth (int measurement)
         {
             string temp = "";
@@ -87,14 +107,5 @@ namespace Scrabble.Models
             temp = temp.Replace(',', '.');
             return temp;
         }
-
-        /*public void SetBoardTileType(BoardTileTypes.Type type, int[] tileIds)
-        {
-            for (int i = 0; i < tileIds.Length; i++)
-            {
-                int tileId = tileIds[i];
-                BoardTiles[tileId % 10][tileId / 10].BoardTileType = type;
-            }
-        }*/
     }
 }
