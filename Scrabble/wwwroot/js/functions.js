@@ -447,6 +447,7 @@ $(document).ready(function () {
             //$("body").removeClass("Start");
             $("#output").height($("#board").height());
             anchorUsed = false;
+            updateStatusMessage("Success :)", "success");
             //console.log(view);
         }).fail(function (jqXHR, textStatus) {
             updateStatusMessage(jqXHR.responseText, "danger");

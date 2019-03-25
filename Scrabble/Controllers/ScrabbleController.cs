@@ -42,6 +42,7 @@ namespace Scrabble.Controllers
                 {
                     return StatusCode(result.StatusCode, result.StatusDescription);
                 }
+                game.SwitchToNextPlayer();
                 _scrabbleContext.SaveChanges();
             }
             return View(game);

@@ -91,13 +91,16 @@ namespace Scrabble.Helpers
         }
         public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data) {
             List<string> playedWords = new List<string>();
+            string logBuilder = "";
+            logBuilder += "Player" + game.GetPlayerAtHand().ID + " played ";
             foreach (KeyValuePair<string, StringValues> wordData in data)
             {
                 playedWords.Add(wordData.Value);
             }
             //var playedWords = data[0].Value.ToString().Split(",");              
-            foreach (string playedWord in playedWords)
+            for (int i = 0; i < playedWords.Count; i++)
             {
+                var playedWord = playedWords[i];
                 var currentScoreOfMove = 0;
                 var playedWordString = "";
                 var usedBoardTiles = new List<BoardTile>();               
@@ -108,19 +111,35 @@ namespace Scrabble.Helpers
                     int tileX = Int32.Parse(tileDetails[0]);
                     int tileY = Int32.Parse(tileDetails[1]);
                     int tileCharTileId = Int32.Parse(tileDetails[2]);
-                    playedWordString += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Letter;
+                    playedWordString += game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault().Letter;
                     game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
                     //currentScoreOfMove += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Score;
                 }
 
-                if (!CheckWordValidity(playedWordString))
+                if (!CheckWordValidity(playedWordString, true))
                 {
                     return new HttpStatusCodeResult(404, playedWordString + " is not a legal word.");
                 }
                 currentScoreOfMove = GetWordScore(usedBoardTiles);
                 playedWordString = playedWordString.ToUpper();
-                game.Log += "Player played " + playedWordString + " for " + currentScoreOfMove + " points.";
+                game.AddScoreToPlayer(game.GetPlayerAtHand(), currentScoreOfMove);
+                logBuilder += playedWordString + " for " + currentScoreOfMove + " points";
+                if (i == playedWords.Count - 1)
+                {
+                    logBuilder += ". ";
+                } else if (i == playedWords.Count - 2)
+                {
+                    logBuilder += " and ";
+                } else
+                {
+                    logBuilder += " , ";
+                }
+                //game.Log += "Player" + game.GetPlayerAtHand().ID + " played " + playedWordString + " for " + currentScoreOfMove + " points.";
+                //game.Log += "-------------------------";
             }
+            game.Log += logBuilder;
+            game.Log += "Player" + game.GetPlayerAtHand().ID + " now has " + game.GetPlayerAtHand().Score + " points.";
+            game.Log += "-------------------------";
             return new HttpStatusCodeResult(200, "Good move :)");
         }
     }

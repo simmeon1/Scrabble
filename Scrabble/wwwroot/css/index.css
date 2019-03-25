@@ -1,7 +1,7 @@
 #board {
     /*display: grid;*/
     width: 70%;
-    min-width: 600px;
+    width: 600px;
     overflow: auto;
     margin: 0 auto;
     float: right;
@@ -9,7 +9,7 @@
 
 #output {
     /*display: grid;*/
-    width: 28%;
+    width: 30%;
     overflow: auto;
     margin: 0 auto;
     float: left;
@@ -21,7 +21,7 @@
 
 
 #game {
-    width: 80%;
+    width: 1000px;
     overflow: auto;
     margin: 0 auto;
 }

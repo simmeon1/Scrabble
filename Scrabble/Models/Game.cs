@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Scrabble.Models
 {
     public class Game
     {
-        public int ID { get; set; }         
-        
+        public int ID { get; set; }
+
         public int GameLanguageID { get; set; }
         public virtual GameLanguage GameLanguage { get; set; }
         //public int RackSize { get; set; }
 
-       /* //[NotMapped]
-        public int CurrentPlayerID { get; set; }
-        //[ForeignKey("PlayerID")]
-        [NotMapped]
-        public Player CurrentPlayer { get; set; }*/
+        /* //[NotMapped]
+         public int CurrentPlayerID { get; set; }
+         //[ForeignKey("PlayerID")]
+         [NotMapped]
+         public Player CurrentPlayer { get; set; }*/
 
         public virtual ICollection<Player> Players { get; set; }
         //public virtual ICollection<Rack> Racks { get; set; }
@@ -108,5 +109,41 @@ namespace Scrabble.Models
             }
             Players.Add(new Player(id, isHuman, new Rack(RackSize), 0, Pouch));
         }*/
-    }   
+
+        public Player GetPlayerAtHand()
+        {
+            List<Player> playersList = Players.ToList();
+            for (int i = 0; i < playersList.Count; i++)
+            {
+                if (playersList[i].AtHand)
+                {
+                    return playersList[i];
+                }
+            }
+            return null;
+        }
+
+        public void AddScoreToPlayer(Player player, int score)
+        {
+            player.Score += score;
+        }
+
+        public void SwitchToNextPlayer ()
+        {
+            List<Player> playersList = Players.ToList();
+            for (int i = 0; i < playersList.Count; i++)
+            {
+                if (playersList[i].AtHand)
+                {
+                    playersList[i].AtHand = false;
+                    if (i == playersList.Count - 1)
+                    {
+                        playersList[0].AtHand = true;
+                    } else playersList[i + 1].AtHand = true;
+                    return;
+                }
+            }
+            Players = playersList;
+        }
+    }
 }
