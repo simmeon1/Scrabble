@@ -429,7 +429,7 @@ $(document).ready(function () {
             $("#output").height($("#board").height());
             //console.log(view);
         }).fail(function (jqXHR, textStatus) {
-            // xxx;
+            updateStatusMessage(jqXHR.responseText, "danger");
         });
     });
 

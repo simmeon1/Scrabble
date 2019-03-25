@@ -4,7 +4,6 @@ using Scrabble.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Encodings.Web;
 
 namespace Scrabble.Controllers
 {
@@ -38,66 +37,10 @@ namespace Scrabble.Controllers
             }
             else
             {
-                List<string> playedWords = new List<string>();
-                foreach (KeyValuePair<string, StringValues> wordData in data)
+                var result = Helpers.Helper.GetWordScores(game, data);
+                if (result.StatusCode != 200)
                 {
-                    playedWords.Add(wordData.Value);
-                }
-                //var playedWords = data[0].Value.ToString().Split(",");              
-                foreach (string playedWord in playedWords)
-                {
-                    var currentScoreOfMove = 0;
-                    var doubleWordTilesUsed = 0;
-                    var tripleWordTilesUsed = 0;
-                    var usedBoardTiles = new List<BoardTile>();
-                    var playedWordString = "";
-                    var playedTiles = playedWord.Split(",");
-                    foreach (string playedTile in playedTiles)
-                    {
-                        var tileDetails = playedTile.Split("_");
-                        int tileX = Int32.Parse(tileDetails[0]);
-                        int tileY = Int32.Parse(tileDetails[1]);
-                        int tileCharTileId = Int32.Parse(tileDetails[2]);
-                        playedWordString += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Letter;
-                        game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
-                        //currentScoreOfMove += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Score;
-                    }
-
-                    foreach (BoardTile b in usedBoardTiles)
-                    {
-
-                        switch (b.BoardTileType.Type)
-                        {
-                            case "DoubleLetter":
-                                currentScoreOfMove += b.CharTile.Score * 2;
-                                break;
-                            case "TripleLetter":
-                                currentScoreOfMove += b.CharTile.Score * 3;
-                                break;
-                            case "DoubleWord":
-                                doubleWordTilesUsed += 1;
-                                currentScoreOfMove += b.CharTile.Score;
-                                break;
-                            case "TripleWord":
-                                tripleWordTilesUsed += 1;
-                                currentScoreOfMove += b.CharTile.Score;
-                                break;
-                            default:
-                                currentScoreOfMove += b.CharTile.Score;
-                                break;
-                        }
-                    }
-                    for (int i = 0; i < doubleWordTilesUsed; i++)
-                    {
-                        currentScoreOfMove *= 2;
-                    }
-                    for (int i = 0; i < tripleWordTilesUsed; i++)
-                    {
-                        currentScoreOfMove *= 3;
-                    }
-                    playedWordString = playedWordString.ToUpper();
-                    game.Log += "\nPlayer played " + playedWordString + " for " + currentScoreOfMove + " points.";                   
-                    //ScrabbleContext context = new ScrabbleContext();
+                    return StatusCode(result.StatusCode, result.StatusDescription);
                 }
                 _scrabbleContext.SaveChanges();
             }
@@ -113,6 +56,11 @@ namespace Scrabble.Controllers
             }
             game.Log = "Enjoy the game!";
             _scrabbleContext.SaveChanges();
+        }
+
+        public void MakeEnglishDictionary()
+        {
+            Helpers.Helper.MakeEnglishDictionary();
         }
 
         // 

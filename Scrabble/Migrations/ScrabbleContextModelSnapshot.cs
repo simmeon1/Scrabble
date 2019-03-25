@@ -496,8 +496,33 @@ namespace Scrabble.Migrations
                     b.ToTable("Pouch_CharTiles");
 
                     b.HasData(
-                        new { ID = 1, CharTileID = 1, Count = 5, PouchID = 1 },
-                        new { ID = 2, CharTileID = 2, Count = 3, PouchID = 1 }
+                        new { ID = 1, CharTileID = 1, Count = 0, PouchID = 1 },
+                        new { ID = 2, CharTileID = 2, Count = 9, PouchID = 1 },
+                        new { ID = 3, CharTileID = 3, Count = 1, PouchID = 1 },
+                        new { ID = 4, CharTileID = 4, Count = 1, PouchID = 1 },
+                        new { ID = 5, CharTileID = 5, Count = 3, PouchID = 1 },
+                        new { ID = 6, CharTileID = 6, Count = 12, PouchID = 1 },
+                        new { ID = 7, CharTileID = 7, Count = 1, PouchID = 1 },
+                        new { ID = 8, CharTileID = 8, Count = 2, PouchID = 1 },
+                        new { ID = 9, CharTileID = 9, Count = 1, PouchID = 1 },
+                        new { ID = 10, CharTileID = 10, Count = 7, PouchID = 1 },
+                        new { ID = 11, CharTileID = 11, Count = 0, PouchID = 1 },
+                        new { ID = 12, CharTileID = 12, Count = 1, PouchID = 1 },
+                        new { ID = 13, CharTileID = 13, Count = 4, PouchID = 1 },
+                        new { ID = 14, CharTileID = 14, Count = 1, PouchID = 1 },
+                        new { ID = 15, CharTileID = 15, Count = 5, PouchID = 1 },
+                        new { ID = 16, CharTileID = 16, Count = 7, PouchID = 1 },
+                        new { ID = 17, CharTileID = 17, Count = 1, PouchID = 1 },
+                        new { ID = 18, CharTileID = 18, Count = 1, PouchID = 1 },
+                        new { ID = 19, CharTileID = 19, Count = 6, PouchID = 1 },
+                        new { ID = 20, CharTileID = 20, Count = 4, PouchID = 1 },
+                        new { ID = 21, CharTileID = 21, Count = 6, PouchID = 1 },
+                        new { ID = 22, CharTileID = 22, Count = 3, PouchID = 1 },
+                        new { ID = 23, CharTileID = 23, Count = 2, PouchID = 1 },
+                        new { ID = 24, CharTileID = 24, Count = 2, PouchID = 1 },
+                        new { ID = 25, CharTileID = 25, Count = 1, PouchID = 1 },
+                        new { ID = 26, CharTileID = 26, Count = 2, PouchID = 1 },
+                        new { ID = 27, CharTileID = 26, Count = 1, PouchID = 1 }
                     );
                 });
 
@@ -557,7 +582,16 @@ namespace Scrabble.Migrations
                         new { ID = 2, CharTileID = 16, Count = 1, RackID = 1 },
                         new { ID = 3, CharTileID = 10, Count = 1, RackID = 1 },
                         new { ID = 4, CharTileID = 15, Count = 1, RackID = 1 },
-                        new { ID = 5, CharTileID = 8, Count = 1, RackID = 1 }
+                        new { ID = 5, CharTileID = 8, Count = 1, RackID = 1 },
+                        new { ID = 6, CharTileID = 15, Count = 1, RackID = 1 },
+                        new { ID = 7, CharTileID = 4, Count = 1, RackID = 1 },
+                        new { ID = 8, CharTileID = 7, Count = 1, RackID = 2 },
+                        new { ID = 9, CharTileID = 17, Count = 1, RackID = 2 },
+                        new { ID = 10, CharTileID = 10, Count = 1, RackID = 2 },
+                        new { ID = 11, CharTileID = 14, Count = 1, RackID = 2 },
+                        new { ID = 12, CharTileID = 5, Count = 1, RackID = 2 },
+                        new { ID = 13, CharTileID = 9, Count = 1, RackID = 2 },
+                        new { ID = 14, CharTileID = 11, Count = 1, RackID = 2 }
                     );
                 });
 

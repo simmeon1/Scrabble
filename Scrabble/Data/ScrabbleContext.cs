@@ -33,15 +33,20 @@ namespace Scrabble.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GameLanguage>().HasData(new GameLanguage { ID = 1, Language = "English" });
+
             modelBuilder.Entity<WordDictionary>().HasData(new WordDictionary { ID = 1, GameLanguageID = 1 });
+
             modelBuilder.Entity<Game>().HasData(new Game { ID = 1, GameLanguageID = 1, BoardID = 1, PouchID = 1, WordDictionaryID = 1, Log = "Enjoy the game!" });
+
             modelBuilder.Entity<Board>().HasData(new Board { ID = 1, Rows = 15, Columns = 15, GameID = 1 });
+
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 1, Type = "Normal" });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 2, Type = "DoubleLetter" });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 3, Type = "TripleLetter" });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 4, Type = "DoubleWord" });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 5, Type = "TripleWord" });
             modelBuilder.Entity<BoardTileType>().HasData(new BoardTileType { ID = 6, Type = "Start" });
+
             modelBuilder.Entity<BoardTile>().HasData(new BoardTile { ID = 1, BoardLocationX = 0, BoardLocationY = 0, BoardID = 1, BoardTileTypeID = 5 });
             modelBuilder.Entity<BoardTile>().HasData(new BoardTile { ID = 2, BoardLocationX = 1, BoardLocationY = 0, BoardID = 1, BoardTileTypeID = 1 });
             modelBuilder.Entity<BoardTile>().HasData(new BoardTile { ID = 3, BoardLocationX = 2, BoardLocationY = 0, BoardID = 1, BoardTileTypeID = 1 });
@@ -296,19 +301,57 @@ namespace Scrabble.Models
             modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 25, Letter = 'X', Score = 8, GameLanguageID = 1, WordDictionaryID = 1 });
             modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 26, Letter = 'Y', Score = 4, GameLanguageID = 1, WordDictionaryID = 1 });
             modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 27, Letter = 'Z', Score = 10, GameLanguageID = 1, WordDictionaryID = 1 });
+
             modelBuilder.Entity<Pouch>().HasData(new Pouch { ID = 1, GameID = 1 });
+
             modelBuilder.Entity<Player>().HasData(new Player { ID = 1, IsHuman = true, Score = 0, GameID = 1, RackID = 1, PouchID = 1, AtHand = true });
             modelBuilder.Entity<Player>().HasData(new Player { ID = 2, IsHuman = false, Score = 0, GameID = 1, RackID = 2, PouchID = 1, AtHand = false });
+
             modelBuilder.Entity<Rack>().HasData(new Rack { ID = 1, PouchID = 1, RackSize = 7, GameID = 1, PlayerID = 1 });
             modelBuilder.Entity<Rack>().HasData(new Rack { ID = 2, PouchID = 1, RackSize = 7, GameID = 1, PlayerID = 2 });                          
            
-            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 1, PouchID = 1, CharTileID = 1, Count = 5 });
-            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 2, PouchID = 1, CharTileID = 2, Count = 3 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 1, PouchID = 1, CharTileID = 1, Count = 0 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 2, PouchID = 1, CharTileID = 2, Count = 9 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 3, PouchID = 1, CharTileID = 3, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 4, PouchID = 1, CharTileID = 4, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 5, PouchID = 1, CharTileID = 5, Count = 3 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 6, PouchID = 1, CharTileID = 6, Count = 12 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 7, PouchID = 1, CharTileID = 7, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 8, PouchID = 1, CharTileID = 8, Count = 2 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 9, PouchID = 1, CharTileID = 9, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 10, PouchID = 1, CharTileID = 10, Count = 7 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 11, PouchID = 1, CharTileID = 11, Count = 0 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 12, PouchID = 1, CharTileID = 12, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 13, PouchID = 1, CharTileID = 13, Count = 4 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 14, PouchID = 1, CharTileID = 14, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 15, PouchID = 1, CharTileID = 15, Count = 5 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 16, PouchID = 1, CharTileID = 16, Count = 7 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 17, PouchID = 1, CharTileID = 17, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 18, PouchID = 1, CharTileID = 18, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 19, PouchID = 1, CharTileID = 19, Count = 6 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 20, PouchID = 1, CharTileID = 20, Count = 4 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 21, PouchID = 1, CharTileID = 21, Count = 6 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 22, PouchID = 1, CharTileID = 22, Count = 3 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 23, PouchID = 1, CharTileID = 23, Count = 2 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 24, PouchID = 1, CharTileID = 24, Count = 2 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 25, PouchID = 1, CharTileID = 25, Count = 1 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 26, PouchID = 1, CharTileID = 26, Count = 2 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 27, PouchID = 1, CharTileID = 26, Count = 1 });
+
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 1, RackID = 1, CharTileID = 3, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 2, RackID = 1, CharTileID = 16, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 3, RackID = 1, CharTileID = 10, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 4, RackID = 1, CharTileID = 15, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 5, RackID = 1, CharTileID = 8, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 6, RackID = 1, CharTileID = 15, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 7, RackID = 1, CharTileID = 4, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 8, RackID = 2, CharTileID = 7, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 9, RackID = 2, CharTileID = 17, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 10, RackID = 2, CharTileID = 10, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 11, RackID = 2, CharTileID = 14, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 12, RackID = 2, CharTileID = 5, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 13, RackID = 2, CharTileID = 9, Count = 1 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 14, RackID = 2, CharTileID = 11, Count = 1 });
         }
     }
     
