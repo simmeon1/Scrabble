@@ -1,7 +1,7 @@
 #board {
     /*display: grid;*/
-    width: 70%;
-    width: 600px;
+    /*width: 70%;*/
+    width: 680px;
     overflow: auto;
     margin: 0 auto;
     float: right;
@@ -92,9 +92,9 @@
     background-color: yellow !important;
 }
 
-.currently-foreseen-tile {
-    /*background-color: lightgray;*/
-}
+/*.currently-foreseen-tile {
+    background-color: lightgray;
+}*/
 
 .DoubleLetter {
     background-color: lightblue;

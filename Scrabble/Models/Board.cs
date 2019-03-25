@@ -30,18 +30,6 @@ namespace Scrabble.Models
                 {
                     b.CharTileID = charTileId;
                     usedBoardTiles.Add(b);
-                    //switch (b.BoardTileType)
-                    //{
-                    //    case "DoubleLetter":
-                    //        Console.WriteLine("Case 1");
-                    //        break;
-                    //    case "TripleLetter":
-                    //        Console.WriteLine("Case 1");
-                    //        break;
-                    //    default:
-                    //        currentScoreOfMove += char
-                    //        break;
-                    //}
                 }
             }
             BoardTiles = boardTilesList;

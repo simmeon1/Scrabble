@@ -71,5 +71,43 @@ namespace Scrabble.Models
             }
             return temp;
         }
+
+        public void SubstractFromRack (CharTile tile)
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            var tileEntryInDb = rackTiles.Where(c => c.CharTileID == tile.ID).FirstOrDefault();
+            if (tileEntryInDb.Count == 1)
+            {
+                rackTiles.RemoveAll(c => c.CharTileID == tile.ID);
+            }
+            else tileEntryInDb.Count--;
+            Rack_CharTiles = rackTiles;
+        }
+
+        public void DrawFromPouch()
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            int countOfRackTiles = 0;
+            foreach (Rack_CharTile charTileDbEntry in Rack_CharTiles)
+            {
+                countOfRackTiles += charTileDbEntry.Count;
+            }
+            for (int i = countOfRackTiles; i < RackSize; i++)
+            {
+                var randomTile = Pouch.PickRandomTile();
+                if (randomTile == null)
+                {
+                    break;
+                }
+                if (rackTiles.Any(t => t.CharTileID == randomTile.ID)) {
+                    var tileEntryInDb = rackTiles.Where(t => t.CharTileID == randomTile.ID).FirstOrDefault();
+                    tileEntryInDb.Count++;
+                } else
+                {
+                    rackTiles.Add(new Rack_CharTile { RackID = ID, CharTileID = randomTile.ID, Count = 1 });
+                }
+            }
+            Rack_CharTiles = rackTiles;
+        }
     }
 }

@@ -79,31 +79,39 @@ namespace Scrabble.Helpers
                         break;
                 }
             }
-            for (int i = 0; i < doubleWordTilesUsed; i++)
+            //for (int i = 0; i < doubleWordTilesUsed; i++)
+            //{
+            //    score *= 2;
+            //}
+            //for (int i = 0; i < tripleWordTilesUsed; i++)
+            //{
+            //    score += 3;
+            //}
+            if (doubleWordTilesUsed != 0)
             {
-                score *= 2;
+                score = score * (2 * doubleWordTilesUsed);
             }
-            for (int i = 0; i < tripleWordTilesUsed; i++)
+            if (tripleWordTilesUsed != 0)
             {
-                score *= 3;
+                score = score * (3 * tripleWordTilesUsed);
             }
             return score;
         }
         public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data) {
             List<string> playedWords = new List<string>();
-            string logBuilder = "";
-            logBuilder += "Player" + game.GetPlayerAtHand().ID + " played ";
+            string logBuilder = "Player" + game.GetPlayerAtHand().ID + " played ";
             foreach (KeyValuePair<string, StringValues> wordData in data)
             {
                 playedWords.Add(wordData.Value);
             }
+            var usedRackTiles = new List<string>();
             //var playedWords = data[0].Value.ToString().Split(",");              
             for (int i = 0; i < playedWords.Count; i++)
             {
                 var playedWord = playedWords[i];
                 var currentScoreOfMove = 0;
                 var playedWordString = "";
-                var usedBoardTiles = new List<BoardTile>();               
+                var usedBoardTiles = new List<BoardTile>();                
                 var playedTiles = playedWord.Split(",");
                 foreach (string playedTile in playedTiles)
                 {
@@ -111,9 +119,22 @@ namespace Scrabble.Helpers
                     int tileX = Int32.Parse(tileDetails[0]);
                     int tileY = Int32.Parse(tileDetails[1]);
                     int tileCharTileId = Int32.Parse(tileDetails[2]);
+                    bool tileIsFromRackAndNotAlreadyUsed = false;
+                    if (tileDetails.Length == 4 && tileDetails[3] == "rack")
+                    {
+                        if (!usedRackTiles.Any(tile => tile == playedTile))
+                        {
+                            tileIsFromRackAndNotAlreadyUsed = true;
+                            usedRackTiles.Add(playedTile);
+                        }
+                    }
                     playedWordString += game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault().Letter;
                     game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
-                    //currentScoreOfMove += game.WordDictionary.CharTiles.Where(i => i.ID == tileCharTileId).FirstOrDefault().Score;
+                    if (tileIsFromRackAndNotAlreadyUsed)
+                    {
+                        game.GetPlayerAtHand().Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault());
+                        game.GetPlayerAtHand().Rack.DrawFromPouch();
+                    }
                 }
 
                 if (!CheckWordValidity(playedWordString, true))

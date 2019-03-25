@@ -27,5 +27,13 @@ namespace Scrabble.Models
         public Game Game { get; set; }*/
 
         public int Count { get; set; }
+
+        //public Rack_CharTile (int id, int rackId, int charTileId)
+        //{
+        //    ID = id;
+        //    RackID = rackId;
+        //    CharTileID = charTileId;
+        //    Count = 1;
+        //}
     }
 }

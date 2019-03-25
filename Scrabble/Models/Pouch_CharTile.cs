@@ -23,5 +23,17 @@ namespace Scrabble.Models
         public Game Game { get; set; }*/
 
         public int Count { get; set; }
+
+        public override string ToString()
+        {
+            var output = "";
+            for (int i = 0; i < Count; i++)
+            {
+                output += CharTile.Letter;
+            }
+            return output;
+        }
     }
+
+   
 }

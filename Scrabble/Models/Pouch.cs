@@ -83,5 +83,44 @@ namespace Scrabble.Models
                 PouchTiles[n] = tile;
             }
         }*/
+
+        public CharTile PickRandomTile()
+        {
+            List<Pouch_CharTile> pouchTiles = Pouch_CharTiles.ToList();
+            if (pouchTiles.Count <= 0)
+            {
+                return null;
+            }
+            Random rnd = new Random();
+            int randomIndex = rnd.Next(0, pouchTiles.Count);
+            var tileEntryInDb = pouchTiles[randomIndex];
+            while (tileEntryInDb.Count == 0)
+            {
+                pouchTiles.RemoveAt(randomIndex);
+                randomIndex = rnd.Next(0, pouchTiles.Count);
+                tileEntryInDb = pouchTiles[randomIndex];
+            }
+            if (tileEntryInDb.Count <= 1)
+            {
+                pouchTiles.RemoveAt(randomIndex);
+            }
+            else
+            {
+                tileEntryInDb.Count--;
+            }
+            Pouch_CharTiles = pouchTiles;
+            return tileEntryInDb.CharTile;
+        }
+
+        public override string ToString()
+        {
+            var output = "";
+            List<Pouch_CharTile> pouchTilesList = Pouch_CharTiles.ToList();
+            foreach (Pouch_CharTile entry in pouchTilesList)
+            {
+                output += entry.ToString();
+            }
+            return output;
+        }
     }
 }
