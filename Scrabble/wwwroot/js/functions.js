@@ -110,20 +110,20 @@ $(document).ready(function () {
         if (!((columnsUsed.length == 1 && rowsUsed.length >= 1) || (columnsUsed.length >= 1 && rowsUsed.length == 1))) {
             updateStatusMessage("Please use only one row or column.", "danger");
             return;
-        } else {
-            var indexesOfPlay = columnsUsed.length > rowsUsed.length ? columnsUsed : rowsUsed;
-            var secondaryIndexOfPlay = columnsUsed.length > rowsUsed.length ? rowsUsed : columnsUsed;
-            var typeOfPlay = columnsUsed.length > rowsUsed.length ? "horizontal" : "vertical";
-            var tilesBetweenFirstAndLastTiles = (indexesOfPlay[indexesOfPlay.length - 1] - indexesOfPlay[0] + 1);
-            for (var i = indexesOfPlay[0]; i < indexesOfPlay[indexesOfPlay.length - 1]; i++) {
-                var checkedTile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryIndexOfPlay[0] + "_" + i) : $("#tile_" + i + "_" + secondaryIndexOfPlay[0]);
-                if (!checkedTile.hasClass("locked") && !checkedTile.children().first().hasClass("board_rack_chartile")) {
-                    updateStatusMessage("Play is not connected.", "danger");
-                    return;
-                }
-           }           
+        }
+        var indexesOfPlay = columnsUsed.length > rowsUsed.length ? columnsUsed : rowsUsed;
+        var secondaryIndexOfPlay = columnsUsed.length > rowsUsed.length ? rowsUsed : columnsUsed;
+        var typeOfPlay = columnsUsed.length > rowsUsed.length ? "horizontal" : "vertical";
+        for (var i = indexesOfPlay[0]; i < indexesOfPlay[indexesOfPlay.length - 1]; i++) {
+            var checkedTile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryIndexOfPlay[0] + "_" + i) : $("#tile_" + i + "_" + secondaryIndexOfPlay[0]);
+            if (!checkedTile.hasClass("locked") && !checkedTile.children().first().hasClass("board_rack_chartile")) {
+                updateStatusMessage("Play is not connected.", "danger");
+                return;
+
+            }
         }
 
+        var rackTilesPlayed = [];
         var rowsCount = $("#board").children().length;
         var columnsCount = $("#board").children().first().children().length;
         var boardArray = Array.from({ length: rowsCount }, () =>
@@ -143,6 +143,7 @@ $(document).ready(function () {
                     if (tileDetails.includes("rack")) {
                         var charTileId = tileDetails[4];
                         boardArray[i][j] += "_" + charTileId + "_rack";
+                        rackTilesPlayed.push(boardArray[i][j]);
                     } else {
                         var charTileId = tileDetails[2];
                         boardArray[i][j] += "_" + charTileId;
@@ -199,12 +200,6 @@ $(document).ready(function () {
             return rotatedArray;
         }
 
-        if ((columnsUsed.length == 1 && rowsUsed.length >= 1) || (columnsUsed.length >= 1 && rowsUsed.length == 1)) {
-        } else {
-            updateStatusMessage("Please use only one row or column.", "danger");
-            return;
-        }
-
         var listOfWordsMadeNow = [];
         for (var i = 0; i < listOfWordsOnBoard.length; i++) {
             for (var j = 0; j < listOfWordsOnBoard[i].length; j++) {
@@ -219,16 +214,7 @@ $(document).ready(function () {
             updateStatusMessage("You have not made any words.", "danger");
             return;
         }
-
-        for (var i = 0; i < tilesNotInHorizontalPlay.length; i++) {
-            for (var j = 0; j < tilesNotInVerticalPlay.length; j++) {
-                if (tilesNotInVerticalPlay[j][0].includes(tilesNotInHorizontalPlay[i][0])) {
-                    updateStatusMessage("Tile " + tilesNotInHorizontalPlay[i] + " is not in a valid play.", "danger");
-                    return;
-                }
-            }
-        }
-       
+     
         if (startTile.length == 1 && !startTile.hasClass("locked")) {
             var startTileDetails = $("body").find(".Start").first().attr("id").split("_");
             var startTileX = parseInt(startTileDetails[1]);
@@ -239,8 +225,18 @@ $(document).ready(function () {
             }
         }
 
+        for (var i = 0; i < tilesNotInHorizontalPlay.length; i++) {
+            for (var j = 0; j < tilesNotInVerticalPlay.length; j++) {
+                if (tilesNotInVerticalPlay[j][0].includes(tilesNotInHorizontalPlay[i][0])) {
+                    updateStatusMessage("Tile " + tilesNotInHorizontalPlay[i] + " is not in a valid play.", "danger");
+                    return;
+                }
+            }
+        }
+
         var data = {
-            "playerWords": listOfWordsMadeNow
+            "playedRackTiles": rackTilesPlayed,
+            "playedWords": listOfWordsMadeNow
         };
         updateStatusMessage("Loading...", "info");
         $.ajax({

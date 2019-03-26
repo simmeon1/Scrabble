@@ -43,9 +43,8 @@ namespace Scrabble.Models
             return array;
         }
 
-        public bool[,] GetAnchors()
+        public bool[,] GetAnchors(BoardTile[,] boardArray)
         {
-            BoardTile[,] boardArray = ConvertTo2DArray();
             bool[,] arrayWithAnchors = new bool[Rows, Columns];
             for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
             {
@@ -83,15 +82,25 @@ namespace Scrabble.Models
             return arrayWithAnchors;
         }
 
-        public bool CheckIfAnchorIsUsed (List<string> playedRackTiles)
+        public bool CheckIfAnchorIsUsed (string[] playedRackTiles, BoardTile[,] boardArray)
         {
+            for (int i = 0; i < boardArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < boardArray.GetLength(1); j++)
+                {
+                    if (boardArray[i, j].BoardTileType.Type == "Start")
+                    {
+                        if (boardArray[i, j].CharTile == null) return true;
+                    }                 
+                }
+            }
             foreach (var tile in playedRackTiles)
             {
                 var tileDetails = tile.Split("_");
                 int tileX = Int32.Parse(tileDetails[0]);
                 int tileY = Int32.Parse(tileDetails[1]);
                 int tileCharTileId = Int32.Parse(tileDetails[2]);
-                var anchors = GetAnchors();
+                var anchors = GetAnchors(boardArray);
                 if (anchors[tileX, tileY] == true)
                 {
                     return true;

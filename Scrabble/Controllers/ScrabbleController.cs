@@ -37,13 +37,26 @@ namespace Scrabble.Controllers
             }
             else
             {
-                var anchors = game.Board.GetAnchors();
+                var boardArray = game.Board.ConvertTo2DArray();
                 var playedWords = Helpers.Helper.GetPlayedWords(data);
-                var playedRackTiles = Helpers.Helper.GetPlayedRackTiles(playedWords);
-                if (!game.Board.CheckIfAnchorIsUsed(playedRackTiles))
+                var playedRackTiles = Helpers.Helper.GetPlayedRackTiles(data);
+                if (playedRackTiles.Length == 0)
+                {
+                    return StatusCode(400, "You have not played a tile.");
+                }
+                if (!game.Board.CheckIfAnchorIsUsed(playedRackTiles, boardArray))
                 {
                     return StatusCode(400, "Anchor is not used.");
                 }
+                if (!Helpers.Helper.ValidateStart(boardArray, playedRackTiles))
+                {
+                    return StatusCode(400, "Invalid start.");
+                }
+                if (!Helpers.Helper.IsRackPlayConnected(boardArray, playedRackTiles))
+                {
+                    return StatusCode(400, "Play is not connected.");
+                }
+
                 var result = Helpers.Helper.GetWordScores(game, data);
                 if (result.StatusCode != 200)
                 {
