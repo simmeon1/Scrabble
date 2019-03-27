@@ -39,11 +39,15 @@ namespace Scrabble.Helpers
 
             //var h = "hello";
         }
-        public static bool CheckWordValidity(string word, bool alwaysExists = false)
+        public static Dawg<bool> LoadDawg (GameLanguage language)
         {
-            Stream fs = File.Open(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\englishDawg.bin", FileMode.Open, FileAccess.Read);
+            Stream fs = File.Open(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\" + language.Language + "Dawg.bin", FileMode.Open, FileAccess.Read);
             var dawg = Dawg<bool>.Load(fs);
-
+            return dawg;
+        }
+        public static bool CheckWordValidity(Dawg<bool> dawg, string word, bool alwaysExists = false)
+        {
+            
             if (!alwaysExists && !dawg[word.ToLower()])
             {
                 return false;
@@ -104,6 +108,75 @@ namespace Scrabble.Helpers
             }         
             return words.Split(";");
         }
+
+        public static void GetValidCrossChecks(BoardTile[,] boardArray, WordDictionary dictionary, Dictionary<int[], List<CharTile>> validCrossChecks, bool boardIsTransposed)
+        {
+            var dawg = LoadDawg(dictionary.GameLanguage);
+            List<int[]> tilesAlreadyChecked = new List<int[]>();
+            for (int i = 0; i < boardArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < boardArray.GetLength(1); j++) {
+                    if (boardArray[i,j].CharTile == null)
+                    {
+                        var wordAboveEmptyTile = "";
+                        var wordUnderEmptyTile = "";
+                        var upIndexCounter = i;
+                        var downIndexCounter = i;                       
+                        
+                        while (upIndexCounter > 0 && boardArray[upIndexCounter - 1, j].CharTile != null)
+                        {
+                            wordAboveEmptyTile = wordAboveEmptyTile.Insert(0, boardArray[upIndexCounter - 1, j].CharTile.Letter.ToString());
+                            upIndexCounter--;
+                        }
+                        
+                        while (downIndexCounter < boardArray.GetLength(0) - 1 && boardArray[downIndexCounter + 1, j].CharTile != null)
+                        {
+                            wordUnderEmptyTile += boardArray[downIndexCounter + 1, j].CharTile.Letter;
+                            downIndexCounter++;
+                        }
+                        var combinedWord = "";
+                        combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
+                        if (boardIsTransposed)
+                        {
+                            //var combinedWordReversed = String.Copy(combinedWord);
+                            //combinedWord = ReverseString(combinedWordReversed);
+                            combinedWord = ReverseString(combinedWord);
+                        }
+                        else
+                        {
+                            combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
+                        }
+                        //combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
+                        if (combinedWord == "_")
+                        {
+                            continue;
+                        } else {
+                            var rowIndexOnOriginalBoard = boardArray[i, j].BoardLocationX;
+                            var columnIndexOnOriginalBoard = boardArray[i, j].BoardLocationY;
+                            if (!validCrossChecks.ContainsKey(new int[] { rowIndexOnOriginalBoard, columnIndexOnOriginalBoard }))
+                            {
+                                validCrossChecks[new int[] { rowIndexOnOriginalBoard, columnIndexOnOriginalBoard }] = new List<CharTile>();
+                            }
+                            foreach (var c in dictionary.CharTiles)
+                            {
+                                var combinedWordTemp = String.Copy(combinedWord);
+                                combinedWordTemp = combinedWordTemp.Replace('_', c.Letter);
+                                if (CheckWordValidity(dawg, combinedWordTemp))
+                                {
+                                    if (validCrossChecks.ContainsKey(new int[] { rowIndexOnOriginalBoard, columnIndexOnOriginalBoard } )) {
+                                        if (!validCrossChecks[new int[] { rowIndexOnOriginalBoard, columnIndexOnOriginalBoard }].Contains(c))
+                                        {
+                                            validCrossChecks[new int[] { rowIndexOnOriginalBoard, columnIndexOnOriginalBoard }].Add(c);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public static string[] GetPlayedRackTiles (List<KeyValuePair<string, StringValues>> data)
         {
             string tiles = "";
@@ -115,6 +188,25 @@ namespace Scrabble.Helpers
                 }
             }
             return tiles.Split(",");
+        }
+        public static void GetBoardArrayFromHtml(List<KeyValuePair<string, StringValues>> data)
+        {
+            string boardArrayString = "";
+            foreach (var dataRow in data)
+            {
+                if (dataRow.Key.Contains("boardArray"))
+                {
+                    boardArrayString += dataRow.Value + ";";
+                }
+            }
+            if (boardArrayString.Length >= 1)
+            {
+                boardArrayString = boardArrayString.Remove(boardArrayString.Length - 1, 1);
+            }
+            var boardArrayAsRows = boardArrayString.Split(";");
+            var rows = boardArrayAsRows.Length;
+            int columns = boardArrayAsRows[0].Count(f => f == ',');
+            var boardArray = new int[rows, columns];
         }
         public static int[] GetTileDetails (string tile)
         {
@@ -238,6 +330,7 @@ namespace Scrabble.Helpers
             return true;
         }
         public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data) {
+            var dawg = LoadDawg(game.GameLanguage);
             var playerAtHand = game.GetPlayerAtHand();
             var playedWords = GetPlayedWords(data);
             var playedRackTiles = GetPlayedRackTiles(data);
@@ -257,9 +350,9 @@ namespace Scrabble.Helpers
                     int tileCharTileId = tileDetails[2];
                     playedWordString += game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault().Letter;
                     game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
-                }                
-
-                if (!CheckWordValidity(playedWordString, false))
+                }
+              
+                if (!CheckWordValidity(dawg, playedWordString, false))
                 {
                     return new HttpStatusCodeResult(400, playedWordString + " is not a legal word.");
                 }
@@ -291,6 +384,12 @@ namespace Scrabble.Helpers
             game.Log += "Player" + playerAtHand.ID + " now has " + playerAtHand.Score + " points.";
             game.Log += "-------------------------";
             return new HttpStatusCodeResult(200, "Good move :)");
+        }
+        public static string ReverseString(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
         }
     }
 }

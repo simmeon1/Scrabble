@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Scrabble.Classes;
 using Scrabble.Models;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,38 @@ namespace Scrabble.Controllers
         public void MakeEnglishDictionary()
         {
             Helpers.Helper.MakeEnglishDictionary();
+        }
+
+        public IActionResult GetMoves()
+        {
+            Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            List<KeyValuePair<string, StringValues>> data = null;
+            try
+            {               
+                data = Request.Form.ToList();
+            }
+            catch (Exception e)
+            {
+                //continue;
+            }
+            if (data == null)
+            {
+                //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
+            } else
+            {
+                //Helpers.Helper.GetBoardArrayFromHtml(data);
+                var boardArray = game.Board.ConvertTo2DArray();
+                var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
+                //transposedBoardArray.to
+                List<int[]> listOfValidAnchorCoordinates = new List<int[]>();
+                Dictionary<int[], List<CharTile>> validHorizontalCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());
+                Dictionary<int[], List<CharTile>> validVerticalCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());
+                Helpers.Helper.GetValidCrossChecks(boardArray, game.WordDictionary, validHorizontalCrossChecks, false);
+                Helpers.Helper.GetValidCrossChecks(transposedBoardArray, game.WordDictionary, validVerticalCrossChecks, true);
+                var anchorArray = game.Board.GetAnchors(boardArray, listOfValidAnchorCoordinates);
+                return StatusCode(200, "hi");
+            }
+            return StatusCode(400, "error");
         }
 
         // 

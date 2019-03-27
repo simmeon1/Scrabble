@@ -52,6 +52,25 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", "#getMoves", function () {
+        var boardArray = getBoardArray(false);
+        var data = {
+            "boardArray": boardArray
+        };
+        updateStatusMessage("Loading...", "info");
+        $.ajax({
+            url: '/Scrabble/GetMoves',
+            async: true,
+            type: "POST",
+            data: data,
+        }).done(function (view) {
+            alert(view);
+        }).fail(function (jqXHR) {
+            updateStatusMessage(jqXHR.responseText, "danger");
+        });
+    });
+
+
     $(document).on("click", ".grid-item", function () {
         if ($(this).hasClass("locked")) {
             return;
@@ -136,81 +155,15 @@ $(document).ready(function () {
         }
 
         var rackTilesPlayed = [];
-        var rowsCount = $("#board").children().length;
-        var columnsCount = $("#board").children().first().children().length;
-        var boardArray = Array.from({ length: rowsCount }, () =>
-            Array.from({ length: columnsCount }, () => false)
-        );
-        for (var i = 0; i < rowsCount; i++) {
-            for (var j = 0; j < columnsCount; j++) {
-                var textInTile = $("#board").children().eq(i).children().eq(j).children().first();
-                if (textInTile.attr("id").includes("board_chartile_0")) {
-                    boardArray[i][j] = "";
-                } else {
-                    var tileDetails = textInTile.attr("id").split("_");
-                    var boardTileDetails = textInTile.parent().attr("id").split("_");
-                    var boardTileRow = boardTileDetails[1];
-                    var boardTileColumn = boardTileDetails[2];
-                    boardArray[i][j] = boardTileRow + "_" + boardTileColumn;
-                    if (tileDetails.includes("rack")) {
-                        var charTileId = tileDetails[4];
-                        boardArray[i][j] += "_" + charTileId + "_rack";
-                        rackTilesPlayed.push(boardArray[i][j]);
-                    } else {
-                        var charTileId = tileDetails[2];
-                        boardArray[i][j] += "_" + charTileId;
-                    }
-                }
-            }
-        }
+        var boardArray = getBoardArray(true, rackTilesPlayed);        
 
-        var detectedWord = [];
+        //var detectedWord = [];
         var totalMovesMade = 0;
         var listOfWordsOnBoard = [];
         var tilesNotInHorizontalPlay = [];
         var tilesNotInVerticalPlay = [];
         checkForWordsAndPlays(boardArray, true, tilesNotInHorizontalPlay, totalMovesMade, listOfWordsOnBoard);
-        checkForWordsAndPlays(boardArray, false, tilesNotInVerticalPlay, totalMovesMade, listOfWordsOnBoard);
-
-
-        function checkForWordsAndPlays(boardArray, isHorizontal, tilesNotInPlay, movesMade, listOfWords) {
-            var boardArrayCopy = boardArray.slice(0);
-            var movesMadeTemp = movesMade;
-            if (!isHorizontal) {
-                boardArrayCopy = rotateArrayCounterClockwise(boardArrayCopy);
-            }
-            for (var i = 0; i < boardArrayCopy.length; i++) {
-                detectedWord = [];
-                for (var j = 0; j < boardArrayCopy[i].length; j++) {
-                    while (boardArrayCopy[i][j] != null && boardArrayCopy[i][j] != "") {
-                        detectedWord.push(boardArrayCopy[i][j]);
-                        j++;
-                        continue;
-                    } if (detectedWord.length == 1) {
-                        tilesNotInPlay.push(detectedWord);
-                    } else {
-                        if (detectedWord.length > 1) {
-                            listOfWords.push(detectedWord);
-                        }
-                    }
-                    detectedWord = [];
-                }
-            }
-            totalMovesMade = movesMadeTemp;
-        }
-
-        function rotateArrayCounterClockwise(array) {
-            var rotatedArray = [];
-            for (var i = 0; i < array[0].length; i++) {
-                var boardColumnAsARow = [];
-                for (var j = 0; j < array.length; j++) {
-                    boardColumnAsARow.push(array[j][i]);
-                }
-                rotatedArray.push(boardColumnAsARow);
-            }
-            rotatedArray.reverse();
-            return rotatedArray;
-        }
+        checkForWordsAndPlays(boardArray, false, tilesNotInVerticalPlay, totalMovesMade, listOfWordsOnBoard);             
 
         var listOfWordsMadeNow = [];
         for (var i = 0; i < listOfWordsOnBoard.length; i++) {
@@ -324,5 +277,79 @@ $(document).ready(function () {
             $("*").removeClass("anchor");
             anchorsShown = false;
         }
-    }    
+    }   
+
+    function getBoardArray(includingPlayedRackTiles, rackTilesPlayedList) {
+        var rowsCount = $("#board").children().length;
+        var columnsCount = $("#board").children().first().children().length;
+        var boardArray = Array.from({ length: rowsCount }, () =>
+            Array.from({ length: columnsCount }, () => false)
+        );
+        for (var i = 0; i < rowsCount; i++) {
+            for (var j = 0; j < columnsCount; j++) {
+                var textInTile = $("#board").children().eq(i).children().eq(j).children().first();
+                if (textInTile.attr("id").includes("board_chartile_0")) {
+                    boardArray[i][j] = "";
+                } else {
+                    var tileDetails = textInTile.attr("id").split("_");
+                    var boardTileDetails = textInTile.parent().attr("id").split("_");
+                    var boardTileRow = boardTileDetails[1];
+                    var boardTileColumn = boardTileDetails[2];
+                    boardArray[i][j] = boardTileRow + "_" + boardTileColumn;
+                    if (tileDetails.includes("rack")) {
+                        if (includingPlayedRackTiles && rackTilesPlayedList != null) {
+                            var charTileId = tileDetails[4];
+                            boardArray[i][j] += "_" + charTileId + "_rack";
+                            rackTilesPlayedList.push(boardArray[i][j]);
+                        } else {
+                            boardArray[i][j] = "";
+                        }
+                    } else {
+                        var charTileId = tileDetails[2];
+                        boardArray[i][j] += "_" + charTileId;
+                    }
+                }
+            }
+        }
+        return boardArray;
+    }
+
+    function rotateArrayCounterClockwise(array) {
+        var rotatedArray = [];
+        for (var i = 0; i < array[0].length; i++) {
+            var boardColumnAsARow = [];
+            for (var j = 0; j < array.length; j++) {
+                boardColumnAsARow.push(array[j][i]);
+            }
+            rotatedArray.push(boardColumnAsARow);
+        }
+        rotatedArray.reverse();
+        return rotatedArray;
+    }
+
+    function checkForWordsAndPlays(boardArray, isHorizontal, tilesNotInPlay, movesMade, listOfWords) {
+        var boardArrayCopy = boardArray.slice(0);
+        var movesMadeTemp = movesMade;
+        if (!isHorizontal) {
+            boardArrayCopy = rotateArrayCounterClockwise(boardArrayCopy);
+        }
+        for (var i = 0; i < boardArrayCopy.length; i++) {
+            var detectedWord = [];
+            for (var j = 0; j < boardArrayCopy[i].length; j++) {
+                while (boardArrayCopy[i][j] != null && boardArrayCopy[i][j] != "") {
+                    detectedWord.push(boardArrayCopy[i][j]);
+                    j++;
+                    continue;
+                } if (detectedWord.length == 1) {
+                    tilesNotInPlay.push(detectedWord);
+                } else {
+                    if (detectedWord.length > 1) {
+                        listOfWords.push(detectedWord);
+                    }
+                }
+                detectedWord = [];
+            }
+        }
+        totalMovesMade = movesMadeTemp;
+    }  
 });
