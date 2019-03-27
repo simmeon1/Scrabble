@@ -1,5 +1,6 @@
 ﻿using DawgSharp;
 using Microsoft.Extensions.Primitives;
+using Scrabble.Classes;
 using Scrabble.Models;
 using System;
 using System.Collections.Generic;
@@ -16,28 +17,16 @@ namespace Scrabble.Helpers
             var dawgBuilder = new DawgBuilder<bool>(); // <bool> is the value type.
                                                        // Key type is always string.
             string[] lines = File.ReadLines(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\englishWords.txt").ToArray();
-            //foreach (string key in lines)
-            //{
-            //    dawgBuilder.Insert(key, true);
-            //}
 
-            foreach (string key in lines)
+            foreach (string key in new[] { "Aaron", "abacus", "abashed" })
             {
                 dawgBuilder.Insert(key, true);
             }
 
-            //foreach (string key in new[] { "Aaron", "abacus", "abashed" })
-            //{
-            //    dawgBuilder.Insert(key, true);
-            //}
-
             var dawg = dawgBuilder.BuildDawg(); // Computer is working.  Please wait ...
 
-            //dawg.SaveTo(File.Create(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\EnglishDAWG.bin"));
-            dawg.SaveTo(File.Create(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\test.bin"));
-            //dawg.SaveTo(File.Create(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\dawg.bin"));
+            dawg.SaveTo(File.Create(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\englishDawg.bin"));
 
-            //var h = "hello";
         }
         public static Dawg<bool> LoadDawg (GameLanguage language)
         {
@@ -48,7 +37,7 @@ namespace Scrabble.Helpers
         public static bool CheckWordValidity(Dawg<bool> dawg, string word, bool alwaysExists = false)
         {
             
-            if (!alwaysExists && !dawg[word.ToLower()])
+            if (!alwaysExists && !dawg[word.ToUpper()])
             {
                 return false;
             }
@@ -109,9 +98,10 @@ namespace Scrabble.Helpers
             return words.Split(";");
         }
 
-        public static void GetValidCrossChecks(BoardTile[,] boardArray, WordDictionary dictionary, Dictionary<int[], List<CharTile>> validCrossChecks, bool boardIsTransposed)
+        public static Dictionary<int[], List<CharTile>> GetValidCrossChecksOneWay(BoardTile[,] boardArray, WordDictionary dictionary, bool boardIsTransposed)
         {
             var dawg = LoadDawg(dictionary.GameLanguage);
+            Dictionary<int[], List<CharTile>> validCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());
             List<int[]> tilesAlreadyChecked = new List<int[]>();
             for (int i = 0; i < boardArray.GetLength(0); i++)
             {
@@ -138,15 +128,13 @@ namespace Scrabble.Helpers
                         combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
                         if (boardIsTransposed)
                         {
-                            //var combinedWordReversed = String.Copy(combinedWord);
-                            //combinedWord = ReverseString(combinedWordReversed);
+
                             combinedWord = ReverseString(combinedWord);
                         }
                         else
                         {
                             combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
                         }
-                        //combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
                         if (combinedWord == "_")
                         {
                             continue;
@@ -175,6 +163,32 @@ namespace Scrabble.Helpers
                     }
                 }
             }
+            return validCrossChecks;
+        }
+        public static Dictionary<int[], List<CharTile>> GetValidCrossChecksCombined(Dictionary<int[], List<CharTile>> validHorizontalCrossChecks, Dictionary<int[], List<CharTile>> validVerticalCrossChecks)
+        {
+            Dictionary<int[], List<CharTile>> validCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());
+            for (int i = 0; i < validHorizontalCrossChecks.Count; i++)
+            {
+                var keyAtIndex = validHorizontalCrossChecks.Keys.ElementAt(i);
+                var valueAtIndex = validHorizontalCrossChecks.Values.ElementAt(i);
+                validCrossChecks.Add(keyAtIndex, valueAtIndex);
+            }
+            for (int i = 0; i < validVerticalCrossChecks.Count; i++)
+            {
+                var keyAtIndex = validVerticalCrossChecks.Keys.ElementAt(i);
+                var valueAtIndex = validVerticalCrossChecks.Values.ElementAt(i);
+                if (!validCrossChecks.ContainsKey(keyAtIndex))
+                {
+                    validCrossChecks.Add(keyAtIndex, valueAtIndex);
+                }
+                else
+                {
+                    List<CharTile> validTilesForBothChecks = valueAtIndex.Intersect(validCrossChecks[keyAtIndex]).ToList();
+                    validCrossChecks[keyAtIndex] = validTilesForBothChecks;
+                }
+            }
+            return validCrossChecks;
         }
 
         public static string[] GetPlayedRackTiles (List<KeyValuePair<string, StringValues>> data)

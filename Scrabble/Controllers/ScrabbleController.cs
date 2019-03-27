@@ -106,15 +106,12 @@ namespace Scrabble.Controllers
                 //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
             } else
             {
-                //Helpers.Helper.GetBoardArrayFromHtml(data);
                 var boardArray = game.Board.ConvertTo2DArray();
                 var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
-                //transposedBoardArray.to
                 List<int[]> listOfValidAnchorCoordinates = new List<int[]>();
-                Dictionary<int[], List<CharTile>> validHorizontalCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());
-                Dictionary<int[], List<CharTile>> validVerticalCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());
-                Helpers.Helper.GetValidCrossChecks(boardArray, game.WordDictionary, validHorizontalCrossChecks, false);
-                Helpers.Helper.GetValidCrossChecks(transposedBoardArray, game.WordDictionary, validVerticalCrossChecks, true);
+                Dictionary<int[], List<CharTile>> validHorizontalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary, false);
+                Dictionary<int[], List<CharTile>> validVerticalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary, true);
+                Dictionary<int[], List<CharTile>> validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validHorizontalCrossChecks, validVerticalCrossChecks);               
                 var anchorArray = game.Board.GetAnchors(boardArray, listOfValidAnchorCoordinates);
                 return StatusCode(200, "hi");
             }
