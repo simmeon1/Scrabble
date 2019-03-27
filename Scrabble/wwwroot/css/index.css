@@ -1,35 +1,25 @@
-#board {
-    /*display: grid;*/
-    /*width: 70%;*/
-    width: 680px;
-    overflow: auto;
-    margin: 0 auto;
-    float: right;
-}
-
-#output {
-    /*display: grid;*/
-    width: 30%;
-    overflow: auto;
-    margin: 0 auto;
-    float: left;
+#statusMessage {
+    position: absolute;
+    top: 10px;
+    left: 0px;
 }
 
 #gameAndOutput {
     overflow: auto;
 }
 
-
-#game {
-    width: 1000px;
-    overflow: auto;
-    margin: 0 auto;
+.playerLog {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
 }
 
-#player {
-    /*float: left;*/
-    /*width: 30%;*/
-    margin: 0 auto;
+.panel-body{
+    padding: 5px;
+}
+
+.table {
+    margin-bottom: 0px;
 }
 
 #rack, #controls {
@@ -39,13 +29,62 @@
 
 .grid-item {
     border: 1px solid rgba(0, 0, 0, 1);
-    font-size: 200%;
+    font-size: 1.6vw;
     text-align: center;
     float: left;
+    min-height: 25px;
+}
+
+.board_chartile_letter, .board_rack_chartile_letter {
+    /*font-size: 1.6vw;*/
+}
+
+.board_chartile_score, .board_rack_chartile_score {
+    /*font-size: 0.9vw;*/
+}
+
+@media(max-width:767px) {
+    .board_chartile_letter, .board_rack_chartile_letter {
+        font-size: 15px;
+    }
+
+    .board_chartile_score, .board_rack_chartile_score {
+        font-size: 11px;
+    }
+}
+
+@media(min-width:768px) {
+    .board_chartile_letter, .board_rack_chartile_letter {
+        font-size: 1.6vw;
+    }
+
+    .board_chartile_score, .board_rack_chartile_score {
+        font-size: 1.0vw;
+    }
+}
+
+@media(min-width:992px) {
+    .board_chartile_letter, .board_rack_chartile_letter {
+        font-size: 1.5vw;
+    }
+
+    .board_chartile_score, .board_rack_chartile_score {
+        font-size: 0.9vw;
+    }
+}
+
+@media(min-width:1200px) {
+    .board_chartile_letter, .board_rack_chartile_letter {
+        font-size: 1.5vw;
+    }
+
+    .board_chartile_score, .board_rack_chartile_score {
+        font-size: 0.9vw;
+    }
 }
 
 .rack_chartile {
-    font-size: 40px;
+    font-size: 20px;
 }
 
 .btn-default, .btn-secondary, .btn-warning {
@@ -58,6 +97,7 @@
 
 .board_rack_chartile {
     width: 100%;
+    /*height: 100%;*/
     border-color: black;
     color: black;
     background-color: yellow;
@@ -66,16 +106,8 @@
    
 }
 
-.board_chartile_letter, .board_rack_chartile_letter {
-    font-size: 187%;
-}
-
-.board_chartile_score, .board_rack_chartile_score {
-    font-size: 10px;
-}
-
 .rack_chartile_score {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 .currently-selected-tile {

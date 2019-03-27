@@ -34,7 +34,7 @@ namespace Scrabble.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WordDictionary",
+                name: "WordDictionaries",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -43,9 +43,9 @@ namespace Scrabble.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WordDictionary", x => x.ID);
+                    table.PrimaryKey("PK_WordDictionaries", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_WordDictionary_GameLanguages_GameLanguageID",
+                        name: "FK_WordDictionaries_GameLanguages_GameLanguageID",
                         column: x => x.GameLanguageID,
                         principalTable: "GameLanguages",
                         principalColumn: "ID",
@@ -73,9 +73,9 @@ namespace Scrabble.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_CharTiles_WordDictionary_WordDictionaryID",
+                        name: "FK_CharTiles_WordDictionaries_WordDictionaryID",
                         column: x => x.WordDictionaryID,
-                        principalTable: "WordDictionary",
+                        principalTable: "WordDictionaries",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -102,9 +102,9 @@ namespace Scrabble.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Games_WordDictionary_WordDictionaryID",
+                        name: "FK_Games_WordDictionaries_WordDictionaryID",
                         column: x => x.WordDictionaryID,
-                        principalTable: "WordDictionary",
+                        principalTable: "WordDictionaries",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -131,7 +131,7 @@ namespace Scrabble.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pouchs",
+                name: "Pouches",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -140,9 +140,9 @@ namespace Scrabble.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pouchs", x => x.ID);
+                    table.PrimaryKey("PK_Pouches", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Pouchs_Games_GameID",
+                        name: "FK_Pouches_Games_GameID",
                         column: x => x.GameID,
                         principalTable: "Games",
                         principalColumn: "ID",
@@ -208,9 +208,9 @@ namespace Scrabble.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Players_Pouchs_PouchID",
+                        name: "FK_Players_Pouches_PouchID",
                         column: x => x.PouchID,
-                        principalTable: "Pouchs",
+                        principalTable: "Pouches",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -235,9 +235,37 @@ namespace Scrabble.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Pouch_CharTiles_Pouchs_PouchID",
+                        name: "FK_Pouch_CharTiles_Pouches_PouchID",
                         column: x => x.PouchID,
-                        principalTable: "Pouchs",
+                        principalTable: "Pouches",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Moves",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Word = table.Column<string>(nullable: true),
+                    Score = table.Column<int>(nullable: false),
+                    PlayerID = table.Column<int>(nullable: false),
+                    GameID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Moves", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Moves_Games_GameID",
+                        column: x => x.GameID,
+                        principalTable: "Games",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Moves_Players_PlayerID",
+                        column: x => x.PlayerID,
+                        principalTable: "Players",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -269,9 +297,9 @@ namespace Scrabble.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Racks_Pouchs_PouchID",
+                        name: "FK_Racks_Pouches_PouchID",
                         column: x => x.PouchID,
-                        principalTable: "Pouchs",
+                        principalTable: "Pouches",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -322,7 +350,7 @@ namespace Scrabble.Migrations
                 values: new object[] { 1, "English" });
 
             migrationBuilder.InsertData(
-                table: "WordDictionary",
+                table: "WordDictionaries",
                 columns: new[] { "ID", "GameLanguageID" },
                 values: new object[] { 1, 1 });
 
@@ -371,7 +399,7 @@ namespace Scrabble.Migrations
                 values: new object[] { 1, 15, 1, 15 });
 
             migrationBuilder.InsertData(
-                table: "Pouchs",
+                table: "Pouches",
                 columns: new[] { "ID", "GameID" },
                 values: new object[] { 1, 1 });
 
@@ -720,6 +748,16 @@ namespace Scrabble.Migrations
                 column: "WordDictionaryID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Moves_GameID",
+                table: "Moves",
+                column: "GameID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Moves_PlayerID",
+                table: "Moves",
+                column: "PlayerID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Players_GameID",
                 table: "Players",
                 column: "GameID");
@@ -740,8 +778,8 @@ namespace Scrabble.Migrations
                 column: "PouchID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pouchs_GameID",
-                table: "Pouchs",
+                name: "IX_Pouches_GameID",
+                table: "Pouches",
                 column: "GameID",
                 unique: true);
 
@@ -772,8 +810,8 @@ namespace Scrabble.Migrations
                 column: "PouchID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WordDictionary_GameLanguageID",
-                table: "WordDictionary",
+                name: "IX_WordDictionaries_GameLanguageID",
+                table: "WordDictionaries",
                 column: "GameLanguageID");
         }
 
@@ -781,6 +819,9 @@ namespace Scrabble.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BoardTiles");
+
+            migrationBuilder.DropTable(
+                name: "Moves");
 
             migrationBuilder.DropTable(
                 name: "Pouch_CharTiles");
@@ -804,13 +845,13 @@ namespace Scrabble.Migrations
                 name: "Players");
 
             migrationBuilder.DropTable(
-                name: "Pouchs");
+                name: "Pouches");
 
             migrationBuilder.DropTable(
                 name: "Games");
 
             migrationBuilder.DropTable(
-                name: "WordDictionary");
+                name: "WordDictionaries");
 
             migrationBuilder.DropTable(
                 name: "GameLanguages");

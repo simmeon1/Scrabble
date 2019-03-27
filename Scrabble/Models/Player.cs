@@ -24,6 +24,9 @@ namespace Scrabble.Models
         [ForeignKey("GameID")]
         public virtual Game Game { get; set; }
 
+        public virtual ICollection<Move> Moves { get; set; }
+
+
         /*public int Pouch_CharTileID { get; set; }
         [ForeignKey("Pouch_CharTileID")]
         public Pouch_CharTile Pouch_CharTile { get; set; }*/

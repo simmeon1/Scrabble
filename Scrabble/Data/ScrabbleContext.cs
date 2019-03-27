@@ -17,13 +17,14 @@ namespace Scrabble.Models
         public DbSet<Scrabble.Models.Board> Boards { get; set; }
         public DbSet<Scrabble.Models.BoardTile> BoardTiles { get; set; }
         public DbSet<Scrabble.Models.CharTile> CharTiles { get; set; }
-        public DbSet<Scrabble.Models.Pouch> Pouchs { get; set; }
+        public DbSet<Scrabble.Models.Pouch> Pouches { get; set; }
         public DbSet<Scrabble.Models.Rack> Racks { get; set; }
-        //public DbSet<Scrabble.Models.User> User { get; set; }
+        public DbSet<Scrabble.Models.Move> Moves { get; set; }
         public DbSet<Scrabble.Models.Player> Players { get; set; }
         public DbSet<Scrabble.Models.Rack_CharTile> Rack_CharTiles { get; set; }
         public DbSet<Scrabble.Models.Pouch_CharTile> Pouch_CharTiles { get; set; }
         public DbSet<Scrabble.Models.GameLanguage> GameLanguages { get; set; }
+        public DbSet<Scrabble.Models.WordDictionary> WordDictionaries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

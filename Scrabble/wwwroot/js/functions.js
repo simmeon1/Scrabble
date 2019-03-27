@@ -6,7 +6,19 @@ $(document).ready(function () {
     var anchorsShown = false;
     var anchorUsed = false;
 
-    $("#output").height($("#board").height());
+    //$(".playerLog").height($("#board").height() / );
+    //$("#statusMessage").hide();
+
+    $(window).resize(function () {
+        // This will fire each time the window is resized:
+        if ($(window).width() < 768) {
+            $("#leftOutput").insertAfter("#board");
+        } else if ($(window).width() >= 768 && $(window).width() <= 992) {
+            // if smaller
+            $("#leftOutput").insertBefore("#board");
+        }
+
+    }).resize();
 
     $(document).on("click", ".rack_chartile", function () {
         if (!$(this).hasClass("btn-secondary")) {
@@ -19,7 +31,7 @@ $(document).ready(function () {
                     rack_chartile = rack_chartile.replace("board_", "");
                     toggleRackCharTileSelection($("#" + rack_chartile));
                 }
-                activeTile.html("<button id=board_" + this.id + " class='btn btn-secondary board_rack_chartile'><span class='board_rack_chartile_letter'>" + $(this).find('.rack_charTile_letter:first').text() + "</span><span class='board_rack_chartile_score small'>" + $(this).find('.rack_charTile_score:first').text() + "</span></button>");
+                activeTile.html("<button id=board_" + this.id + " class='btn btn-block btn-secondary board_rack_chartile'><span class='board_rack_chartile_letter'>" + $(this).find('.rack_chartile_letter:first').text() + "</span><span class='board_rack_chartile_score'>" + $(this).find('.rack_chartile_score:first').text() + "</span></button>");
                 toggleRackCharTileSelection($(this));
             }
         } else {
@@ -263,12 +275,9 @@ $(document).ready(function () {
     });
 
     function updateStatusMessage(message, type) {
-        $('#statusMessage').fadeOut(200, function () {
-            $('#output').removeClass();
-            $('#output').addClass("panel panel-" + type);
-            $("#statusMessage").html("<span>" + message + "</span>");
-            $('#statusMessage').fadeIn(200);
-        });
+        $("#statusMessage").html(`<div class="alert alert-` + type + `">
+            <button type="button" class="close" data-dismiss="alert">x</button>` + message + `</div>`);
+        $('#statusMessage').fadeIn(200).delay(500).fadeOut(200);       
     }
 
     function animateHtmlUpdates(jqueryObject, message) {
@@ -276,7 +285,7 @@ $(document).ready(function () {
             jqueryObject.html(message).fadeIn(200);
             
         });
-        $("#output").height($("#board").height());
+        //$("#output").height($("#board").height());
     }
 
     function toggleRackCharTileSelection(tile) {
@@ -315,5 +324,5 @@ $(document).ready(function () {
             $("*").removeClass("anchor");
             anchorsShown = false;
         }
-    }
+    }    
 });

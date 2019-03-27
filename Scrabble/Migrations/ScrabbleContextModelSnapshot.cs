@@ -421,6 +421,29 @@ namespace Scrabble.Migrations
                     );
                 });
 
+            modelBuilder.Entity("Scrabble.Models.Move", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GameID");
+
+                    b.Property<int>("PlayerID");
+
+                    b.Property<int>("Score");
+
+                    b.Property<string>("Word");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("GameID");
+
+                    b.HasIndex("PlayerID");
+
+                    b.ToTable("Moves");
+                });
+
             modelBuilder.Entity("Scrabble.Models.Player", b =>
                 {
                     b.Property<int>("ID")
@@ -468,7 +491,7 @@ namespace Scrabble.Migrations
                     b.HasIndex("GameID")
                         .IsUnique();
 
-                    b.ToTable("Pouchs");
+                    b.ToTable("Pouches");
 
                     b.HasData(
                         new { ID = 1, GameID = 1 }
@@ -604,7 +627,7 @@ namespace Scrabble.Migrations
 
                     b.HasIndex("GameLanguageID");
 
-                    b.ToTable("WordDictionary");
+                    b.ToTable("WordDictionaries");
 
                     b.HasData(
                         new { ID = 1, GameLanguageID = 1 }
@@ -659,6 +682,19 @@ namespace Scrabble.Migrations
                     b.HasOne("Scrabble.Models.WordDictionary", "WordDictionary")
                         .WithMany("Games")
                         .HasForeignKey("WordDictionaryID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Scrabble.Models.Move", b =>
+                {
+                    b.HasOne("Scrabble.Models.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Scrabble.Models.Player", "Player")
+                        .WithMany("Moves")
+                        .HasForeignKey("PlayerID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

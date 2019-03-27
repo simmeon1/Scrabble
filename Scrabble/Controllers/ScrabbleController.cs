@@ -36,26 +36,26 @@ namespace Scrabble.Controllers
                 //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
             }
             else
-            {
-                var boardArray = game.Board.ConvertTo2DArray();
+            {               
                 var playedWords = Helpers.Helper.GetPlayedWords(data);
                 var playedRackTiles = Helpers.Helper.GetPlayedRackTiles(data);
+                var boardArray = game.Board.ConvertTo2DArray();
                 if (playedRackTiles.Length == 0)
                 {
                     return StatusCode(400, "You have not played a tile.");
                 }
-                if (!game.Board.CheckIfAnchorIsUsed(playedRackTiles, boardArray))
-                {
-                    return StatusCode(400, "Anchor is not used.");
-                }
-                if (!Helpers.Helper.ValidateStart(boardArray, playedRackTiles))
-                {
-                    return StatusCode(400, "Invalid start.");
-                }
-                if (!Helpers.Helper.IsRackPlayConnected(boardArray, playedRackTiles))
-                {
-                    return StatusCode(400, "Play is not connected.");
-                }
+                //if (!game.Board.CheckIfAnchorIsUsed(playedRackTiles, boardArray))
+                //{
+                //    return StatusCode(400, "Anchor is not used.");
+                //}
+                //if (!Helpers.Helper.ValidateStart(boardArray, playedRackTiles))
+                //{
+                //    return StatusCode(400, "Invalid start.");
+                //}
+                //if (!Helpers.Helper.IsRackPlayConnected(boardArray, playedRackTiles))
+                //{
+                //    return StatusCode(400, "Play is not connected.");
+                //}
 
                 var result = Helpers.Helper.GetWordScores(game, data);
                 if (result.StatusCode != 200)
@@ -76,6 +76,10 @@ namespace Scrabble.Controllers
                 t.CharTileID = null;
             }
             game.Log = "Enjoy the game!";
+            foreach (Player p in game.Players)
+            {
+                p.Score = 0;
+            }
             _scrabbleContext.SaveChanges();
         }
 

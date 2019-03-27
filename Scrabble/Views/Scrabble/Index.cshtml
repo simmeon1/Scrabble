@@ -1,16 +1,31 @@
 ﻿@model Scrabble.Models.Game
 @{
     ViewData["Title"] = "Scrabble";
+    List<Player> players = Model.Players.ToList();
+    List<Player> playersOnLeftSide = new List<Player>();
+    List<Player> playersOnRightSide = new List<Player>();
+    for (var i = 0; i < players.Count; i++)
+    {
+        if (i % 2 == 0)
+        {
+            playersOnLeftSide.Add(players[i]);
+        }
+        else
+        {
+            playersOnRightSide.Add(players[i]);
+        }
+    }
 }
+<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="//code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="~/js/functions.js"></script>
     <link rel="stylesheet" href="~/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <style>
@@ -19,11 +34,11 @@
     }
 </style>
 <body>
-    <div id="game">
+    <div id="game" class="container">
         <div id="userCommands">
             <div id="player">
                 <div id="rack">
-                    @foreach (Player p in Model.Players)
+                    @foreach (Player p in players)
                     {
                         @if (p.AtHand)
                         {
@@ -36,7 +51,7 @@
                                     {
                                         <button id="rack_chartile_@(rackIndex)_@(c.CharTileID)" class="btn btn-default btn-lg rack_chartile">
                                             <span class="rack_chartile_letter">@(c.CharTile.Letter)</span>
-                                            <span class="rack_chartile_score small">@(c.CharTile.Score)</span>
+                                            <span class="rack_chartile_score">@(c.CharTile.Score)</span>
                                         </button>
                                         rackIndex++;
                                     }
@@ -46,34 +61,65 @@
                         }
                     }
                 </div>
-                @*<div>
-                <p id="startingWordPosition">None</p>
-                <input id="wordInput" type="text">
-            </div>
-            <div id="inputErrors"></div>*@
             </div>
             <div id="controls">
                 <p>
-                    @*<button id="goLeft" class="btn btn-default btn-lg changeDirection"><span class="glyphicon glyphicon-arrow-right"></span></button>*@
                     <button id="showAnchors" class="btn btn-default btn-lg"><span>Anchors</span></button>
                     <button id="submit" class="btn btn-default btn-lg"><span>Submit</span></button>
                     <button id="clearPlacements" class="btn btn-default btn-lg"><span>Clear</span></button>
                 </p>
-            </div>           
-            <div>
-            <p class="text-center">
-                <span id="pouchContent">@Model.Pouch.ToString()</span>
-            </p>
-        </div>
-        </div>
-        <div id="gameAndOutput">
-            <div id="output" class="panel panel-primary">
-                <div class="panel-heading">
-                    <span id="statusMessage">Message will show here.</span>
-                </div>
-                <div class="panel-body">@(Model.Log)</div>
             </div>
-            <div id="board">
+            <div>
+                <p class="text-center">
+                    <span id="pouchContent">@Model.Pouch.ToString()</span>
+                </p>
+            </div>
+        </div>        
+        <div id="gameAndOutput">
+            <div id="statusMessage" class="col-xs-12">
+            </div>
+            <div id="leftOutput" class="col-xs-12 col-sm-2 panel-group playerLog">
+                @foreach (var player in playersOnLeftSide)
+                {
+                    <div id="player-@(player.ID)-log" class="panel panel-@(player.AtHand ? "primary" : "default")">
+                        <div class="panel-heading">
+                            <span>Player @(player.ID)</span>
+                        </div>
+                        <div class="panel-body">
+                            @if (player.Moves.Count == 0)
+                            {
+                                <span>No moves played.</span>
+                            }
+                            else
+                            {
+                                <table class="table table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-11">Word</th>
+                                            <th class="col-xs-1">Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var move in player.Moves)
+                                        {
+                                            <tr>
+                                                <td>@move.Word</td>
+                                                <td>@move.Score</td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td><strong>Total</strong></td>
+                                            <td><strong>@player.Score</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div id="board" class="col-xs-12 col-sm-8">
                 @{BoardTile[,] boardAs2DArray = Model.Board.ConvertTo2DArray(); }
                 @for (int i = 0; i < boardAs2DArray.GetLength(0); i++)
                 {
@@ -85,9 +131,9 @@
                             {
                                 <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item locked @(boardAs2DArray[i,j].BoardTileType.Type)">
                                     <div id="board_chartile_@(boardAs2DArray[i,j].CharTileID)" class="filled">
-                                        <span>@boardAs2DArray[i, j].CharTile.Letter</span>
+                                        <span class="board_chartile_letter">@boardAs2DArray[i, j].CharTile.Letter</span>
                                         <span class="board_chartile_score">@boardAs2DArray[i, j].CharTile.Score</span>
-                                    </div>                                  
+                                    </div>
                                 </div>
                             }
                             else
@@ -95,21 +141,54 @@
                                 <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item @(boardAs2DArray[i,j].BoardTileType.Type)">
                                     <span id="board_chartile_0">
                                         <br />
-                                    </span>  
+                                    </span>
                                 </div>
                             }
                         }
                     </div>
                 }
             </div>
-        </div>      
-    </div>
+            <div id="rightOutput" class="col-xs-12 col-sm-2 panel-group playerLog">
+                @foreach (var player in playersOnRightSide)
+                {
+                    <div id="player-@(player.ID)-log" class="panel panel-@(player.AtHand ? "primary" : "default")">
+                        <div class="panel-heading">
+                            <span>Player @(player.ID)</span>
+                        </div>
+                        <div class="panel-body">
+                            @if (player.Moves.Count == 0)
+                            {
+                                <span>No moves played.</span>
+                            }
+                            else
+                            {
+                                <table class="table table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-xs-11">Word</th>
+                                            <th class="col-xs-1">Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var move in player.Moves)
+                                        {
+                                            <tr>
+                                                <td>@move.Word</td>
+                                                <td>@move.Score</td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td><strong>Total</strong></td>
+                                            <td><strong>@player.Score</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>  
 </body>
 </html>
-@*<h2>@Html.DisplayFor(model => model.Pouch.PouchTiles)</h2>
-    <h2>
-        @foreach (Player p in Model.PlayerData)
-        {
-            <h1>@p.Rack.ToString()</h1>
-        }
-    </h2>*@

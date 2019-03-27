@@ -238,9 +238,10 @@ namespace Scrabble.Helpers
             return true;
         }
         public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data) {
+            var playerAtHand = game.GetPlayerAtHand();
             var playedWords = GetPlayedWords(data);
             var playedRackTiles = GetPlayedRackTiles(data);
-            string logBuilder = "Player" + game.GetPlayerAtHand().ID + " played ";            
+            string logBuilder = "Player" + playerAtHand.ID + " played ";            
             for (int i = 0; i < playedWords.Length; i++)
             {
                 var playedWord = playedWords[i];
@@ -258,13 +259,14 @@ namespace Scrabble.Helpers
                     game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
                 }                
 
-                if (!CheckWordValidity(playedWordString, true))
+                if (!CheckWordValidity(playedWordString, false))
                 {
                     return new HttpStatusCodeResult(400, playedWordString + " is not a legal word.");
                 }
                 currentScoreOfMove = GetWordScore(usedBoardTiles);
                 playedWordString = playedWordString.ToUpper();
-                game.AddScoreToPlayer(game.GetPlayerAtHand(), currentScoreOfMove);
+                game.AddScoreToPlayer(playerAtHand, currentScoreOfMove);
+                playerAtHand.Moves.Add(new Move {PlayerID = playerAtHand.ID, GameID = game.ID, Word = playedWordString, Score = currentScoreOfMove });
                 logBuilder += playedWordString + " for " + currentScoreOfMove + " points";
                 if (i == playedWords.Length - 1)
                 {
@@ -281,12 +283,12 @@ namespace Scrabble.Helpers
             foreach (var playedRackTile in playedRackTiles)
             {
                 var tileDetails = GetTileDetails(playedRackTile);
-                game.GetPlayerAtHand().Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileDetails[2]).FirstOrDefault());
-                game.GetPlayerAtHand().Rack.DrawFromPouch();
+                playerAtHand.Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileDetails[2]).FirstOrDefault());
+                playerAtHand.Rack.DrawFromPouch();
             }
 
             game.Log += logBuilder;
-            game.Log += "Player" + game.GetPlayerAtHand().ID + " now has " + game.GetPlayerAtHand().Score + " points.";
+            game.Log += "Player" + playerAtHand.ID + " now has " + playerAtHand.Score + " points.";
             game.Log += "-------------------------";
             return new HttpStatusCodeResult(200, "Good move :)");
         }
