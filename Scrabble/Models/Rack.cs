@@ -9,7 +9,6 @@ namespace Scrabble.Models
     {
         public int ID { get; set; }
         public int RackSize { get; set; }
-        //public int RackCount { get; set; }
 
         public int PlayerID { get; set; }
         [ForeignKey("PlayerID")]
@@ -23,41 +22,7 @@ namespace Scrabble.Models
         [ForeignKey("GameID")]
         public virtual Game Game { get; set; }
 
-        //[NotMapped]
         public virtual ICollection<Rack_CharTile> Rack_CharTiles { get; set; }
-
-        /*public Rack()
-        {
-            Random rnd = new Random();
-            ID = rnd.Next(1, 5000);
-            //RackTiles = new List<CharTile>();
-            RackSize = 7;
-            Pouch = new Pouch();
-            RackCount = 0;
-        }
-
-        public Rack (Player player, int size, Pouch pouch)
-        {
-            Random rnd = new Random();
-            ID = rnd.Next(1, 5000);
-            Player = player;
-            PlayerID = Player.ID;
-            Pouch = pouch;
-            PouchID = Pouch.ID;
-            CharTiles = new List<CharTile>();
-            //RackTiles = new List<CharTile>();
-            RackSize = size;
-            RackCount = 0;
-        }
-
-        public void Draw()
-        {
-            for (int i = RackCount; i < RackSize; i++)
-            {
-                CharTiles.Add(Pouch.CharTiles[0]);
-                Pouch.CharTiles.RemoveAt(0);
-            }
-        }*/
 
         public override string ToString()
         {
@@ -82,6 +47,54 @@ namespace Scrabble.Models
             }
             else tileEntryInDb.Count--;
             Rack_CharTiles = rackTiles;
+        }
+
+        public void SubstractFromRack(char c)
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            var tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == c).FirstOrDefault();
+            if (tileEntryInDb.Count == 1)
+            {
+                rackTiles.RemoveAll(x => x.CharTile.Letter == c);
+            }
+            else tileEntryInDb.Count--;
+            Rack_CharTiles = rackTiles;
+        }
+
+        public void AddToRack(CharTile tile)
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            var tileEntryInDb = rackTiles.Where(c => c.CharTileID == tile.ID).FirstOrDefault();
+            if (tileEntryInDb == null)
+            {
+                rackTiles.Add(new Rack_CharTile { CharTileID = tile.ID, RackID = ID, Count = 1 });
+            }
+            else tileEntryInDb.Count++;
+            Rack_CharTiles = rackTiles;
+        }
+
+        public void AddToRack(char x)
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            var tileEntryInDb = rackTiles.Where(c => c.CharTile.Letter == x).FirstOrDefault();
+            if (tileEntryInDb == null)
+            {
+                rackTiles.Add(new Rack_CharTile { CharTileID = Game.WordDictionary.CharTiles.Where(c => c.Letter == x).FirstOrDefault().ID,
+                    RackID = ID, Count = 1 });
+            }
+            else tileEntryInDb.Count++;
+            Rack_CharTiles = rackTiles;
+        }
+
+        public bool CheckIfTileIsInRack(char c)
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            var tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == c).FirstOrDefault();
+            if (tileEntryInDb == null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public void DrawFromPouch()

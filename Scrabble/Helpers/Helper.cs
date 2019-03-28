@@ -164,7 +164,8 @@ namespace Scrabble.Helpers
                 }
             }
             return validCrossChecks;
-        }
+        }      
+
         public static Dictionary<int[], List<CharTile>> GetValidCrossChecksCombined(Dictionary<int[], List<CharTile>> validHorizontalCrossChecks, Dictionary<int[], List<CharTile>> validVerticalCrossChecks)
         {
             Dictionary<int[], List<CharTile>> validCrossChecks = new Dictionary<int[], List<CharTile>>(new CoordinatesEqualityComparer());

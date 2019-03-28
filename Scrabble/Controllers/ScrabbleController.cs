@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Scrabble.Classes;
+using Scrabble.Helpers;
 using Scrabble.Models;
 using System;
 using System.Collections.Generic;
@@ -113,6 +114,9 @@ namespace Scrabble.Controllers
                 Dictionary<int[], List<CharTile>> validVerticalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary, true);
                 Dictionary<int[], List<CharTile>> validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validHorizontalCrossChecks, validVerticalCrossChecks);               
                 var anchorArray = game.Board.GetAnchors(boardArray, listOfValidAnchorCoordinates);
+                MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinates, validCrossChecks);
+                moveValidator.GetValidMoves();
+                //Dictionary<int[], string> validMoves = Helpers.Helper.GetValidMoves(game, boardArray, transposedBoardArray, listOfValidAnchorCoordinates, validCrossChecks);
                 return StatusCode(200, "hi");
             }
             return StatusCode(400, "error");
