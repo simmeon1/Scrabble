@@ -6,7 +6,15 @@ $(document).ready(function () {
     var anchorsShown = false;
     var anchorUsed = false;
 
-    //$(".playerLog").height($("#board").height() / );
+    refreshElementSizes();
+
+    $(window).on('resize', function () {
+        $(".grid-item").height($(".grid-item").width());
+        $(".rack_chartile").height($(".rack_chartile").width());
+        $(".board_rack_chartile").height($(".board_rack_chartile").parent().height() - 2);
+    });
+
+    // / );
     //$("#statusMessage").hide();
 
     $(window).resize(function () {
@@ -58,6 +66,7 @@ $(document).ready(function () {
             "boardArray": boardArray
         };
         updateStatusMessage("Loading...", "info");
+        $('button').prop('disabled', true);
         $.ajax({
             url: '/Scrabble/GetMoves',
             async: true,
@@ -65,17 +74,20 @@ $(document).ready(function () {
             data: data,
         }).done(function (view) {
             alert(view);
+            $('button').prop('disabled', false);
         }).fail(function (jqXHR) {
             updateStatusMessage(jqXHR.responseText, "danger");
+            $('button').prop('disabled', false);
         });
     });
 
     $(document).on("click", "#flipBoard", function () {
-        var boardArray = getBoardArray(false);
+        //var boardArray = getBoardArray(false);
         var data = {
-            "boardArray": boardArray
+            "flipBoard": $("#board").hasClass("flipped") ? false : true
         };
         updateStatusMessage("Loading...", "info");
+        $('button').prop('disabled', true);
         $.ajax({
             url: '/Scrabble/FlipBoard',
             async: true,
@@ -86,9 +98,49 @@ $(document).ready(function () {
                 view.lastIndexOf("<body>"),
                 view.lastIndexOf("</body>")
             );
+            $('button').prop('disabled', false);
             animateHtmlUpdates($("body"), viewBody);
         }).fail(function (jqXHR) {
             updateStatusMessage(jqXHR.responseText, "danger");
+            $('button').prop('disabled', false);
+        });
+    });
+
+    $(document).on("click", "#redraw", function () {
+        updateStatusMessage("Loading...", "info");
+        $('button').prop('disabled', true);
+        $.ajax({
+            url: '/Scrabble/Redraw',
+            type: "POST"
+        }).done(function (view) {
+            var viewBody = view.substring(
+                view.lastIndexOf("<body>"),
+                view.lastIndexOf("</body>")
+            );
+            $('button').prop('disabled', false);
+            animateHtmlUpdates($("body"), viewBody);
+        }).fail(function (jqXHR) {
+            updateStatusMessage(jqXHR.responseText, "danger");
+            $('button').prop('disabled', false);
+        });
+    });
+
+    $(document).on("click", "#skip", function () {
+        updateStatusMessage("Loading...", "info");
+        $('button').prop('disabled', true);
+        $.ajax({
+            url: '/Scrabble/Redraw',
+            type: "POST"
+        }).done(function (view) {
+            var viewBody = view.substring(
+                view.lastIndexOf("<body>"),
+                view.lastIndexOf("</body>")
+            );
+            $('button').prop('disabled', false);
+            animateHtmlUpdates($("body"), viewBody);
+        }).fail(function (jqXHR) {
+            updateStatusMessage(jqXHR.responseText, "danger");
+            $('button').prop('disabled', false);
         });
     });
 
@@ -226,6 +278,7 @@ $(document).ready(function () {
             "playedWords": listOfWordsMadeNow
         };
         updateStatusMessage("Loading...", "info");
+        $('.button').prop('disabled', true);
         $.ajax({
             url: '/Scrabble/Index',
             async: true,
@@ -237,11 +290,13 @@ $(document).ready(function () {
                 view.lastIndexOf("</body>")
             );
             animateHtmlUpdates($("body"), viewBody);
-            $("#output").height($("#board").height());
+            //$("#output").height($("#board").height());
             anchorUsed = false;
             updateStatusMessage("Success :)", "success");
+            $('.button').prop('disabled', false);
         }).fail(function (jqXHR) {
             updateStatusMessage(jqXHR.responseText, "danger");
+            $('.button').prop('disabled', false);
         });
     });
 
@@ -252,13 +307,18 @@ $(document).ready(function () {
     function updateStatusMessage(message, type) {
         $("#statusMessage").html(`<div class="alert alert-` + type + `">
             <button type="button" class="close" data-dismiss="alert">x</button>` + message + `</div>`);
-        $('#statusMessage').fadeIn(200).delay(500).fadeOut(200);       
+        if (type == "info") {
+            $('#statusMessage').fadeIn(200);
+        } else {
+            $('#statusMessage').fadeIn(200).delay(500).fadeOut(200);
+        }
     }
 
     function animateHtmlUpdates(jqueryObject, message) {
         jqueryObject.fadeOut(200, function () {
-            jqueryObject.html(message).fadeIn(200);
-            
+            jqueryObject.html(message).fadeIn(200, function () {
+                refreshElementSizes();
+            });         
         });
         //$("#output").height($("#board").height());
     }
@@ -374,4 +434,10 @@ $(document).ready(function () {
         }
         totalMovesMade = movesMadeTemp;
     }  
+
+    function refreshElementSizes (){
+        $(".grid-item").height($(".grid-item").width());
+        $(".rack_chartile").height($(".rack_chartile").width());
+        $(".board_rack_chartile").height($(".board_rack_chartile").parent().height() - 2);
+    }
 });

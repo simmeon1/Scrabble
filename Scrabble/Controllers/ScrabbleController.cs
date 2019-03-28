@@ -77,7 +77,23 @@ namespace Scrabble.Controllers
         public IActionResult FlipBoard()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
-            TempData["FlipBoard"] = true;
+            List<KeyValuePair<string, StringValues>> data = null;
+            try
+            {
+                data = Request.Form.ToList();
+            }
+            catch (Exception e)
+            {
+                //continue;
+            }
+            if (data == null)
+            {
+                //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
+            }
+            else
+            {
+                TempData["FlipBoard"] = Helper.GetValueFromAjaxData(data, "flipBoard");
+            }
             return RedirectToAction("Index");
         }
 
@@ -94,6 +110,35 @@ namespace Scrabble.Controllers
                 p.Score = 0;
             }
             _scrabbleContext.SaveChanges();
+        }
+
+        public IActionResult Redraw()
+        {
+            Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            var currentPlayer = game.GetPlayerAtHand();
+            var rack = currentPlayer.Rack.Rack_CharTiles.ToList();
+            var tilesToDraw = 0;
+            for (int i = 0; i < rack.Count; i++)
+            {
+                for (int j = 0; j < rack[i].Count; j++)
+                {
+                    currentPlayer.Rack.Pouch.AddToPouch(rack[i].CharTile);
+                    tilesToDraw++;
+                }
+            }
+            rack.Clear();
+            currentPlayer.Rack.Rack_CharTiles = rack;
+            currentPlayer.Rack.RefillRackFromPouch();
+            game.SwitchToNextPlayer();
+            _scrabbleContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Skip()
+        {
+            Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            game.SwitchToNextPlayer();
+            return RedirectToAction("Index");
         }
 
         public void MakeEnglishDictionary()

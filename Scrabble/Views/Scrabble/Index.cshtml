@@ -38,7 +38,7 @@
     <div id="game" class="container">
         <div id="userCommands">
             <div id="player">
-                <div id="rack">
+                <div id="rack" class="col-xs-12">
                     @foreach (Player p in players)
                     {
                         @if (p.AtHand)
@@ -50,7 +50,7 @@
 
                                     @for (int i = 0; i < c.Count; i++)
                                     {
-                                        <button id="rack_chartile_@(rackIndex)_@(c.CharTileID)" class="btn btn-default btn-lg rack_chartile">
+                                        <button id="rack_chartile_@(rackIndex)_@(c.CharTileID)" class="btn btn-default btn rack_chartile">
                                             <span class="rack_chartile_letter">@(c.CharTile.Letter)</span>
                                             <span class="rack_chartile_score">@(c.CharTile.Score)</span>
                                         </button>
@@ -65,11 +65,13 @@
             </div>
             <div id="controls">
                 <p>
-                    <button id="showAnchors" class="btn btn-default btn"><span>Anchors</span></button>
-                    <button id="submit" class="btn btn-default btn"><span>Submit</span></button>
-                    <button id="clearPlacements" class="btn btn-default btn"><span>Clear</span></button>
-                    <button id="getMoves" class="btn btn-default btn"><span>Get Moves</span></button>
-                    <button id="flipBoard" class="btn btn-default btn"><span>Flip</span></button>
+                    <button id="showAnchors" class="btn btn-default btn-sm"><span>Anchors</span></button>
+                    <button id="clearPlacements" class="btn btn-default btn-sm"><span>Clear</span></button>
+                    <button id="submit" class="btn btn-primary btn-sm"><span>Submit</span></button>
+                    <button id="getMoves" class="btn btn-default btn-sm"><span>Get Moves</span></button>
+                    <button id="redraw" class="btn btn-default btn-sm"><span>Redraw</span></button>
+                    <button id="skip" class="btn btn-default btn-sm"><span>Skip</span></button>
+                    <button id="flipBoard" class="btn btn-default btn-sm"><span>Flip</span></button>
 
                 </p>
             </div>
@@ -122,10 +124,10 @@
                     </div>
                 }
             </div>
-
-            <div id="board" class="col-xs-12 col-sm-@if (players.Count > 2) { <text>8</text> }else {<text>10</text>}">
+            @{var flipBoard = ViewBag.FlipBoard;}
+            <div id="board" class="@if (flipBoard == "true") { <text>flipped</text> } col-xs-12 col-sm-@if (players.Count > 2) { <text>8</text> }else {<text>10</text>}">
                 @{BoardTile[,] boardAs2DArray = Model.Board.ConvertTo2DArray(); }
-                @if (ViewBag != null && ViewBag.FlipBoard == "True")
+                @if (ViewBag != null && ViewBag.FlipBoard == "true")
                 {
                     boardAs2DArray = Model.Board.Transpose2DArray(boardAs2DArray);
                 }

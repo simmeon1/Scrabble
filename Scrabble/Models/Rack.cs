@@ -97,7 +97,7 @@ namespace Scrabble.Models
             return true;
         }
 
-        public void DrawFromPouch()
+        public void RefillRackFromPouch()
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
             int countOfRackTiles = 0;

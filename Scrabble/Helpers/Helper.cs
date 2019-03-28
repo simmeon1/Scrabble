@@ -208,7 +208,18 @@ namespace Scrabble.Helpers
             }
             //return validCrossChecks;
         }
-
+        public static string GetValueFromAjaxData(List<KeyValuePair<string, StringValues>> data, string property)
+        {
+            string value = "";
+            foreach (var dataRow in data)
+            {
+                if (dataRow.Key.Contains(property))
+                {
+                    value += dataRow.Value;
+                }
+            }
+            return value;
+        }
         public static string[] GetPlayedRackTiles(List<KeyValuePair<string, StringValues>> data)
         {
             string tiles = "";
@@ -221,6 +232,7 @@ namespace Scrabble.Helpers
             }
             return tiles.Split(",");
         }
+
         public static void GetBoardArrayFromHtml(List<KeyValuePair<string, StringValues>> data)
         {
             string boardArrayString = "";
@@ -412,7 +424,7 @@ namespace Scrabble.Helpers
             {
                 var tileDetails = GetTileDetails(playedRackTile);
                 playerAtHand.Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileDetails[2]).FirstOrDefault());
-                playerAtHand.Rack.DrawFromPouch();
+                playerAtHand.Rack.RefillRackFromPouch();
             }
 
             game.Log += logBuilder;
