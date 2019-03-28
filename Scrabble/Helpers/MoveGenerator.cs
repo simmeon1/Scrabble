@@ -15,44 +15,53 @@ namespace Scrabble.Helpers
         public BoardTile[,] BoardArray { get; set; }
         public BoardTile[,] TransposedBoardArray { get; set; }
         public Dawg<bool> Dawg { get; set; }
-        public List<int[]> ListOfValidAnchorCoordinates { get; set; }
-        public Dictionary<int[], List<CharTile>> ValidCrossChecks { get; set; }
+        public List<int[]> ListOfValidAnchorCoordinatesOnHorizontalBoard { get; set; }
+        public List<int[]> ListOfValidAnchorCoordinatesOnVerticalBoard { get; set; }
+        public Dictionary<BoardTile, List<CharTile>> ValidHorizontalCrossCheck { get; set; }
+        public Dictionary<BoardTile, List<CharTile>> ValidVerticalCrossCheck { get; set; }
 
-        public MoveGenerator(Game game, BoardTile[,] boardArray, BoardTile[,] transposedBoardArray, Dawg<bool> dawg,
-            List<int[]> listOfValidAnchorCoordinates, Dictionary<int[], List<CharTile>> validCrossChecks)
+        public MoveGenerator(Game game, BoardTile[,] boardArray, BoardTile[,] transposedBoardArray, Dawg<bool> dawg, List<int[]> listOfValidAnchorCoordinatesOnHorizontalBoard, List<int[]> listOfValidAnchorCoordinatesOnVerticalBoard, Dictionary<BoardTile, List<CharTile>> validHorizontalCrossCheck, Dictionary<BoardTile, List<CharTile>> validVerticalCrossCheck)
         {
             Game = game;
             RackOfCurrentPlayer = game.GetPlayerAtHand().Rack;
             BoardArray = boardArray;
             TransposedBoardArray = transposedBoardArray;
             Dawg = dawg;
-            ListOfValidAnchorCoordinates = listOfValidAnchorCoordinates;
-            ValidCrossChecks = validCrossChecks;
+            ListOfValidAnchorCoordinatesOnHorizontalBoard = listOfValidAnchorCoordinatesOnHorizontalBoard;
+            ListOfValidAnchorCoordinatesOnVerticalBoard = listOfValidAnchorCoordinatesOnVerticalBoard;
+            ValidHorizontalCrossCheck = validHorizontalCrossCheck;
+            ValidVerticalCrossCheck = validVerticalCrossCheck;
         }
 
-        public void GetValidMoves()
+        public Dictionary<int[], string> GetValidMoves(bool boardIsHorizontal)
         {
-            ListOfValidAnchorCoordinates = new List<int[]>(new int[][] { new int[] { 7, 7 }, new int[] { 7, 8 }, new int[] { 7, 9 } });
-            Dictionary<int[], string> validMoves = new Dictionary<int[], string>();
-            foreach (var anchor in ListOfValidAnchorCoordinates)
+            //ListOfValidAnchorCoordinates = new List<int[]>(new int[][] { new int[] { 7, 7 }, new int[] { 7, 8 }, new int[] { 7, 9 } });
+            var boardArray = boardIsHorizontal ? BoardArray : TransposedBoardArray;
+            var listOfValidAnchorCoordinates = boardIsHorizontal ? ListOfValidAnchorCoordinatesOnHorizontalBoard : ListOfValidAnchorCoordinatesOnVerticalBoard;
+            var validCrossChecks = boardIsHorizontal ? ValidHorizontalCrossCheck : ValidVerticalCrossCheck;
+            Dictionary<int[], string> validMovesList = new Dictionary<int[], string>();
+            foreach (var anchor in listOfValidAnchorCoordinates)
             {
                 var limit = 0;
                 var columnIndex = anchor[1];
-                while (columnIndex > 0 && !ListOfValidAnchorCoordinates.Any(a => a.SequenceEqual(new int[] { anchor[0], columnIndex - 1 })))
+                while (columnIndex > 0 && !listOfValidAnchorCoordinates.Any(a => a.SequenceEqual(new int[] { anchor[0], columnIndex - 1 })))
                 {
                     limit++;
                     columnIndex--;
                 }
-
-                LeftPart("", limit, anchor, validMoves);
+                if (limit == 0)
+                {
+                    continue;
+                } 
+                else LeftPart("", limit, anchor, boardArray, validCrossChecks, validMovesList);
                 
             }
-            var x = 0;
+            return validMovesList;
         }
 
-        public void LeftPart(string partialWord, int limit, int[] anchor, Dictionary<int[], string> validMoves)
+        public void LeftPart(string partialWord, int limit, int[] anchor, BoardTile[,] boardArray, Dictionary<BoardTile, List<CharTile>> validCrossChecks, Dictionary<int[], string> validMovesList)
         {
-            ExtendRight(partialWord, anchor, validMoves);
+            ExtendRight(partialWord, anchor, boardArray, validCrossChecks, validMovesList);
             if (limit > 0)
             {
                 HashSet<string> labelsOfDawgEdges = new HashSet<string>(new DawgEdgeEqualityComparer());
@@ -64,23 +73,25 @@ namespace Scrabble.Helpers
                 foreach (var label in labelsOfDawgEdges)
                 {
                     if (label == "") continue;
-                    if (RackOfCurrentPlayer.CheckIfTileIsInRack(label[0]))
+                    if (RackOfCurrentPlayer.CheckIfTileIsInRack(label[0]) &&
+                        (!validCrossChecks.Any(c => c.Key == boardArray[anchor[0], anchor[1] - partialWord.Length])
+                        || validCrossChecks.Any(c => c.Key == boardArray[anchor[0], anchor[1] - partialWord.Length] && c.Value.Any(x => x.Letter == label[0]))))
                     {
                         RackOfCurrentPlayer.SubstractFromRack(label[0]);
-                        LeftPart(partialWord + label[0], limit - 1, anchor, validMoves);
+                        LeftPart(partialWord + label[0], limit - 1, anchor, boardArray, validCrossChecks, validMovesList);
                         RackOfCurrentPlayer.AddToRack(label[0]);
                     }
                 }
             }
         }
 
-        public void ExtendRight(string partialWord, int[] anchor, Dictionary<int[], string> validMoves)
+        public void ExtendRight(string partialWord, int[] anchor, BoardTile[,] boardArray, Dictionary<BoardTile, List<CharTile>> validCrossChecks, Dictionary<int[], string> validMovesList)
         {
-            if (BoardArray[anchor[0], anchor[1]].CharTile == null)
+            if (boardArray[anchor[0], anchor[1]].CharTile == null)
             {
                 if (Helper.CheckWordValidity(Dawg, partialWord))
                 {
-                    validMoves.Add(new int[] { anchor[0], anchor[1] }, partialWord);
+                    validMovesList.Add(new int[] { anchor[0], anchor[1] }, partialWord);
                 }
                 HashSet<string> labelsOfDawgEdges = new HashSet<string>(new DawgEdgeEqualityComparer());
                 var wordsWithCommonPreffix = Dawg.MatchPrefix(partialWord);
@@ -92,13 +103,13 @@ namespace Scrabble.Helpers
                 {
                     if (label == "") continue;
                     if (RackOfCurrentPlayer.CheckIfTileIsInRack(label[0]) &&
-                        (!ValidCrossChecks.Any(c => c.Key[0] == anchor[0] && c.Key[1] == anchor[1]) 
-                        || ValidCrossChecks.Any(c => c.Key[0] == anchor[0] && c.Key[1] == anchor[1] && c.Value.Any(x => x.Letter == label[0]))))
+                        (!validCrossChecks.Any(c => c.Key == boardArray[anchor[0], anchor[1]]) 
+                        || validCrossChecks.Any(c => c.Key == boardArray[anchor[0], anchor[1]] && c.Value.Any(x => x.Letter == label[0]))))
                     {
                         RackOfCurrentPlayer.SubstractFromRack(label[0]);
-                        if (anchor[1] + 1 < BoardArray.GetLength(1) - 1)
+                        if (anchor[1] + 1 < boardArray.GetLength(1) - 1)
                         {
-                            ExtendRight(partialWord + label[0], new int[] { anchor[0], anchor[1] + 1 }, validMoves);
+                            ExtendRight(partialWord + label[0], new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList);
                         }
                         RackOfCurrentPlayer.AddToRack(label[0]);
                     }
@@ -106,16 +117,16 @@ namespace Scrabble.Helpers
             }
             else
             {
-                var tile = BoardArray[anchor[0], anchor[1]].CharTile;
+                var tile = boardArray[anchor[0], anchor[1]].CharTile;
                 HashSet<string> labelsOfDawgEdges = new HashSet<string>(new DawgEdgeEqualityComparer());
                 var wordsWithCommonPreffix = Dawg.MatchPrefix(partialWord + tile.Letter);
                 foreach (var word in wordsWithCommonPreffix)
                 {
                     labelsOfDawgEdges.Add(word.Key.Substring((partialWord + tile.Letter).Length));
                 }
-                if (labelsOfDawgEdges.Any() && anchor[1] + 1 < BoardArray.GetLength(1) - 1)
+                if (labelsOfDawgEdges.Any() && anchor[1] + 1 < boardArray.GetLength(1) - 1)
                 {
-                    ExtendRight(partialWord + tile.Letter, new int[] { anchor[0], anchor[1] + 1 }, validMoves);
+                    ExtendRight(partialWord + tile.Letter, new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList);
                 }
             }
         }

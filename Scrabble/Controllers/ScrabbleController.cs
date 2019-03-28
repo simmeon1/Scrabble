@@ -24,6 +24,10 @@ namespace Scrabble.Controllers
         public IActionResult Index()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            if (TempData["FlipBoard"] != null)
+            {
+                ViewBag.FlipBoard = TempData["FlipBoard"].ToString();
+            }
             List<KeyValuePair<string, StringValues>> data = null;
             try
             {
@@ -70,6 +74,13 @@ namespace Scrabble.Controllers
             return View(game);
         }
 
+        public IActionResult FlipBoard()
+        {
+            Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            TempData["FlipBoard"] = true;
+            return RedirectToAction("Index");
+        }
+
         public void ResetBoard()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -109,13 +120,18 @@ namespace Scrabble.Controllers
             {
                 var boardArray = game.Board.ConvertTo2DArray();
                 var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
-                List<int[]> listOfValidAnchorCoordinates = new List<int[]>();
-                Dictionary<int[], List<CharTile>> validHorizontalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary, false);
-                Dictionary<int[], List<CharTile>> validVerticalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary, true);
-                Dictionary<int[], List<CharTile>> validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validHorizontalCrossChecks, validVerticalCrossChecks);               
-                var anchorArray = game.Board.GetAnchors(boardArray, listOfValidAnchorCoordinates);
-                MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinates, validCrossChecks);
-                moveValidator.GetValidMoves();
+                List<int[]> listOfValidAnchorCoordinatesOnHorizontalBoard = new List<int[]>();
+                List<int[]> listOfValidAnchorCoordinatesOnVerticalBoard = new List<int[]>();
+                Dictionary<BoardTile, List<CharTile>> validHorizontalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary, false);
+                Dictionary<BoardTile, List<CharTile>> validVerticalCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary, true);
+                Helpers.Helper.GetValidCrossChecksCombined(validHorizontalCrossChecks, validVerticalCrossChecks);               
+                game.Board.GetAnchors(boardArray, listOfValidAnchorCoordinatesOnHorizontalBoard);
+                game.Board.GetAnchors(transposedBoardArray, listOfValidAnchorCoordinatesOnVerticalBoard);
+                MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnHorizontalBoard, listOfValidAnchorCoordinatesOnVerticalBoard, validHorizontalCrossChecks, validVerticalCrossChecks);
+                Dictionary<int[], string> validHorizontalMovesList = new Dictionary<int[], string>();
+                Dictionary<int[], string> validVerticalMovesList = new Dictionary<int[], string>();
+                validHorizontalMovesList = moveValidator.GetValidMoves(true);
+                validVerticalMovesList = moveValidator.GetValidMoves(false);
                 //Dictionary<int[], string> validMoves = Helpers.Helper.GetValidMoves(game, boardArray, transposedBoardArray, listOfValidAnchorCoordinates, validCrossChecks);
                 return StatusCode(200, "hi");
             }

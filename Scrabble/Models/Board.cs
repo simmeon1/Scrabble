@@ -9,7 +9,7 @@ namespace Scrabble.Models
     {
         public int ID { get; set; }
         public int Rows { get; set; }
-        public int Columns { get; set; }      
+        public int Columns { get; set; }
 
         public int GameID { get; set; }
         [ForeignKey("GameID")]
@@ -17,7 +17,7 @@ namespace Scrabble.Models
 
         public virtual ICollection<BoardTile> BoardTiles { get; set; }
 
-        public void PlayTile (int x, int y, int charTileId, List<BoardTile> usedBoardTiles)
+        public void PlayTile(int x, int y, int charTileId, List<BoardTile> usedBoardTiles)
         {
             List<BoardTile> boardTilesList = BoardTiles.ToList();
             foreach (BoardTile b in boardTilesList)
@@ -31,7 +31,7 @@ namespace Scrabble.Models
             BoardTiles = boardTilesList;
         }
 
-        public BoardTile[,] ConvertTo2DArray ()
+        public BoardTile[,] ConvertTo2DArray()
         {
             List<BoardTile> boardTilesList = BoardTiles.ToList();
             int indexOfLastBoardTile = boardTilesList.Count - 1;
@@ -68,7 +68,7 @@ namespace Scrabble.Models
             return resultArray;
         }
 
-        public bool[,] GetAnchors(BoardTile[,] boardArray, List<int[]> listOfValidAnchorCoordinates = null)
+        public void GetAnchors(BoardTile[,] boardArray, List<int[]> listOfValidAnchorCoordinates = null)
         {
             bool[,] arrayWithAnchors = new bool[Rows, Columns];
             for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
@@ -82,51 +82,55 @@ namespace Scrabble.Models
             {
                 for (int j = 0; j < boardArray.GetLength(1); j++)
                 {
-                    if (boardArray[i,j].CharTile != null)
+                    if (boardArray[i, j].CharTile != null)
                     {
-                        if (i > 0 && boardArray[i-1, j].CharTile == null)
-                        {                            
-                            arrayWithAnchors[i - 1, j] = true;
-                            if (listOfValidAnchorCoordinates != null) {
-                                var coordinates = new int[] { i - 1, j };
-                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
+                        if (i > 0 && boardArray[i - 1, j].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j] = true;
+                            if (listOfValidAnchorCoordinates != null)
+                            {
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
+                        else
                         if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
                         {
-                            arrayWithAnchors[i + 1, j] = true;
+                            arrayWithAnchors[i, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i + 1, j };
-                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
+                        else
                         if (j > 0 && boardArray[i, j - 1].CharTile == null)
                         {
-                            arrayWithAnchors[i, j - 1] = true;
+                            arrayWithAnchors[i, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i, j - 1 };
-                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
+                        else
                         if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
                         {
-                            arrayWithAnchors[i, j + 1] = true;
+                            arrayWithAnchors[i, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i, j + 1 };
-                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
                     }
 
                 }
             }
-            return arrayWithAnchors;
+            //return arrayWithAnchors;
         }
 
-        public bool CheckIfAnchorIsUsed (string[] playedRackTiles, BoardTile[,] boardArray)
+        public bool CheckIfAnchorIsUsed(string[] playedRackTiles, BoardTile[,] boardArray)
         {
             for (int i = 0; i < boardArray.GetLength(0); i++)
             {
@@ -135,7 +139,7 @@ namespace Scrabble.Models
                     if (boardArray[i, j].BoardTileType.Type == "Start")
                     {
                         if (boardArray[i, j].CharTile == null) return true;
-                    }                 
+                    }
                 }
             }
             foreach (var tile in playedRackTiles)
@@ -144,16 +148,16 @@ namespace Scrabble.Models
                 int tileX = Int32.Parse(tileDetails[0]);
                 int tileY = Int32.Parse(tileDetails[1]);
                 int tileCharTileId = Int32.Parse(tileDetails[2]);
-                var anchors = GetAnchors(boardArray);
-                if (anchors[tileX, tileY] == true)
-                {
-                    return true;
-                }
+                //var anchors = GetAnchors(boardArray);
+                //if (anchors[tileX, tileY] == true)
+                //{
+                //    return true;
+                //}
             }
             return false;
         }
 
-        public string IntToCSSWidth (int measurement)
+        public string IntToCSSWidth(int measurement)
         {
             string temp = "";
             temp = ((1.0 / measurement) * 100) + "";

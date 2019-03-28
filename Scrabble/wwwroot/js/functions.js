@@ -70,6 +70,28 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", "#flipBoard", function () {
+        var boardArray = getBoardArray(false);
+        var data = {
+            "boardArray": boardArray
+        };
+        updateStatusMessage("Loading...", "info");
+        $.ajax({
+            url: '/Scrabble/FlipBoard',
+            async: true,
+            type: "POST",
+            data: data,
+        }).done(function (view) {
+            var viewBody = view.substring(
+                view.lastIndexOf("<body>"),
+                view.lastIndexOf("</body>")
+            );
+            animateHtmlUpdates($("body"), viewBody);
+        }).fail(function (jqXHR) {
+            updateStatusMessage(jqXHR.responseText, "danger");
+        });
+    });
+
 
     $(document).on("click", ".grid-item", function () {
         if ($(this).hasClass("locked")) {

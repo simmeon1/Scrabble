@@ -8,11 +8,12 @@
     overflow: auto;
 }
 
-.playerLog {
+.output {
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
 }
+
 
 .panel-body{
     padding: 5px;
@@ -43,7 +44,18 @@
     /*font-size: 0.9vw;*/
 }
 
+.playerLog {
+    margin-top: 0px !important;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 @media(max-width:767px) {
+    #board {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
     .board_chartile_letter, .board_rack_chartile_letter {
         font-size: 15px;
     }
@@ -54,6 +66,11 @@
 }
 
 @media(min-width:768px) {
+    #board {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     .board_chartile_letter, .board_rack_chartile_letter {
         font-size: 1.6vw;
     }
@@ -64,6 +81,8 @@
 }
 
 @media(min-width:992px) {
+    
+
     .board_chartile_letter, .board_rack_chartile_letter {
         font-size: 1.5vw;
     }
@@ -123,6 +142,7 @@
 .locked {
     background-color: yellow !important;
 }
+
 
 /*.currently-foreseen-tile {
     background-color: lightgray;
