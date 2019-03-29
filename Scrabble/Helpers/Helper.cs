@@ -98,7 +98,7 @@ namespace Scrabble.Helpers
             return words.Split(";");
         }
 
-        public static Dictionary<BoardTile, List<CharTile>> GetValidCrossChecksOneWay(BoardTile[,] boardArray, WordDictionary dictionary, bool boardIsTransposed)
+        public static Dictionary<BoardTile, List<CharTile>> GetValidCrossChecksOneWay(BoardTile[,] boardArray, WordDictionary dictionary)
         {
             var dawg = LoadDawg(dictionary.GameLanguage);
             Dictionary<BoardTile, List<CharTile>> validCrossChecks = new Dictionary<BoardTile, List<CharTile>>();
@@ -127,15 +127,6 @@ namespace Scrabble.Helpers
                         }
                         var combinedWord = "";
                         combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
-                        if (boardIsTransposed)
-                        {
-
-                            combinedWord = ReverseString(combinedWord);
-                        }
-                        else
-                        {
-                            combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
-                        }
                         if (combinedWord == "_")
                         {
                             continue;
@@ -170,19 +161,19 @@ namespace Scrabble.Helpers
             return validCrossChecks;
         }
 
-        public static void GetValidCrossChecksCombined(Dictionary<BoardTile, List<CharTile>> validHorizontalCrossChecks, Dictionary<BoardTile, List<CharTile>> validVerticalCrossChecks)
+        public static void GetValidCrossChecksCombined(Dictionary<BoardTile, List<CharTile>> validUntransposedCossChecks, Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks)
         {
             Dictionary<BoardTile, List<CharTile>> validCrossChecks = new Dictionary<BoardTile, List<CharTile>>();
-            for (int i = 0; i < validHorizontalCrossChecks.Count; i++)
+            for (int i = 0; i < validUntransposedCossChecks.Count; i++)
             {
-                var keyAtIndex = validHorizontalCrossChecks.Keys.ElementAt(i);
-                var valueAtIndex = validHorizontalCrossChecks.Values.ElementAt(i);
+                var keyAtIndex = validUntransposedCossChecks.Keys.ElementAt(i);
+                var valueAtIndex = validUntransposedCossChecks.Values.ElementAt(i);
                 validCrossChecks.Add(keyAtIndex, valueAtIndex);
             }
-            for (int i = 0; i < validVerticalCrossChecks.Count; i++)
+            for (int i = 0; i < validTransposedCrossChecks.Count; i++)
             {
-                var keyAtIndex = validVerticalCrossChecks.Keys.ElementAt(i);
-                var valueAtIndex = validVerticalCrossChecks.Values.ElementAt(i);
+                var keyAtIndex = validTransposedCrossChecks.Keys.ElementAt(i);
+                var valueAtIndex = validTransposedCrossChecks.Values.ElementAt(i);
                 if (!validCrossChecks.ContainsKey(keyAtIndex))
                 {
                     validCrossChecks.Add(keyAtIndex, valueAtIndex);
@@ -197,13 +188,13 @@ namespace Scrabble.Helpers
             {
                 var keyAtIndex = validCrossChecks.Keys.ElementAt(i);
                 var valueAtIndex = validCrossChecks.Values.ElementAt(i);
-                if (validHorizontalCrossChecks.ContainsKey(keyAtIndex))
+                if (validUntransposedCossChecks.ContainsKey(keyAtIndex))
                 {
-                    validHorizontalCrossChecks[keyAtIndex] = valueAtIndex;
+                    validUntransposedCossChecks[keyAtIndex] = valueAtIndex;
                 }
-                if (validVerticalCrossChecks.ContainsKey(keyAtIndex))
+                if (validTransposedCrossChecks.ContainsKey(keyAtIndex))
                 {
-                    validVerticalCrossChecks[keyAtIndex] = valueAtIndex;
+                    validTransposedCrossChecks[keyAtIndex] = valueAtIndex;
                 }
             }
             //return validCrossChecks;
@@ -349,10 +340,10 @@ namespace Scrabble.Helpers
             columnsUsedSorted.Sort();
             var multipleIndexes = rowsUsedSorted.Count > columnsUsedSorted.Count ? rowsUsedSorted : columnsUsedSorted;
             var secondaryIndex = rowsUsedSorted.Count > columnsUsedSorted.Count ? columnsUsedSorted : rowsUsedSorted;
-            directionOfPlay = rowsUsedSorted.Count > columnsUsedSorted.Count ? "vertical" : "horizontal";
+            directionOfPlay = rowsUsedSorted.Count > columnsUsedSorted.Count ? "transposed" : "untransposed";
             for (var i = multipleIndexes[0]; i < multipleIndexes[multipleIndexes.Count - 1]; i++)
             {
-                var checkedTile = directionOfPlay == "horizontal" ? boardAsArray[secondaryIndex[0], i] : boardAsArray[i, secondaryIndex[0]];
+                var checkedTile = directionOfPlay == "untransposed" ? boardAsArray[secondaryIndex[0], i] : boardAsArray[i, secondaryIndex[0]];
                 if (checkedTile.CharTile == null)
                 {
                     var boardTileHasTemporaryPlacedRackTile = false;

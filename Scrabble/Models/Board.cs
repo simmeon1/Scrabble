@@ -45,31 +45,46 @@ namespace Scrabble.Models
 
         public BoardTile[,] Transpose2DArray(BoardTile[,] boardArray)
         {
-            List<BoardTile[]> rotatedArrayList = new List<BoardTile[]>();
-            for (var i = 0; i < boardArray.GetLength(1); i++)
+            //List<BoardTile[]> rotatedArrayList = new List<BoardTile[]>();
+            //for (var i = 0; i < boardArray.GetLength(1); i++)
+            //{
+            //    var boardColumnAsARow = new List<BoardTile>();
+            //    for (var j = 0; j < boardArray.GetLength(0); j++)
+            //    {
+            //        boardColumnAsARow.Add(boardArray[j, i]);
+            //    }
+            //    rotatedArrayList.Add(boardColumnAsARow.ToArray());
+            //}
+            //rotatedArrayList.Reverse();
+            //var rotatedArray = rotatedArrayList.ToArray();
+            //BoardTile[,] resultArray = new BoardTile[boardArray.GetLength(1), boardArray.GetLength(0)];
+            //for (int i = 0; i < resultArray.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < resultArray.GetLength(1); j++)
+            //    {
+            //        resultArray[i, j] = rotatedArray[i][j];
+            //    }
+            //}
+            //return resultArray;
+            int w = boardArray.GetLength(0);
+            int h = boardArray.GetLength(1);
+
+            BoardTile[,] result = new BoardTile[h, w];
+
+            for (int i = 0; i < w; i++)
             {
-                var boardColumnAsARow = new List<BoardTile>();
-                for (var j = 0; j < boardArray.GetLength(0); j++)
+                for (int j = 0; j < h; j++)
                 {
-                    boardColumnAsARow.Add(boardArray[j, i]);
-                }
-                rotatedArrayList.Add(boardColumnAsARow.ToArray());
-            }
-            rotatedArrayList.Reverse();
-            var rotatedArray = rotatedArrayList.ToArray();
-            BoardTile[,] resultArray = new BoardTile[boardArray.GetLength(1), boardArray.GetLength(0)];
-            for (int i = 0; i < resultArray.GetLength(0); i++)
-            {
-                for (int j = 0; j < resultArray.GetLength(1); j++)
-                {
-                    resultArray[i, j] = rotatedArray[i][j];
+                    result[j, i] = boardArray[i, j];
                 }
             }
-            return resultArray;
+
+            return result;
         }
 
-        public void GetAnchors(BoardTile[,] boardArray, List<int[]> listOfValidAnchorCoordinates = null)
+        public List<int[]> GetAnchors(BoardTile[,] boardArray)
         {
+            List<int[]> listOfValidAnchorCoordinates = new List<int[]>();
             bool[,] arrayWithAnchors = new bool[Rows, Columns];
             for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
             {
@@ -82,6 +97,12 @@ namespace Scrabble.Models
             {
                 for (int j = 0; j < boardArray.GetLength(1); j++)
                 {
+                    if (boardArray[i, j].BoardTileType.Type == "Start" && boardArray[i, j].CharTile == null)
+                    {
+                        listOfValidAnchorCoordinates.Clear();
+                        listOfValidAnchorCoordinates.Add(new int[] { i, j });
+                        return listOfValidAnchorCoordinates;
+                    }
                     if (boardArray[i, j].CharTile != null)
                     {
                         if (i > 0 && boardArray[i - 1, j].CharTile == null)
@@ -127,7 +148,7 @@ namespace Scrabble.Models
 
                 }
             }
-            //return arrayWithAnchors;
+            return listOfValidAnchorCoordinates;
         }
 
         public bool CheckIfAnchorIsUsed(string[] playedRackTiles, BoardTile[,] boardArray)

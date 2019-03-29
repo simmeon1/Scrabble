@@ -1,6 +1,6 @@
 #statusMessage {
     position: absolute;
-    top: 10px;
+    bottom: 10px;
     left: 0px;
 }
 
@@ -12,6 +12,7 @@
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
+    overflow: hidden;
 }
 
 
@@ -54,6 +55,15 @@
     margin-top: 0px !important;
     padding-left: 0px;
     padding-right: 0px;
+    overflow: hidden;
+}
+
+.rowIndex {
+    vertical-align: text-bottom;
+}
+
+.playerLog:hover {
+    overflow-y: scroll;
 }
 
 @media(max-width:767px) {

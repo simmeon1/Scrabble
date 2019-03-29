@@ -72,12 +72,16 @@ $(document).ready(function () {
             async: true,
             type: "POST",
             data: data,
-        }).done(function (view) {
-            alert(view);
+        }).done(function (results) {
+            populateTable(results);
+            updateStatusMessage("Success :)", "success");
             $('button').prop('disabled', false);
         }).fail(function (jqXHR) {
+            populateTable(results);
             updateStatusMessage(jqXHR.responseText, "danger");
             $('button').prop('disabled', false);
+        }).always(function (results) {
+            alert("hery");
         });
     });
 
@@ -218,9 +222,9 @@ $(document).ready(function () {
         }
         var indexesOfPlay = columnsUsed.length > rowsUsed.length ? columnsUsed : rowsUsed;
         var secondaryIndexOfPlay = columnsUsed.length > rowsUsed.length ? rowsUsed : columnsUsed;
-        var typeOfPlay = columnsUsed.length > rowsUsed.length ? "horizontal" : "vertical";
+        var typeOfPlay = columnsUsed.length > rowsUsed.length ? "normal" : "transposed";
         for (var i = indexesOfPlay[0]; i < indexesOfPlay[indexesOfPlay.length - 1]; i++) {
-            var checkedTile = typeOfPlay == "horizontal" ? $("#tile_" + secondaryIndexOfPlay[0] + "_" + i) : $("#tile_" + i + "_" + secondaryIndexOfPlay[0]);
+            var checkedTile = typeOfPlay == "normal" ? $("#tile_" + secondaryIndexOfPlay[0] + "_" + i) : $("#tile_" + i + "_" + secondaryIndexOfPlay[0]);
             if (!checkedTile.hasClass("locked") && !checkedTile.children().first().hasClass("board_rack_chartile")) {
                 updateStatusMessage("Play is not connected.", "danger");
                 return;
@@ -231,13 +235,12 @@ $(document).ready(function () {
         var rackTilesPlayed = [];
         var boardArray = getBoardArray(true, rackTilesPlayed);        
 
-        //var detectedWord = [];
         var totalMovesMade = 0;
         var listOfWordsOnBoard = [];
-        var tilesNotInHorizontalPlay = [];
-        var tilesNotInVerticalPlay = [];
-        checkForWordsAndPlays(boardArray, true, tilesNotInHorizontalPlay, totalMovesMade, listOfWordsOnBoard);
-        checkForWordsAndPlays(boardArray, false, tilesNotInVerticalPlay, totalMovesMade, listOfWordsOnBoard);             
+        var tilesNotInUntransposedPlay = [];
+        var tilesNotInTransposedPlay = [];
+        checkForWordsAndPlays(boardArray, true, tilesNotInUntransposedPlay, totalMovesMade, listOfWordsOnBoard);
+        checkForWordsAndPlays(boardArray, false, tilesNotInTransposedPlay, totalMovesMade, listOfWordsOnBoard);             
 
         var listOfWordsMadeNow = [];
         for (var i = 0; i < listOfWordsOnBoard.length; i++) {
@@ -264,10 +267,10 @@ $(document).ready(function () {
             }
         }
 
-        for (var i = 0; i < tilesNotInHorizontalPlay.length; i++) {
-            for (var j = 0; j < tilesNotInVerticalPlay.length; j++) {
-                if (tilesNotInVerticalPlay[j][0].includes(tilesNotInHorizontalPlay[i][0])) {
-                    updateStatusMessage("Tile " + tilesNotInHorizontalPlay[i] + " is not in a valid play.", "danger");
+        for (var i = 0; i < tilesNotInUntransposedPlay.length; i++) {
+            for (var j = 0; j < tilesNotInTransposedPlay.length; j++) {
+                if (tilesNotInTransposedPlay[j][0].includes(tilesNotInUntransposedPlay[i][0])) {
+                    updateStatusMessage("Tile " + tilesNotInUntransposedPlay[i] + " is not in a valid play.", "danger");
                     return;
                 }
             }
@@ -396,24 +399,36 @@ $(document).ready(function () {
         return boardArray;
     }
 
-    function rotateArrayCounterClockwise(array) {
-        var rotatedArray = [];
-        for (var i = 0; i < array[0].length; i++) {
-            var boardColumnAsARow = [];
-            for (var j = 0; j < array.length; j++) {
-                boardColumnAsARow.push(array[j][i]);
+    function transposeArray(array) {
+        //var rotatedArray = [];
+        //for (var i = 0; i < array[0].length; i++) {
+        //    var boardColumnAsARow = [];
+        //    for (var j = 0; j < array.length; j++) {
+        //        boardColumnAsARow.push(array[j][i]);
+        //    }
+        //    rotatedArray.push(boardColumnAsARow);
+        //}
+        //rotatedArray.reverse();
+        //return rotatedArray;
+        var w = array.length;
+        var h = array[0].length;
+
+        var result = [];
+
+        for (var i = 0; i < w; i++) {
+            for (var j = 0; j < h; j++) {
+                result[j, i] = array[i, j];
             }
-            rotatedArray.push(boardColumnAsARow);
         }
-        rotatedArray.reverse();
-        return rotatedArray;
+
+        return result;
     }
 
-    function checkForWordsAndPlays(boardArray, isHorizontal, tilesNotInPlay, movesMade, listOfWords) {
+    function checkForWordsAndPlays(boardArray, isNotTransposed, tilesNotInPlay, movesMade, listOfWords) {
         var boardArrayCopy = boardArray.slice(0);
         var movesMadeTemp = movesMade;
-        if (!isHorizontal) {
-            boardArrayCopy = rotateArrayCounterClockwise(boardArrayCopy);
+        if (!isNotTransposed) {
+            boardArrayCopy = transposeArray(boardArrayCopy);
         }
         for (var i = 0; i < boardArrayCopy.length; i++) {
             var detectedWord = [];
@@ -435,9 +450,19 @@ $(document).ready(function () {
         totalMovesMade = movesMadeTemp;
     }  
 
+    function populateTable(json) {
+        var x = 0;
+        //for (var i = 0; i < json.Values.length; i++) {
+
+        //}
+    }
+
     function refreshElementSizes (){
         $(".grid-item").height($(".grid-item").width());
         $(".rack_chartile").height($(".rack_chartile").width());
         $(".board_rack_chartile").height($(".board_rack_chartile").parent().height() - 2);
+        $(".playerLog").height($("#board").height() / 2);
+        $("#rowIndexes").height($("#board").height());
+        $(".rowIndex").height($(".grid-item").height() + 1);
     }
 });

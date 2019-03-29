@@ -75,6 +75,25 @@
 
                 </p>
             </div>
+            @*<div id="movesResults">
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#movesModal">Valid Moves</button>
+                <div class="modal fade" id="movesModal" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Valid Moves</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>This is a large modal.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
             <div>
                 <p class="text-center">
                     <span id="pouchContent">@Model.Pouch.ToString()</span>
@@ -82,8 +101,6 @@
             </div>
         </div>
         <div id="gameAndOutput">
-            <div id="statusMessage" class="col-xs-12">
-            </div>
             <div id="leftOutput" class="col-xs-12 col-sm-2 panel-group output">
                 @foreach (var player in playersOnLeftSide)
                 {
@@ -106,17 +123,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var move in player.Moves)
-                                        {
-                                            <tr>
-                                                <td>@move.Word</td>
-                                                <td>@move.Score</td>
-                                            </tr>
-                                        }
                                         <tr>
                                             <td><strong>Total</strong></td>
                                             <td><strong>@player.Score</strong></td>
                                         </tr>
+                                        @{ var moves = player.Moves.ToList();}
+                                        @for (int i = 0; i < moves.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@moves[moves.Count - 1 - i].Word</td>
+                                                <td>@moves[moves.Count - 1 - i].Score</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             }
@@ -124,6 +142,7 @@
                     </div>
                 }
             </div>
+
             @{var flipBoard = ViewBag.FlipBoard;}
             <div id="board" class="@if (flipBoard == "true") { <text>flipped</text> } col-xs-12 col-sm-@if (players.Count > 2) { <text>8</text> }else {<text>10</text>}">
                 @{BoardTile[,] boardAs2DArray = Model.Board.ConvertTo2DArray(); }
@@ -159,6 +178,23 @@
                     </div>
                 }
             </div>
+            @*<div id="rowIndexes" class="col-sm-1">
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+                <div class="col-sm-12 rowIndex">1</div>
+            </div>*@
             <div id="rightOutput" class="col-xs-12 col-sm-2 panel-group output">
                 @foreach (var player in playersOnRightSide)
                 {
@@ -181,23 +217,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var move in player.Moves)
-                                        {
-                                            <tr>
-                                                <td>@move.Word</td>
-                                                <td>@move.Score</td>
-                                            </tr>
-                                        }
                                         <tr>
                                             <td><strong>Total</strong></td>
                                             <td><strong>@player.Score</strong></td>
                                         </tr>
+                                        @{ var moves = player.Moves.ToList();}
+                                        @for (int i = 0; i < moves.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>@moves[moves.Count - 1 - i].Word</td>
+                                                <td>@moves[moves.Count - 1 - i].Score</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             }
                         </div>
                     </div>
                 }
+            </div>
+            <div id="statusMessage" class="col-xs-12">
             </div>
         </div>
     </div>
