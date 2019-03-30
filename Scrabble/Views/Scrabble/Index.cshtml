@@ -72,12 +72,11 @@
                     <button id="redraw" class="btn btn-default btn-sm"><span>Redraw</span></button>
                     <button id="skip" class="btn btn-default btn-sm"><span>Skip</span></button>
                     <button id="flipBoard" class="btn btn-default btn-sm"><span>Flip</span></button>
-
+                    <button id="validMovesButton" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#movesModal">Valid Moves</button>
                 </p>
             </div>
-            @*<div id="movesResults">
-                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#movesModal">Valid Moves</button>
-                <div class="modal fade" id="movesModal" role="dialog">
+            <div id="movesResults">
+                <div class="modal" id="movesModal" role="dialog">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -85,7 +84,6 @@
                                 <h4 class="modal-title">Valid Moves</h4>
                             </div>
                             <div class="modal-body">
-                                <p>This is a large modal.</p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -93,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-            </div>*@
+            </div>
             <div>
                 <p class="text-center">
                     <span id="pouchContent">@Model.Pouch.ToString()</span>
@@ -159,7 +157,8 @@
 
                             @if (boardAs2DArray[i, j] != null && boardAs2DArray[i, j].CharTile != null)
                             {
-                                <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item locked @(boardAs2DArray[i,j].BoardTileType.Type)">
+                                <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)"
+                                     class="grid-item locked @(boardAs2DArray[i,j].BoardTileType.Type)">
                                     <div id="board_chartile_@(boardAs2DArray[i,j].CharTileID)" class="filled">
                                         <span class="board_chartile_letter">@boardAs2DArray[i, j].CharTile.Letter</span>
                                         <span class="board_chartile_score">@boardAs2DArray[i, j].CharTile.Score</span>
@@ -178,23 +177,6 @@
                     </div>
                 }
             </div>
-            @*<div id="rowIndexes" class="col-sm-1">
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-                <div class="col-sm-12 rowIndex">1</div>
-            </div>*@
             <div id="rightOutput" class="col-xs-12 col-sm-2 panel-group output">
                 @foreach (var player in playersOnRightSide)
                 {

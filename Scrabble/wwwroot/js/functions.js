@@ -7,6 +7,7 @@ $(document).ready(function () {
     var anchorUsed = false;
 
     refreshElementSizes();
+    $("#validMovesButton").hide();
 
     $(window).on('resize', function () {
         $(".grid-item").height($(".grid-item").width());
@@ -74,19 +75,18 @@ $(document).ready(function () {
             data: data,
         }).done(function (results) {
             populateTable(results);
+            $("#getMoves").replaceWith($("#validMovesButton"));
+            $("#validMovesButton").show();
             updateStatusMessage("Success :)", "success");
             $('button').prop('disabled', false);
         }).fail(function (jqXHR) {
             populateTable(results);
             updateStatusMessage(jqXHR.responseText, "danger");
             $('button').prop('disabled', false);
-        }).always(function (results) {
-            alert("hery");
         });
     });
 
     $(document).on("click", "#flipBoard", function () {
-        //var boardArray = getBoardArray(false);
         var data = {
             "flipBoard": $("#board").hasClass("flipped") ? false : true
         };
@@ -177,15 +177,15 @@ $(document).ready(function () {
         foreseenTile.toggleClass("currently-foreseen-tile");
     });
 
-    $(document).on("click", "#submit", function () {       
-       
+    $(document).on("click", "#submit", function () {
+
         showAnchors(true);
         var anchoredTilesCounter = 0;
         $('*[class*=anchor]:visible').each(function () {
             if ($(this).has('.board_rack_chartile').length == 1) {
                 anchorUsed = true;
                 anchoredTilesCounter++;
-            }                
+            }
         });
 
         showAnchors(false);
@@ -196,8 +196,8 @@ $(document).ready(function () {
         var startTile = $('div[class*="Start"]');
 
         if (!anchorUsed && startTile.hasClass("locked")) {
-                updateStatusMessage("Anchor not used.", "danger");
-                return;
+            updateStatusMessage("Anchor not used.", "danger");
+            return;
         }
 
         var rowsUsed = [];
@@ -233,14 +233,14 @@ $(document).ready(function () {
         }
 
         var rackTilesPlayed = [];
-        var boardArray = getBoardArray(true, rackTilesPlayed);        
+        var boardArray = getBoardArray(true, rackTilesPlayed);
 
         var totalMovesMade = 0;
         var listOfWordsOnBoard = [];
         var tilesNotInUntransposedPlay = [];
         var tilesNotInTransposedPlay = [];
         checkForWordsAndPlays(boardArray, true, tilesNotInUntransposedPlay, totalMovesMade, listOfWordsOnBoard);
-        checkForWordsAndPlays(boardArray, false, tilesNotInTransposedPlay, totalMovesMade, listOfWordsOnBoard);             
+        checkForWordsAndPlays(boardArray, false, tilesNotInTransposedPlay, totalMovesMade, listOfWordsOnBoard);
 
         var listOfWordsMadeNow = [];
         for (var i = 0; i < listOfWordsOnBoard.length; i++) {
@@ -256,7 +256,7 @@ $(document).ready(function () {
             updateStatusMessage("You have not made any words.", "danger");
             return;
         }
-     
+
         if (startTile.length == 1 && !startTile.hasClass("locked")) {
             var startTileDetails = $("body").find(".Start").first().attr("id").split("_");
             var startTileX = parseInt(startTileDetails[1]);
@@ -292,6 +292,8 @@ $(document).ready(function () {
                 view.lastIndexOf("<body>"),
                 view.lastIndexOf("</body>")
             );
+            //$("#validMovesButton").replaceWith($("#getMoves"));
+            $("#validMovesButton").hide();
             animateHtmlUpdates($("body"), viewBody);
             //$("#output").height($("#board").height());
             anchorUsed = false;
@@ -321,7 +323,8 @@ $(document).ready(function () {
         jqueryObject.fadeOut(200, function () {
             jqueryObject.html(message).fadeIn(200, function () {
                 refreshElementSizes();
-            });         
+                $("#validMovesButton").hide();
+            });
         });
         //$("#output").height($("#board").height());
     }
@@ -362,7 +365,7 @@ $(document).ready(function () {
             $("*").removeClass("anchor");
             anchorsShown = false;
         }
-    }   
+    }
 
     function getBoardArray(includingPlayedRackTiles, rackTilesPlayedList) {
         var rowsCount = $("#board").children().length;
@@ -400,28 +403,28 @@ $(document).ready(function () {
     }
 
     function transposeArray(array) {
-        //var rotatedArray = [];
-        //for (var i = 0; i < array[0].length; i++) {
-        //    var boardColumnAsARow = [];
-        //    for (var j = 0; j < array.length; j++) {
-        //        boardColumnAsARow.push(array[j][i]);
-        //    }
-        //    rotatedArray.push(boardColumnAsARow);
-        //}
-        //rotatedArray.reverse();
-        //return rotatedArray;
-        var w = array.length;
-        var h = array[0].length;
-
-        var result = [];
-
-        for (var i = 0; i < w; i++) {
-            for (var j = 0; j < h; j++) {
-                result[j, i] = array[i, j];
+        var rotatedArray = [];
+        for (var i = 0; i < array[0].length; i++) {
+            var boardColumnAsARow = [];
+            for (var j = 0; j < array.length; j++) {
+                boardColumnAsARow.push(array[j][i]);
             }
+            rotatedArray.push(boardColumnAsARow);
         }
+        rotatedArray.reverse();
+        return rotatedArray;
+        //var w = array.length;
+        //var h = array[0].length;
 
-        return result;
+        //var result = [];
+
+        //for (var i = 0; i < w; i++) {
+        //    for (var j = 0; j < h; j++) {
+        //        result[j, i] = array[i, j];
+        //    }
+        //}
+
+        //return result;
     }
 
     function checkForWordsAndPlays(boardArray, isNotTransposed, tilesNotInPlay, movesMade, listOfWords) {
@@ -448,16 +451,37 @@ $(document).ready(function () {
             }
         }
         totalMovesMade = movesMadeTemp;
-    }  
-
-    function populateTable(json) {
-        var x = 0;
-        //for (var i = 0; i < json.Values.length; i++) {
-
-        //}
     }
 
-    function refreshElementSizes (){
+    function populateTable(json) {
+        var table = `<table class="table table-striped table - condensed">
+                <thead>
+                    <tr>
+                        <th>Word</th>
+                        <th>Direction</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Secondary</th>
+                        <th>Score</th>
+                    </tr>
+                </thead >
+                <tbody>`
+        for (var i = 0; i < json.length; i++) {
+            var obj = json[i];
+            table += `<tr>
+                    <td>`+ obj["Word"] + `</td>
+                    <td>`+ obj["Direction"] + `</td>
+                <td>`+ obj["Start"] + `</td>
+                        <td>`+ obj["End"] + `</td>
+                        <td>`+ obj["Secondary"] + `</td>
+                    <td>`+ obj["Score"] + `</td>
+                </tr>`
+        }
+        table += `</tbody></table>`
+        $(".modal-body").html(table);
+    }
+
+    function refreshElementSizes() {
         $(".grid-item").height($(".grid-item").width());
         $(".rack_chartile").height($(".rack_chartile").width());
         $(".board_rack_chartile").height($(".board_rack_chartile").parent().height() - 2);

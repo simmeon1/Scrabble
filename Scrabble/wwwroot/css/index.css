@@ -8,6 +8,10 @@
     overflow: auto;
 }
 
+#movesResults {
+    overflow: auto;
+}
+
 .output {
     padding-left: 0px;
     padding-right: 0px;
@@ -16,7 +20,7 @@
 }
 
 
-.panel-body{
+.panel-body {
     padding: 5px;
 }
 
@@ -29,10 +33,10 @@
     text-align: center;
 }
 
-#rack p {
-    overflow: auto;
-    text-align: center;
-}
+    #rack p {
+        overflow: auto;
+        text-align: center;
+    }
 
 .grid-item {
     border: 1px solid rgba(0, 0, 0, 1);
@@ -97,7 +101,7 @@
 }
 
 @media(min-width:992px) {
-    
+
 
     .board_chartile_letter, .board_rack_chartile_letter {
         font-size: 1.9vw;
@@ -138,7 +142,6 @@
     background-color: yellow;
     padding: 0 0 0 0;
     /*font-size: 18px;*/
-   
 }
 
 .rack_chartile_score {
@@ -167,12 +170,15 @@
 .DoubleLetter {
     background-color: lightblue;
 }
+
 .TripleLetter {
     background-color: royalblue;
 }
+
 .DoubleWord {
     background-color: orange;
 }
+
 .TripleWord {
     background-color: orangered;
 }

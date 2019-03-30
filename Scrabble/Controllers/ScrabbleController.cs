@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using Scrabble.Classes;
 using Scrabble.Helpers;
 using Scrabble.Models;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Web.Helpers;
 
@@ -43,7 +45,7 @@ namespace Scrabble.Controllers
                 //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
             }
             else
-            {               
+            {
                 var playedWords = Helpers.Helper.GetPlayedWords(data);
                 var playedRackTiles = Helpers.Helper.GetPlayedRackTiles(data);
                 var boardArray = game.Board.ConvertTo2DArray();
@@ -152,7 +154,7 @@ namespace Scrabble.Controllers
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
             List<KeyValuePair<string, StringValues>> data = null;
             try
-            {               
+            {
                 data = Request.Form.ToList();
             }
             catch (Exception e)
@@ -162,23 +164,36 @@ namespace Scrabble.Controllers
             if (data == null)
             {
                 return this.Json(new { success = false, message = "Uuups, something went wrong!" });
-            } else
+            }
+            else
             {
                 var boardArray = game.Board.ConvertTo2DArray();
                 var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
                 Dictionary<BoardTile, List<CharTile>> validUntransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary);
                 Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary);
-                Helpers.Helper.GetValidCrossChecksCombined(validUntransposedCrossChecks, validTransposedCrossChecks);
+                var validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validUntransposedCrossChecks, validTransposedCrossChecks);
                 var listOfValidAnchorCoordinatesOnUntransposedBoard = game.Board.GetAnchors(boardArray);
                 var listOfValidAnchorCoordinatesOnTransposedBoard = game.Board.GetAnchors(transposedBoardArray);
-                MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnUntransposedBoard, 
-                    listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault());
+                MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnUntransposedBoard,
+                    listOfValidAnchorCoordinatesOnTransposedBoard, validCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
+                    _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList());
                 var validUntransposedMovesList = moveValidator.GetValidMoves(true);
                 var validTransposedMovesList = moveValidator.GetValidMoves(false);
-                var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList);
-                //return new JsonResult(allValidMoves);
-
-                return Json(new { success = true, data = "hey" });
+                var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
+                var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score);
+                List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
+                foreach (var move in allValidMovesSorted)
+                {
+                    var entry = new Dictionary<string, string>();
+                    entry.Add("Word", move.Word);
+                    entry.Add("Direction", move.IsHorizontal ? "Horizontal" : "Vertical");
+                    entry.Add("Start", move.StartIndex.ToString());
+                    entry.Add("End", move.StartIndex == move.EndIndex ? move.SecondaryIndex.ToString() : move.EndIndex.ToString());
+                    entry.Add("Secondary", move.StartIndex == move.EndIndex ? move.EndIndex.ToString() : move.SecondaryIndex.ToString());
+                    entry.Add("Score", move.Score.ToString());
+                    allValidMovesJson.Add(entry);
+                }
+                return Json(allValidMovesJson);
                 //return StatusCode(200, "hi");
             }
             return StatusCode(400, "error");

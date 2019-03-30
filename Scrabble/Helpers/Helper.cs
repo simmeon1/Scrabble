@@ -137,7 +137,7 @@ namespace Scrabble.Helpers
                             //var columnIndexOnOriginalBoard = boardArray[i, j].BoardLocationY;
                             if (!validCrossChecks.ContainsKey(boardArray[i, j]))
                             {
-                                validCrossChecks[boardArray[i, j]] = new List<CharTile>();
+                                validCrossChecks.Add(boardArray[i, j], new List<CharTile>());
                             }
                             foreach (var c in dictionary.CharTiles)
                             {
@@ -161,7 +161,7 @@ namespace Scrabble.Helpers
             return validCrossChecks;
         }
 
-        public static void GetValidCrossChecksCombined(Dictionary<BoardTile, List<CharTile>> validUntransposedCossChecks, Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks)
+        public static Dictionary<BoardTile, List<CharTile>> GetValidCrossChecksCombined(Dictionary<BoardTile, List<CharTile>> validUntransposedCossChecks, Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks)
         {
             Dictionary<BoardTile, List<CharTile>> validCrossChecks = new Dictionary<BoardTile, List<CharTile>>();
             for (int i = 0; i < validUntransposedCossChecks.Count; i++)
@@ -184,20 +184,22 @@ namespace Scrabble.Helpers
                     validCrossChecks[keyAtIndex] = validTilesForBothChecks;
                 }
             }
-            for (int i = 0; i < validCrossChecks.Count; i++)
-            {
-                var keyAtIndex = validCrossChecks.Keys.ElementAt(i);
-                var valueAtIndex = validCrossChecks.Values.ElementAt(i);
-                if (validUntransposedCossChecks.ContainsKey(keyAtIndex))
-                {
-                    validUntransposedCossChecks[keyAtIndex] = valueAtIndex;
-                }
-                if (validTransposedCrossChecks.ContainsKey(keyAtIndex))
-                {
-                    validTransposedCrossChecks[keyAtIndex] = valueAtIndex;
-                }
-            }
-            //return validCrossChecks;
+
+            //for (int i = 0; i < validCrossChecks.Count; i++)
+            //{
+            //    var keyAtIndex = validCrossChecks.Keys.ElementAt(i);
+            //    var valueAtIndex = validCrossChecks.Values.ElementAt(i);
+            //    if (validUntransposedCossChecks.ContainsKey(keyAtIndex))
+            //    {
+            //        validUntransposedCossChecks[keyAtIndex] = valueAtIndex;
+            //    }
+            //    if (validTransposedCrossChecks.ContainsKey(keyAtIndex))
+            //    {
+            //        validTransposedCrossChecks[keyAtIndex] = valueAtIndex;
+            //    }
+            //}
+            return validCrossChecks;
+
         }
         public static string GetValueFromAjaxData(List<KeyValuePair<string, StringValues>> data, string property)
         {

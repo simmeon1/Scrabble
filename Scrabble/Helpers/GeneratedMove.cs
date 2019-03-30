@@ -50,7 +50,7 @@ namespace Scrabble.Helpers
 
         public override string ToString()
         {
-            return Word + ", " + (IsHorizontal ? "Horizontal" : "Vertical") + ", " + StartIndex + " to " + EndIndex + 
+            return Word + ", " + (IsHorizontal ? "Horizontal" : "Vertical") + ", " + StartIndex + " to " + EndIndex +
                 " on " + SecondaryIndex + ", " + Score + " points";
         }
     }

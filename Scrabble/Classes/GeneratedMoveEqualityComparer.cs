@@ -21,7 +21,7 @@ namespace Scrabble.Classes
 
         public int GetHashCode(GeneratedMove obj)
         {
-            return obj.StartIndex * 1000 + obj.EndIndex * 100 + obj.EndIndex * 10 + obj.Score;
+            return obj.StartIndex * 1337 + obj.EndIndex * 337 + obj.EndIndex * 37 + obj.Score * 7;
         }
     }
 }
