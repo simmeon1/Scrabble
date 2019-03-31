@@ -245,13 +245,19 @@ namespace Scrabble.Helpers
             int columns = boardArrayAsRows[0].Count(f => f == ',');
             var boardArray = new int[rows, columns];
         }
-        public static int[] GetTileDetails(string tile)
+        public static string[] GetTileDetails(string tile)
         {
             var tileDetails = tile.Split("_");
-            int tileX = Int32.Parse(tileDetails[0]);
-            int tileY = Int32.Parse(tileDetails[1]);
-            int tileCharTileId = Int32.Parse(tileDetails[2]);
-            return new int[] { tileX, tileY, tileCharTileId };
+            var tileX = tileDetails[0];
+            var tileY = tileDetails[1];
+            var tileCharTileId = tileDetails[2];
+            if (Int32.Parse(tileCharTileId) == 1)
+            {
+                var blankLetter = tileDetails[3];
+                return new string[] { tileX, tileY, tileCharTileId, blankLetter };
+            }
+
+            return new string[] { tileX, tileY, tileCharTileId };
         }
         public static bool IsRackPlayOneWayAndConnected(string[] rackTiles)
         {
@@ -259,9 +265,9 @@ namespace Scrabble.Helpers
             HashSet<int> columnsUsed = new HashSet<int>();
             foreach (var tile in rackTiles)
             {
-                int[] tileDetails = GetTileDetails(tile);
-                rowsUsed.Add(tileDetails[0]);
-                columnsUsed.Add(tileDetails[1]);
+                string[] tileDetails = GetTileDetails(tile);
+                rowsUsed.Add(Int32.Parse(tileDetails[0]));
+                columnsUsed.Add(Int32.Parse(tileDetails[1]));
             }
             if (rowsUsed.Count > 1 && columnsUsed.Count > 1)
             {
@@ -288,11 +294,13 @@ namespace Scrabble.Helpers
             foreach (var tile in playedRackTiles)
             {
                 var tileDetails = GetTileDetails(tile);
-                if (tileDetails[0] == startBoardTileCoordinates[0] && tileDetails[1] == startBoardTileCoordinates[1])
+                var rowIndex = Int32.Parse(tileDetails[0]);
+                var columnIndex = Int32.Parse(tileDetails[1]);              
+                if (rowIndex == startBoardTileCoordinates[0] && columnIndex == startBoardTileCoordinates[1])
                 {
                     startTileIsFilled = true;
                 }
-                if (tileDetails[0] < startBoardTileCoordinates[0] || tileDetails[1] < startBoardTileCoordinates[1])
+                if (rowIndex < startBoardTileCoordinates[0] || columnIndex < startBoardTileCoordinates[1])
                 {
                     tilesBeforeStartFilled = true;
                 }
@@ -310,9 +318,11 @@ namespace Scrabble.Helpers
             HashSet<int> columnsUsed = new HashSet<int>();
             foreach (var tile in rackTiles)
             {
-                int[] tileDetails = GetTileDetails(tile);
-                rowsUsed.Add(tileDetails[0]);
-                columnsUsed.Add(tileDetails[1]);
+                var tileDetails = GetTileDetails(tile);
+                var rowIndex = Int32.Parse(tileDetails[0]);
+                var columnIndex = Int32.Parse(tileDetails[1]);
+                rowsUsed.Add(rowIndex);
+                columnsUsed.Add(columnIndex);
             }
             if (rowsUsed.Count > 1 && columnsUsed.Count > 1)
             {
@@ -352,7 +362,9 @@ namespace Scrabble.Helpers
                     foreach (var rackTile in rackTiles)
                     {
                         var tileDetails = GetTileDetails(rackTile);
-                        if (tileDetails[0] == checkedTile.BoardLocationX && tileDetails[1] == checkedTile.BoardLocationY)
+                        var rowIndex = Int32.Parse(tileDetails[0]);
+                        var columnIndex = Int32.Parse(tileDetails[1]);
+                        if (rowIndex == checkedTile.BoardLocationX && columnIndex == checkedTile.BoardLocationY)
                         {
                             boardTileHasTemporaryPlacedRackTile = true;
                             break;
@@ -382,12 +394,21 @@ namespace Scrabble.Helpers
                 var playedTiles = playedWord.Split(",");
                 foreach (string playedTile in playedTiles)
                 {
-                    int[] tileDetails = GetTileDetails(playedTile);
-                    int tileX = tileDetails[0];
-                    int tileY = tileDetails[1];
-                    int tileCharTileId = tileDetails[2];
-                    playedWordString += game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault().Letter;
-                    game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
+                    var tileDetails = GetTileDetails(playedTile);
+                    var tileX = Int32.Parse(tileDetails[0]);
+                    var tileY = Int32.Parse(tileDetails[1]);
+                    var tileCharTileId = Int32.Parse(tileDetails[2]);
+                    if (tileCharTileId == 1)
+                    {
+                        var blankLetter = tileDetails[3][0];
+                        playedWordString += blankLetter;
+                        game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles, blankLetter.ToString());
+                    }
+                    else
+                    {
+                        playedWordString += game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault().Letter;
+                        game.Board.PlayTile(tileX, tileY, tileCharTileId, usedBoardTiles);
+                    }
                 }
 
                 if (!CheckWordValidity(dawg, playedWordString, false))
@@ -416,7 +437,8 @@ namespace Scrabble.Helpers
             foreach (var playedRackTile in playedRackTiles)
             {
                 var tileDetails = GetTileDetails(playedRackTile);
-                playerAtHand.Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileDetails[2]).FirstOrDefault());
+                var tileCharTileId = Int32.Parse(tileDetails[2]);
+                playerAtHand.Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault());
                 playerAtHand.Rack.RefillRackFromPouch();
             }
 
@@ -430,6 +452,15 @@ namespace Scrabble.Helpers
             char[] charArray = s.ToCharArray();
             Array.Reverse(charArray);
             return new string(charArray);
+        }
+
+        public static void InsertInArray(object[] array, int index, object val)
+        {
+            for (int i = index; i < array.Length; i++)
+            {
+                array[i] = array[i - 1];
+            }
+            array[index] = val;
         }
     }
 }

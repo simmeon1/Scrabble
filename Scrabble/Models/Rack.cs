@@ -41,25 +41,33 @@ namespace Scrabble.Models
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
             var tileEntryInDb = rackTiles.Where(c => c.CharTileID == tile.ID).FirstOrDefault();
+            if (tileEntryInDb == null)
+            {
+                tileEntryInDb = rackTiles.Where(x => x.ID == 1).FirstOrDefault();
+            }
             if (tileEntryInDb.Count == 1)
             {
-                rackTiles.RemoveAll(c => c.CharTileID == tile.ID);
+                rackTiles.RemoveAll(c => c.CharTileID == tileEntryInDb.CharTile.ID);
             }
             else tileEntryInDb.Count--;
             Rack_CharTiles = rackTiles;
         }
 
-        public void SubstractFromRack(char c)
-        {
-            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
-            var tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == c).FirstOrDefault();
-            if (tileEntryInDb.Count == 1)
-            {
-                rackTiles.RemoveAll(x => x.CharTile.Letter == c);
-            }
-            else tileEntryInDb.Count--;
-            Rack_CharTiles = rackTiles;
-        }
+        //public void SubstractFromRack(char c)
+        //{
+        //    List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+        //    var tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == c).FirstOrDefault();
+        //    if (tileEntryInDb == null)
+        //    {
+        //        tileEntryInDb = rackTiles.Where(x => x.ID == 1).FirstOrDefault();
+        //    }
+        //    if (tileEntryInDb.Count == 1)
+        //    {
+        //        rackTiles.RemoveAll(x => x.CharTile.Letter == tileEntryInDb.CharTile.Letter);
+        //    }
+        //    else tileEntryInDb.Count--;
+        //    Rack_CharTiles = rackTiles;
+        //}
 
         public void AddToRack(CharTile tile)
         {
@@ -73,25 +81,29 @@ namespace Scrabble.Models
             Rack_CharTiles = rackTiles;
         }
 
-        public void AddToRack(char x)
-        {
-            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
-            var tileEntryInDb = rackTiles.Where(c => c.CharTile.Letter == x).FirstOrDefault();
-            if (tileEntryInDb == null)
-            {
-                rackTiles.Add(new Rack_CharTile { CharTileID = Game.WordDictionary.CharTiles.Where(c => c.Letter == x).FirstOrDefault().ID,
-                    RackID = ID, Count = 1 });
-            }
-            else tileEntryInDb.Count++;
-            Rack_CharTiles = rackTiles;
-        }
+        //public void AddToRack(char x)
+        //{
+        //    List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+        //    var tileEntryInDb = rackTiles.Where(c => c.CharTile.Letter == x).FirstOrDefault();
+        //    if (tileEntryInDb == null)
+        //    {
+        //        rackTiles.Add(new Rack_CharTile { CharTileID = Game.WordDictionary.CharTiles.Where(c => c.Letter == x).FirstOrDefault().ID,
+        //            RackID = ID, Count = 1 });
+        //    }
+        //    else tileEntryInDb.Count++;
+        //    Rack_CharTiles = rackTiles;
+        //}
 
-        public bool CheckIfTileIsInRack(char c)
+        public bool CheckIfTileIsInRack(char c, bool includingBlanks)
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
             var tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == c).FirstOrDefault();
             if (tileEntryInDb == null)
             {
+                if (includingBlanks)
+                {
+                    return rackTiles.Any(x => x.CharTile.ID == 1);
+                }
                 return false;
             }
             return true;

@@ -33,7 +33,7 @@ namespace Scrabble.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GameLanguage>().HasData(new GameLanguage { ID = 1, Language = "English" });
+            modelBuilder.Entity<GameLanguage>().HasData(new GameLanguage { ID = 1, Language = "English", CountOfLetters = 26 });
 
             modelBuilder.Entity<WordDictionary>().HasData(new WordDictionary { ID = 1, GameLanguageID = 1 });
 
@@ -302,6 +302,32 @@ namespace Scrabble.Models
             modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 25, Letter = 'X', Score = 8, GameLanguageID = 1, WordDictionaryID = 1 });
             modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 26, Letter = 'Y', Score = 4, GameLanguageID = 1, WordDictionaryID = 1 });
             modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 27, Letter = 'Z', Score = 10, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 28, Letter = 'A', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 29, Letter = 'B', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 30, Letter = 'C', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 31, Letter = 'D', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 32, Letter = 'E', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 33, Letter = 'F', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 34, Letter = 'G', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 35, Letter = 'H', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 36, Letter = 'I', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 37, Letter = 'J', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 38, Letter = 'K', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 39, Letter = 'L', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 40, Letter = 'M', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 41, Letter = 'N', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 42, Letter = 'O', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 43, Letter = 'P', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 44, Letter = 'Q', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 45, Letter = 'R', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 46, Letter = 'S', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 47, Letter = 'T', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 48, Letter = 'U', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 49, Letter = 'V', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 50, Letter = 'W', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 51, Letter = 'X', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 52, Letter = 'Y', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
+            modelBuilder.Entity<CharTile>().HasData(new CharTile { ID = 53, Letter = 'Z', Score = 0, GameLanguageID = 1, WordDictionaryID = 1 });
 
             modelBuilder.Entity<Pouch>().HasData(new Pouch { ID = 1, GameID = 1 });
 
@@ -325,7 +351,7 @@ namespace Scrabble.Models
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 12, PouchID = 1, CharTileID = 12, Count = 1 });
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 13, PouchID = 1, CharTileID = 13, Count = 4 });
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 14, PouchID = 1, CharTileID = 14, Count = 1 });
-            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 15, PouchID = 1, CharTileID = 15, Count = 4 });
+            modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 15, PouchID = 1, CharTileID = 15, Count = 6 });
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 16, PouchID = 1, CharTileID = 16, Count = 7 });
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 17, PouchID = 1, CharTileID = 17, Count = 1 });
             modelBuilder.Entity<Pouch_CharTile>().HasData(new Pouch_CharTile { ID = 18, PouchID = 1, CharTileID = 18, Count = 1 });
@@ -342,7 +368,7 @@ namespace Scrabble.Models
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 1, RackID = 1, CharTileID = 3, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 2, RackID = 1, CharTileID = 16, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 3, RackID = 1, CharTileID = 10, Count = 1 });
-            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 4, RackID = 1, CharTileID = 15, Count = 2 });
+            modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 4, RackID = 1, CharTileID = 2, Count = 2 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 5, RackID = 1, CharTileID = 8, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 7, RackID = 1, CharTileID = 4, Count = 1 });
             modelBuilder.Entity<Rack_CharTile>().HasData(new Rack_CharTile { ID = 8, RackID = 2, CharTileID = 7, Count = 1 });

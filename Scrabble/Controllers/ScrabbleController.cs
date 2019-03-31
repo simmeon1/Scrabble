@@ -171,11 +171,11 @@ namespace Scrabble.Controllers
                 var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
                 Dictionary<BoardTile, List<CharTile>> validUntransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary);
                 Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary);
-                var validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validUntransposedCrossChecks, validTransposedCrossChecks);
+                //var validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validUntransposedCrossChecks, validTransposedCrossChecks);
                 var listOfValidAnchorCoordinatesOnUntransposedBoard = game.Board.GetAnchors(boardArray);
                 var listOfValidAnchorCoordinatesOnTransposedBoard = game.Board.GetAnchors(transposedBoardArray);
                 MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnUntransposedBoard,
-                    listOfValidAnchorCoordinatesOnTransposedBoard, validCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
+                    listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
                     _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList());
                 var validUntransposedMovesList = moveValidator.GetValidMoves(true);
                 var validTransposedMovesList = moveValidator.GetValidMoves(false);

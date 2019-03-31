@@ -371,7 +371,33 @@ namespace Scrabble.Migrations
                         new { ID = 24, GameLanguageID = 1, Letter = "W", Score = 4, WordDictionaryID = 1 },
                         new { ID = 25, GameLanguageID = 1, Letter = "X", Score = 8, WordDictionaryID = 1 },
                         new { ID = 26, GameLanguageID = 1, Letter = "Y", Score = 4, WordDictionaryID = 1 },
-                        new { ID = 27, GameLanguageID = 1, Letter = "Z", Score = 10, WordDictionaryID = 1 }
+                        new { ID = 27, GameLanguageID = 1, Letter = "Z", Score = 10, WordDictionaryID = 1 },
+                        new { ID = 28, GameLanguageID = 1, Letter = "A", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 29, GameLanguageID = 1, Letter = "B", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 30, GameLanguageID = 1, Letter = "C", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 31, GameLanguageID = 1, Letter = "D", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 32, GameLanguageID = 1, Letter = "E", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 33, GameLanguageID = 1, Letter = "F", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 34, GameLanguageID = 1, Letter = "G", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 35, GameLanguageID = 1, Letter = "H", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 36, GameLanguageID = 1, Letter = "I", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 37, GameLanguageID = 1, Letter = "J", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 38, GameLanguageID = 1, Letter = "K", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 39, GameLanguageID = 1, Letter = "L", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 40, GameLanguageID = 1, Letter = "M", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 41, GameLanguageID = 1, Letter = "N", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 42, GameLanguageID = 1, Letter = "O", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 43, GameLanguageID = 1, Letter = "P", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 44, GameLanguageID = 1, Letter = "Q", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 45, GameLanguageID = 1, Letter = "R", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 46, GameLanguageID = 1, Letter = "S", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 47, GameLanguageID = 1, Letter = "T", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 48, GameLanguageID = 1, Letter = "U", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 49, GameLanguageID = 1, Letter = "V", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 50, GameLanguageID = 1, Letter = "W", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 51, GameLanguageID = 1, Letter = "X", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 52, GameLanguageID = 1, Letter = "Y", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 53, GameLanguageID = 1, Letter = "Z", Score = 0, WordDictionaryID = 1 }
                     );
                 });
 
@@ -410,6 +436,8 @@ namespace Scrabble.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CountOfLetters");
+
                     b.Property<string>("Language");
 
                     b.HasKey("ID");
@@ -417,7 +445,7 @@ namespace Scrabble.Migrations
                     b.ToTable("GameLanguages");
 
                     b.HasData(
-                        new { ID = 1, Language = "English" }
+                        new { ID = 1, CountOfLetters = 26, Language = "English" }
                     );
                 });
 

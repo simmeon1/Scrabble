@@ -26,7 +26,8 @@ namespace Scrabble.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Language = table.Column<string>(nullable: true)
+                    Language = table.Column<string>(nullable: true),
+                    CountOfLetters = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -346,8 +347,8 @@ namespace Scrabble.Migrations
 
             migrationBuilder.InsertData(
                 table: "GameLanguages",
-                columns: new[] { "ID", "Language" },
-                values: new object[] { 1, "English" });
+                columns: new[] { "ID", "CountOfLetters", "Language" },
+                values: new object[] { 1, 26, "English" });
 
             migrationBuilder.InsertData(
                 table: "WordDictionaries",
@@ -360,32 +361,58 @@ namespace Scrabble.Migrations
                 values: new object[,]
                 {
                     { 1, 1, "*", 0, 1 },
+                    { 30, 1, "C", 0, 1 },
+                    { 31, 1, "D", 0, 1 },
+                    { 32, 1, "E", 0, 1 },
+                    { 33, 1, "F", 0, 1 },
+                    { 34, 1, "G", 0, 1 },
+                    { 35, 1, "H", 0, 1 },
+                    { 36, 1, "I", 0, 1 },
+                    { 37, 1, "J", 0, 1 },
+                    { 38, 1, "K", 0, 1 },
+                    { 39, 1, "L", 0, 1 },
+                    { 40, 1, "M", 0, 1 },
+                    { 41, 1, "N", 0, 1 },
+                    { 42, 1, "O", 0, 1 },
+                    { 43, 1, "P", 0, 1 },
+                    { 44, 1, "Q", 0, 1 },
+                    { 45, 1, "R", 0, 1 },
+                    { 46, 1, "S", 0, 1 },
+                    { 47, 1, "T", 0, 1 },
+                    { 48, 1, "U", 0, 1 },
+                    { 49, 1, "V", 0, 1 },
+                    { 50, 1, "W", 0, 1 },
+                    { 51, 1, "X", 0, 1 },
+                    { 52, 1, "Y", 0, 1 },
+                    { 29, 1, "B", 0, 1 },
+                    { 28, 1, "A", 0, 1 },
+                    { 27, 1, "Z", 10, 1 },
                     { 26, 1, "Y", 4, 1 },
-                    { 25, 1, "X", 8, 1 },
-                    { 24, 1, "W", 4, 1 },
-                    { 23, 1, "V", 4, 1 },
-                    { 22, 1, "U", 1, 1 },
-                    { 21, 1, "T", 1, 1 },
-                    { 20, 1, "S", 1, 1 },
-                    { 19, 1, "R", 1, 1 },
-                    { 18, 1, "Q", 10, 1 },
-                    { 17, 1, "P", 3, 1 },
-                    { 16, 1, "O", 1, 1 },
-                    { 15, 1, "N", 1, 1 },
-                    { 14, 1, "M", 3, 1 },
-                    { 13, 1, "L", 1, 1 },
-                    { 12, 1, "K", 5, 1 },
-                    { 11, 1, "J", 8, 1 },
-                    { 10, 1, "I", 1, 1 },
-                    { 9, 1, "H", 4, 1 },
-                    { 8, 1, "G", 2, 1 },
-                    { 7, 1, "F", 4, 1 },
-                    { 6, 1, "E", 1, 1 },
-                    { 5, 1, "D", 2, 1 },
-                    { 4, 1, "C", 3, 1 },
-                    { 3, 1, "B", 3, 1 },
                     { 2, 1, "A", 1, 1 },
-                    { 27, 1, "Z", 10, 1 }
+                    { 3, 1, "B", 3, 1 },
+                    { 4, 1, "C", 3, 1 },
+                    { 5, 1, "D", 2, 1 },
+                    { 6, 1, "E", 1, 1 },
+                    { 7, 1, "F", 4, 1 },
+                    { 8, 1, "G", 2, 1 },
+                    { 9, 1, "H", 4, 1 },
+                    { 10, 1, "I", 1, 1 },
+                    { 11, 1, "J", 8, 1 },
+                    { 12, 1, "K", 5, 1 },
+                    { 53, 1, "Z", 0, 1 },
+                    { 13, 1, "L", 1, 1 },
+                    { 15, 1, "N", 1, 1 },
+                    { 16, 1, "O", 1, 1 },
+                    { 17, 1, "P", 3, 1 },
+                    { 18, 1, "Q", 10, 1 },
+                    { 19, 1, "R", 1, 1 },
+                    { 20, 1, "S", 1, 1 },
+                    { 21, 1, "T", 1, 1 },
+                    { 22, 1, "U", 1, 1 },
+                    { 23, 1, "V", 4, 1 },
+                    { 24, 1, "W", 4, 1 },
+                    { 25, 1, "X", 8, 1 },
+                    { 14, 1, "M", 3, 1 }
                 });
 
             migrationBuilder.InsertData(
