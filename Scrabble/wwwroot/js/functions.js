@@ -180,7 +180,7 @@ $(document).ready(function () {
         updateStatusMessage("Loading...", "info");
         $('button').prop('disabled', true);
         $.ajax({
-            url: '/Scrabble/Redraw',
+            url: '/Scrabble/Skip',
             type: "POST"
         }).done(function (view) {
             var viewBody = view.substring(

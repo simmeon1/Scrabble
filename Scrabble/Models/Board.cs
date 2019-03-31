@@ -113,41 +113,41 @@ namespace Scrabble.Models
                     {
                         if (i > 0 && boardArray[i - 1, j].CharTile == null)
                         {
-                            arrayWithAnchors[i, j] = true;
+                            arrayWithAnchors[i - 1, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i, j };
+                                var coordinates = new int[] { i - 1, j };
                                 listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
 
-                        else
+                        
                         if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
                         {
-                            arrayWithAnchors[i, j] = true;
+                            arrayWithAnchors[i + 1, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i, j };
+                                var coordinates = new int[] { i + 1, j };
                                 listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
-                        else
+                        
                         if (j > 0 && boardArray[i, j - 1].CharTile == null)
                         {
-                            arrayWithAnchors[i, j] = true;
+                            arrayWithAnchors[i, j - 1] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i, j };
+                                var coordinates = new int[] { i, j - 1 };
                                 listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
-                        else
+                        
                         if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
                         {
-                            arrayWithAnchors[i, j] = true;
+                            arrayWithAnchors[i, j + 1] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
-                                var coordinates = new int[] { i, j };
+                                var coordinates = new int[] { i, j + 1 };
                                 listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }

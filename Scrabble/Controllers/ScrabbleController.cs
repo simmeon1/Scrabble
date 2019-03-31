@@ -177,7 +177,8 @@ namespace Scrabble.Controllers
                     listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
                     _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList());
                 var validUntransposedMovesList = moveValidator.GetValidMoves(true);
-                var validTransposedMovesList = moveValidator.GetValidMoves(false,);
+                var validTransposedMovesList = moveValidator.GetValidMoves(false);
+                //var validTransposedMovesList = new HashSet<GeneratedMove>();
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
                 var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
                 List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
