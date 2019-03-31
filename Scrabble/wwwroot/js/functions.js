@@ -485,7 +485,7 @@ $(document).ready(function () {
                         <th>Direction</th>
                         <th>Start</th>
                         <th>End</th>
-                        <th>Secondary</th>
+                        <th>Anchor</th>
                         <th>Score</th>
                     </tr>
                 </thead >
@@ -497,7 +497,7 @@ $(document).ready(function () {
                     <td>`+ obj["Direction"] + `</td>
                 <td>`+ obj["Start"] + `</td>
                         <td>`+ obj["End"] + `</td>
-                        <td>`+ obj["Secondary"] + `</td>
+                        <td>`+ obj["Anchor"] + `</td>
                     <td>`+ obj["Score"] + `</td>
                 </tr>`
         }

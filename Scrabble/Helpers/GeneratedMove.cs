@@ -11,17 +11,17 @@ namespace Scrabble.Helpers
         public bool IsHorizontal { get; set; }
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
-        public int SecondaryIndex { get; set; }
+        public int[] Anchor { get; set; }
         public string Word { get; set; }
         public Dictionary<BoardTile, CharTile> TilesUsed { get; set; }
         public int Score { get; set; }
 
-        public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int secondaryIndex, Dictionary<BoardTile, CharTile> tilesUsed)
+        public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int[] anchor, Dictionary<BoardTile, CharTile> tilesUsed)
         {
             IsHorizontal = isHorizontal;
             StartIndex = startIndex;
             EndIndex = endIndex;
-            SecondaryIndex = secondaryIndex;
+            Anchor = anchor;
             TilesUsed = tilesUsed;
             Word = GetWord();
             Score = GetScore();
@@ -51,7 +51,7 @@ namespace Scrabble.Helpers
         public override string ToString()
         {
             return Word + ", " + (IsHorizontal ? "Horizontal" : "Vertical") + ", " + StartIndex + " to " + EndIndex +
-                " on " + SecondaryIndex + ", " + Score + " points";
+                " anchored at " + Anchor[0] + ", " + Anchor[1] + ", " + Score + " points";
         }
     }
 }

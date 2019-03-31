@@ -111,46 +111,46 @@ namespace Scrabble.Models
                     }
                     if (boardArray[i, j].CharTile != null)
                     {
-                        //if (i > 0 && boardArray[i - 1, j].CharTile == null)
-                        //{
-                        //    arrayWithAnchors[i, j] = true;
-                        //    if (listOfValidAnchorCoordinates != null)
-                        //    {
-                        //        var coordinates = new int[] { i, j };
-                        //        listOfValidAnchorCoordinates.Add(coordinates);
-                        //    }
-                        //}
+                        if (i > 0 && boardArray[i - 1, j].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j] = true;
+                            if (listOfValidAnchorCoordinates != null)
+                            {
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
+                            }
+                        }
 
-                        //else
-                        //if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
-                        //{
-                        //    arrayWithAnchors[i, j] = true;
-                        //    if (listOfValidAnchorCoordinates != null)
-                        //    {
-                        //        var coordinates = new int[] { i, j };
-                        //        listOfValidAnchorCoordinates.Add(coordinates);
-                        //    }
-                        //}
-                        //else
-                        //if (j > 0 && boardArray[i, j - 1].CharTile == null)
-                        //{
-                        //    arrayWithAnchors[i, j] = true;
-                        //    if (listOfValidAnchorCoordinates != null)
-                        //    {
-                        //        var coordinates = new int[] { i, j };
-                        //        listOfValidAnchorCoordinates.Add(coordinates);
-                        //    }
-                        //}
-                        //else
-                        //if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
-                        //{
-                        //    arrayWithAnchors[i, j] = true;
-                        //    if (listOfValidAnchorCoordinates != null)
-                        //    {
-                        //        var coordinates = new int[] { i, j };
-                        //        listOfValidAnchorCoordinates.Add(coordinates);
-                        //    }
-                        //}
+                        else
+                        if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j] = true;
+                            if (listOfValidAnchorCoordinates != null)
+                            {
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
+                            }
+                        }
+                        else
+                        if (j > 0 && boardArray[i, j - 1].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j] = true;
+                            if (listOfValidAnchorCoordinates != null)
+                            {
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
+                            }
+                        }
+                        else
+                        if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
+                        {
+                            arrayWithAnchors[i, j] = true;
+                            if (listOfValidAnchorCoordinates != null)
+                            {
+                                var coordinates = new int[] { i, j };
+                                listOfValidAnchorCoordinates.Add(coordinates);
+                            }
+                        }
                     }
 
                 }

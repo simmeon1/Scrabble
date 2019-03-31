@@ -11,7 +11,7 @@ namespace Scrabble.Classes
         public bool Equals(GeneratedMove x, GeneratedMove y)
         {
             if (x.Word.Equals(y.Word) && x.StartIndex == y.StartIndex && x.EndIndex == y.EndIndex
-                && x.SecondaryIndex == y.SecondaryIndex && x.IsHorizontal == y.IsHorizontal
+                && x.Anchor[0] == y.Anchor[0] && x.Anchor[1] == y.Anchor[1] && x.IsHorizontal == y.IsHorizontal
                 && x.Score == y.Score)
             {
                 return true;

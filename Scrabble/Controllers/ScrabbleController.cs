@@ -171,16 +171,15 @@ namespace Scrabble.Controllers
                 var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
                 Dictionary<BoardTile, List<CharTile>> validUntransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary);
                 Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary);
-                //var validCrossChecks = Helpers.Helper.GetValidCrossChecksCombined(validUntransposedCrossChecks, validTransposedCrossChecks);
                 var listOfValidAnchorCoordinatesOnUntransposedBoard = game.Board.GetAnchors(boardArray);
                 var listOfValidAnchorCoordinatesOnTransposedBoard = game.Board.GetAnchors(transposedBoardArray);
                 MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnUntransposedBoard,
                     listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
                     _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList());
                 var validUntransposedMovesList = moveValidator.GetValidMoves(true);
-                var validTransposedMovesList = moveValidator.GetValidMoves(false);
+                var validTransposedMovesList = moveValidator.GetValidMoves(false,);
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
-                var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score);
+                var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
                 List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
                 foreach (var move in allValidMovesSorted)
                 {
@@ -188,19 +187,14 @@ namespace Scrabble.Controllers
                     entry.Add("Word", move.Word);
                     entry.Add("Direction", move.IsHorizontal ? "Horizontal" : "Vertical");
                     entry.Add("Start", move.StartIndex.ToString());
-                    entry.Add("End", move.StartIndex == move.EndIndex ? move.SecondaryIndex.ToString() : move.EndIndex.ToString());
-                    entry.Add("Secondary", move.StartIndex == move.EndIndex ? move.EndIndex.ToString() : move.SecondaryIndex.ToString());
+                    entry.Add("End", move.StartIndex == move.EndIndex ? move.Anchor[0].ToString() : move.EndIndex.ToString());
+                    entry.Add("Anchor", move.Anchor[0] + ", " + move.Anchor[1]);
                     entry.Add("Score", move.Score.ToString());
                     allValidMovesJson.Add(entry);
                 }
                 return Json(allValidMovesJson);
-                //return StatusCode(200, "hi");
             }
-            return StatusCode(400, "error");
         }
-
-        // 
-        // GET: /Scrabble/Welcome/ 
 
         public IActionResult Welcome(string name, int numTimes = 1)
         {
