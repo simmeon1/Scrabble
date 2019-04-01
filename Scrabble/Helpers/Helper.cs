@@ -4,8 +4,10 @@ using Scrabble.Classes;
 using Scrabble.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 
 namespace Scrabble.Helpers
@@ -103,47 +105,45 @@ namespace Scrabble.Helpers
             var dawg = LoadDawg(dictionary.GameLanguage);
             Dictionary<BoardTile, List<CharTile>> validCrossChecks = new Dictionary<BoardTile, List<CharTile>>();
             List<int[]> tilesAlreadyChecked = new List<int[]>();
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < boardArray.GetLength(0); i++)
             {
                 for (int j = 0; j < boardArray.GetLength(1); j++)
                 {
+                    sb.Clear();
                     if (boardArray[i, j].CharTile == null)
                     {
-                        var wordAboveEmptyTile = "";
-                        var wordUnderEmptyTile = "";
                         var upIndexCounter = i;
                         var downIndexCounter = i;
 
                         while (upIndexCounter > 0 && boardArray[upIndexCounter - 1, j].CharTile != null)
                         {
-                            wordAboveEmptyTile = wordAboveEmptyTile.Insert(0, boardArray[upIndexCounter - 1, j].CharTile.Letter.ToString());
+                            sb.Insert(0, boardArray[upIndexCounter - 1, j].CharTile.Letter);
                             upIndexCounter--;
                         }
-
+                        sb.Append("_");
                         while (downIndexCounter < boardArray.GetLength(0) - 1 && boardArray[downIndexCounter + 1, j].CharTile != null)
                         {
-                            wordUnderEmptyTile += boardArray[downIndexCounter + 1, j].CharTile.Letter;
+                            sb.Append(boardArray[downIndexCounter + 1, j].CharTile.Letter);
                             downIndexCounter++;
                         }
-                        var combinedWord = "";
-                        combinedWord = wordAboveEmptyTile + "_" + wordUnderEmptyTile;
-                        if (combinedWord == "_")
+                        if (sb.Length == 1)
                         {
                             continue;
                         }
                         else
                         {
-                            //var rowIndexOnOriginalBoard = boardArray[i, j].BoardLocationX;
-                            //var columnIndexOnOriginalBoard = boardArray[i, j].BoardLocationY;
+                            var wordWithUnderscore = sb.ToString();
+                            var sbTemp = new StringBuilder(wordWithUnderscore);
                             if (!validCrossChecks.ContainsKey(boardArray[i, j]))
                             {
                                 validCrossChecks.Add(boardArray[i, j], new List<CharTile>());
                             }
                             foreach (var c in dictionary.CharTiles)
                             {
-                                var combinedWordTemp = String.Copy(combinedWord);
-                                combinedWordTemp = combinedWordTemp.Replace('_', c.Letter);
-                                if (CheckWordValidity(dawg, combinedWordTemp))
+                                if (c.Score == 0) continue;
+                                sbTemp.Replace('_', c.Letter);
+                                if (CheckWordValidity(dawg, sbTemp.ToString()))
                                 {
                                     if (validCrossChecks.ContainsKey(boardArray[i, j]))
                                     {
@@ -153,6 +153,8 @@ namespace Scrabble.Helpers
                                         }
                                     }
                                 }
+                                sbTemp.Clear();
+                                sbTemp.Append(wordWithUnderscore);
                             }
                         }
                     }
@@ -244,6 +246,18 @@ namespace Scrabble.Helpers
             var rows = boardArrayAsRows.Length;
             int columns = boardArrayAsRows[0].Count(f => f == ',');
             var boardArray = new int[rows, columns];
+        }
+        public static MoveGenerator GetMoveGenerator(Game game, List<Move> gameMoves, int timeLimit = 0)
+        {
+            var boardArray = game.Board.ConvertTo2DArray();
+            var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
+            Dictionary<BoardTile, List<CharTile>> validUntransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary);
+            Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary);
+            var listOfValidAnchorCoordinatesOnUntransposedBoard = game.Board.GetAnchors(boardArray);
+            var listOfValidAnchorCoordinatesOnTransposedBoard = game.Board.GetAnchors(transposedBoardArray);
+            MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnUntransposedBoard,
+                listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, game.WordDictionary, gameMoves, timeLimit);
+            return moveValidator;
         }
         public static string[] GetTileDetails(string tile)
         {
@@ -399,7 +413,7 @@ namespace Scrabble.Helpers
             if (word.Count < 2) return null;
             return word;           
         }
-        public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data)
+        public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data = null)
         {
             var dawg = LoadDawg(game.GameLanguage);
             var playerAtHand = game.GetPlayerAtHand();
@@ -473,6 +487,29 @@ namespace Scrabble.Helpers
             char[] charArray = s.ToCharArray();
             Array.Reverse(charArray);
             return new string(charArray);
+        }
+        public static bool CheckIfTimeLimitIsReached(Stopwatch stopwatch, int timeLimit, bool anchorSearchIsFinished = false)
+        {
+            if (timeLimit == 0) return false;
+            if (Convert.ToInt32(stopwatch.Elapsed.TotalSeconds) > timeLimit)
+            {
+                //stopwatch.Stop();
+                return true;
+            }
+            return false;
+        }
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            Random rng = new Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
 
         public static void InsertInArray(object[] array, int index, object val)

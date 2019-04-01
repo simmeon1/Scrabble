@@ -91,14 +91,14 @@ namespace Scrabble.Models
         public List<int[]> GetAnchors(BoardTile[,] boardArray)
         {
             List<int[]> listOfValidAnchorCoordinates = new List<int[]>();
-            bool[,] arrayWithAnchors = new bool[Rows, Columns];
-            for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
-            {
-                for (int j = 0; j < arrayWithAnchors.GetLength(1); j++)
-                {
-                    arrayWithAnchors[i, j] = false;
-                }
-            }
+            //bool[,] arrayWithAnchors = new bool[Rows, Columns];
+            //for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < arrayWithAnchors.GetLength(1); j++)
+            //    {
+            //        arrayWithAnchors[i, j] = false;
+            //    }
+            //}
             for (int i = 0; i < boardArray.GetLength(0); i++)
             {
                 for (int j = 0; j < boardArray.GetLength(1); j++)
@@ -113,42 +113,42 @@ namespace Scrabble.Models
                     {
                         if (i > 0 && boardArray[i - 1, j].CharTile == null)
                         {
-                            arrayWithAnchors[i - 1, j] = true;
+                            //arrayWithAnchors[i - 1, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i - 1, j };
-                                listOfValidAnchorCoordinates.Add(coordinates);
+                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
 
                         
                         if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
                         {
-                            arrayWithAnchors[i + 1, j] = true;
+                            //arrayWithAnchors[i + 1, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i + 1, j };
-                                listOfValidAnchorCoordinates.Add(coordinates);
+                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
                         
                         if (j > 0 && boardArray[i, j - 1].CharTile == null)
                         {
-                            arrayWithAnchors[i, j - 1] = true;
+                            //arrayWithAnchors[i, j - 1] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i, j - 1 };
-                                listOfValidAnchorCoordinates.Add(coordinates);
+                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
                         
                         if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
                         {
-                            arrayWithAnchors[i, j + 1] = true;
+                            //arrayWithAnchors[i, j + 1] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i, j + 1 };
-                                listOfValidAnchorCoordinates.Add(coordinates);
+                                if (!listOfValidAnchorCoordinates.Any(c => c[0] == coordinates[0] && c[1] == coordinates[1])) listOfValidAnchorCoordinates.Add(coordinates);
                             }
                         }
                     }

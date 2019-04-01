@@ -152,50 +152,28 @@ namespace Scrabble.Controllers
         public IActionResult GetMoves()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
-            List<KeyValuePair<string, StringValues>> data = null;
-            try
+
+            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 10);
+            var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
+            var validTransposedMovesList = moveGenerator.GetValidMoves(false);
+            //var validTransposedMovesList = new HashSet<GeneratedMove>();
+            var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
+            var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
+            List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
+            foreach (var move in allValidMovesSorted)
             {
-                data = Request.Form.ToList();
+                var entry = new Dictionary<string, string>();
+                entry.Add("Word", move.Word);
+                entry.Add("Direction", move.IsHorizontal ? "Horizontal" : "Vertical");
+                entry.Add("Extra Words", move.GetExtraWordsMessage());
+                entry.Add("Start", move.StartIndex.ToString());
+                entry.Add("End",  move.EndIndex.ToString());
+                entry.Add("Anchor", move.Anchor[0].ToString());
+                entry.Add("Score", move.Score.ToString());
+                allValidMovesJson.Add(entry);
             }
-            catch (Exception e)
-            {
-                //continue;
-            }
-            if (data == null)
-            {
-                return this.Json(new { success = false, message = "Uuups, something went wrong!" });
-            }
-            else
-            {
-                var boardArray = game.Board.ConvertTo2DArray();
-                var transposedBoardArray = game.Board.Transpose2DArray(boardArray);
-                Dictionary<BoardTile, List<CharTile>> validUntransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(boardArray, game.WordDictionary);
-                Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks = Helpers.Helper.GetValidCrossChecksOneWay(transposedBoardArray, game.WordDictionary);
-                var listOfValidAnchorCoordinatesOnUntransposedBoard = game.Board.GetAnchors(boardArray);
-                var listOfValidAnchorCoordinatesOnTransposedBoard = game.Board.GetAnchors(transposedBoardArray);
-                MoveGenerator moveValidator = new MoveGenerator(game, boardArray, transposedBoardArray, Helper.LoadDawg(game.GameLanguage), listOfValidAnchorCoordinatesOnUntransposedBoard,
-                    listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
-                    _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList());
-                var validUntransposedMovesList = moveValidator.GetValidMoves(true);
-                var validTransposedMovesList = moveValidator.GetValidMoves(false);
-                //var validTransposedMovesList = new HashSet<GeneratedMove>();
-                var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
-                var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
-                List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
-                foreach (var move in allValidMovesSorted)
-                {
-                    var entry = new Dictionary<string, string>();
-                    entry.Add("Word", move.Word);
-                    entry.Add("Direction", move.IsHorizontal ? "Horizontal" : "Vertical");
-                    entry.Add("Extra Words", move.GetExtraWordsMessage());
-                    entry.Add("Start", move.StartIndex.ToString());
-                    entry.Add("End", move.StartIndex == move.EndIndex ? move.Anchor[0].ToString() : (move.EndIndex).ToString());
-                    entry.Add("Anchor", move.Anchor[0].ToString());
-                    entry.Add("Score", move.Score.ToString());
-                    allValidMovesJson.Add(entry);
-                }
-                return Json(allValidMovesJson);
-            }
+            return Json(allValidMovesJson);
+
         }
 
         public IActionResult Welcome(string name, int numTimes = 1)

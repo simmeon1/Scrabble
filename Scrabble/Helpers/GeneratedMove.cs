@@ -28,7 +28,6 @@ namespace Scrabble.Helpers
             Anchor = anchor;
             TilesUsed = tilesUsed;
             Word = GetWord();
-            //BoardBeforeMove = boardBeforeMove;
             BoardBeforeMove = new BoardTile[boardBeforeMove.GetLength(0), boardBeforeMove.GetLength(1)];
             for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
             {

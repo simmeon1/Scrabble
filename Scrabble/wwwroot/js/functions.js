@@ -124,7 +124,7 @@ $(document).ready(function () {
             data: data,
         }).done(function (results) {
             populateTable(results);
-            $("#getMoves").replaceWith($("#validMovesButton"));
+            //$("#getMoves").replaceWith($("#validMovesButton"));
             $("#validMovesButton").show();
             updateStatusMessage("Success :)", "success");
             $('button').prop('disabled', false);
@@ -487,7 +487,7 @@ $(document).ready(function () {
                         <th>Extra Words</th>
                         <th>Row/Column Start</th>
                         <th>Row/Column End</th>
-                        <th>Column/Row Index</th>
+                        <th>Row/Column Index</th>
                         <th>Score</th>
                     </tr>
                 </thead >
