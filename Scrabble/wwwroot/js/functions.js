@@ -483,6 +483,7 @@ $(document).ready(function () {
                     <tr>
                         <th>Word</th>
                         <th>Direction</th>
+                        <th>Extra Words</th>
                         <th>Start</th>
                         <th>End</th>
                         <th>Anchor</th>
@@ -495,6 +496,7 @@ $(document).ready(function () {
             table += `<tr>
                     <td>`+ obj["Word"] + `</td>
                     <td>`+ obj["Direction"] + `</td>
+                    <td>`+ obj["Extra Words"] + `</td>
                 <td>`+ obj["Start"] + `</td>
                         <td>`+ obj["End"] + `</td>
                         <td>`+ obj["Anchor"] + `</td>

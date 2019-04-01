@@ -177,8 +177,8 @@ namespace Scrabble.Controllers
                     listOfValidAnchorCoordinatesOnTransposedBoard, validUntransposedCrossChecks, validTransposedCrossChecks, _scrabbleContext.WordDictionaries.Where(d => d.GameLanguageID == game.GameLanguageID).FirstOrDefault(),
                     _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList());
                 var validUntransposedMovesList = moveValidator.GetValidMoves(true);
-                var validTransposedMovesList = moveValidator.GetValidMoves(false);
-                //var validTransposedMovesList = new HashSet<GeneratedMove>();
+                //var validTransposedMovesList = moveValidator.GetValidMoves(false);
+                var validTransposedMovesList = new HashSet<GeneratedMove>();
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
                 var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
                 List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
@@ -187,9 +187,10 @@ namespace Scrabble.Controllers
                     var entry = new Dictionary<string, string>();
                     entry.Add("Word", move.Word);
                     entry.Add("Direction", move.IsHorizontal ? "Horizontal" : "Vertical");
+                    entry.Add("Extra Words", move.GetExtraWordsMessage());
                     entry.Add("Start", move.StartIndex.ToString());
                     entry.Add("End", move.StartIndex == move.EndIndex ? move.Anchor[0].ToString() : move.EndIndex.ToString());
-                    entry.Add("Anchor", move.Anchor[0] + ", " + move.Anchor[1]);
+                    entry.Add("Anchor", "Row" + (move.Anchor[0] + 1) + ", Column" + (move.Anchor[1] + 1));
                     entry.Add("Score", move.Score.ToString());
                     allValidMovesJson.Add(entry);
                 }

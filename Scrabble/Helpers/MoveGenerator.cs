@@ -53,6 +53,15 @@ namespace Scrabble.Helpers
         public HashSet<GeneratedMove> GetValidMoves(bool boardIsHorizontal, bool giveOneResult = false)
         {
             var boardArray = boardIsHorizontal ? BoardArray : TransposedBoardArray;
+            var boardBeforeMove = new BoardTile[boardArray.GetLength(0), boardArray.GetLength(1)];
+            for (int i = 0; i < boardArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < boardArray.GetLength(1); j++)
+                {
+                    boardBeforeMove[i, j] = new BoardTile { BoardLocationX = boardArray[i, j].BoardLocationX, BoardLocationY = boardArray[i, j].BoardLocationY,
+                        BoardTileType = boardArray[i, j].BoardTileType, CharTile =  boardArray[i, j].CharTile};
+                }
+            }
             var listOfValidAnchorCoordinates = boardIsHorizontal ? ListOfValidAnchorCoordinatesOnUntransposedBoard : ListOfValidAnchorCoordinatesOnTransposedBoard;
             var validCrossChecks = boardIsHorizontal ? ValidUntransposedCrossChecks : ValidTransposedCrossChecks;
             HashSet<GeneratedMove> validMovesList = new HashSet<GeneratedMove>(new GeneratedMoveEqualityComparer());
@@ -79,7 +88,7 @@ namespace Scrabble.Helpers
                     columnIndex--;
                     if (columnIndex > 0 && wordBeforeAnchor.Length != 0 && boardArray[anchor[0], columnIndex - 1].CharTile == null)
                     {
-                        ExtendRight(wordBeforeAnchor, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal);
+                        ExtendRight(wordBeforeAnchor, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove);
                         break;
                     }
                 }
@@ -94,7 +103,7 @@ namespace Scrabble.Helpers
                         {
                             var tile = RackOfCurrentPlayer.SubstractFromRack(entry.Letter);
                             boardArray[anchor[0], anchor[1]].CharTile = tile;
-                            LeftPart(tile.Letter.ToString(), limit, new int []{ anchor[0], anchor[1] + 1}, boardArray, validCrossChecks, validMovesList, boardIsHorizontal);
+                            LeftPart(tile.Letter.ToString(), limit, new int []{ anchor[0], anchor[1] + 1}, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove);
                             RackOfCurrentPlayer.AddToRack(tile);
                             boardArray[anchor[0], anchor[1]].CharTile = null;
                         }
@@ -109,9 +118,10 @@ namespace Scrabble.Helpers
             return validMovesList;
         }
 
-        public void LeftPart(string partialWord, int limit, int[] anchor, BoardTile[,] boardArray, Dictionary<BoardTile, List<CharTile>> validCrossChecks, HashSet<GeneratedMove> validMovesList, bool boardIsHorizontal)
+        public void LeftPart(string partialWord, int limit, int[] anchor, BoardTile[,] boardArray, Dictionary<BoardTile, List<CharTile>> validCrossChecks, 
+            HashSet<GeneratedMove> validMovesList, bool boardIsHorizontal, BoardTile[,] boardBeforeMove)
         {
-            ExtendRight(partialWord, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal);
+            ExtendRight(partialWord, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove);
             if (limit > 0)
             {
                 HashSet<string> labelsOfDawgEdges = new HashSet<string>(new DawgEdgeEqualityComparer());
@@ -161,7 +171,7 @@ namespace Scrabble.Helpers
                             }
                         }
 
-                        if (validPrefix) LeftPart(partialWord + label[0], limit - 1, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal);
+                        if (validPrefix) LeftPart(partialWord + label[0], limit - 1, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove);
                         RackOfCurrentPlayer.AddToRack(tileToWorkWith);
                         boardArray[anchor[0], anchor[1] - 1].CharTile = null;
                         for (int i = 0; i < partialWord.Length; i++)
@@ -174,7 +184,8 @@ namespace Scrabble.Helpers
         }
 
         public void ExtendRight(string partialWord, int[] anchor, BoardTile[,] boardArray, Dictionary<BoardTile,
-            List<CharTile>> validCrossChecks, HashSet<GeneratedMove> validMovesList, bool boardIsHorizontal, CharTile tileExtendedWith = null)
+            List<CharTile>> validCrossChecks, HashSet<GeneratedMove> validMovesList, bool boardIsHorizontal, BoardTile[,] boardBeforeMove,
+            CharTile tileExtendedWith = null)
         {
 
             if (boardArray[anchor[0], anchor[1]].CharTile == null)
@@ -184,6 +195,7 @@ namespace Scrabble.Helpers
                     if (!Moves.Any(m => m.Word.Equals(partialWord)))
                     {
                         Dictionary<BoardTile, CharTile> tilesUsed = new Dictionary<BoardTile, CharTile>();
+                        Dictionary<BoardTile, CharTile> rackTilesUsed = new Dictionary<BoardTile, CharTile>();
                         for (int i = 0; i < partialWord.Length; i++)
                         {
                             var letter = partialWord[i];
@@ -198,7 +210,7 @@ namespace Scrabble.Helpers
                                 tilesUsed.Add(boardTile, tileExtendedWith);
                             }
                         }
-                        validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - partialWord.Length, anchor[1], anchor, tilesUsed));
+                        validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - partialWord.Length, anchor[1], anchor, tilesUsed, boardBeforeMove));
                     }
                 }
                 HashSet<string> labelsOfDawgEdges = new HashSet<string>(new DawgEdgeEqualityComparer());
@@ -227,7 +239,7 @@ namespace Scrabble.Helpers
                         boardArray[anchor[0], anchor[1]].CharTile = Dictionary.CharTiles.Where(c => c.Letter == label[0] && c.Score == tileToWorkWith.Score).FirstOrDefault();
                         if (anchor[1] < boardArray.GetLength(1) - 1)
                         {
-                            ExtendRight(partialWord + label[0], new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, tileToWorkWith);
+                            ExtendRight(partialWord + label[0], new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove, tileToWorkWith);
                         }
                         else
                         {
@@ -250,7 +262,7 @@ namespace Scrabble.Helpers
                                             tilesUsed.Add(boardTile, tileToWorkWith);
                                         }
                                     }
-                                    validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - finalWord.Length, anchor[1], anchor, tilesUsed));
+                                    validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - finalWord.Length, anchor[1], anchor, tilesUsed, boardBeforeMove));
                                 }
                             }
                         }
@@ -270,7 +282,7 @@ namespace Scrabble.Helpers
                 }
                 if (labelsOfDawgEdges.Any() && anchor[1] < boardArray.GetLength(1))
                 {
-                    ExtendRight(partialWord + tile.Letter, new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, tile);
+                    ExtendRight(partialWord + tile.Letter, new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove, tile);
                 }
             }
         }

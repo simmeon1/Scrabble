@@ -73,11 +73,11 @@ namespace Scrabble.Helpers
             }
             if (doubleWordTilesUsed != 0)
             {
-                score = score * (2 * doubleWordTilesUsed);
+                score *= 2;
             }
             if (tripleWordTilesUsed != 0)
             {
-                score = score * (3 * tripleWordTilesUsed);
+                score *= 3;
             }
             return score;
         }
@@ -295,7 +295,7 @@ namespace Scrabble.Helpers
             {
                 var tileDetails = GetTileDetails(tile);
                 var rowIndex = Int32.Parse(tileDetails[0]);
-                var columnIndex = Int32.Parse(tileDetails[1]);              
+                var columnIndex = Int32.Parse(tileDetails[1]);
                 if (rowIndex == startBoardTileCoordinates[0] && columnIndex == startBoardTileCoordinates[1])
                 {
                     startTileIsFilled = true;
@@ -377,6 +377,27 @@ namespace Scrabble.Helpers
                 }
             }
             return true;
+        }
+        public static List<BoardTile> GetVerticalPlays(BoardTile[,] board, int[] rackTileCoordinates)
+        {
+            var word = new List<BoardTile>();
+            var upIndexCounter = rackTileCoordinates[0];
+            var downIndexCounter = rackTileCoordinates[0];
+            var columnIndex = rackTileCoordinates[1];
+
+            while (upIndexCounter > 0 && board[upIndexCounter - 1, columnIndex].CharTile != null)
+            {
+                word.Insert(0, board[upIndexCounter - 1, columnIndex]);
+                upIndexCounter--;
+            }
+            word.Add(board[rackTileCoordinates[0], rackTileCoordinates[1]]);
+            while (downIndexCounter < board.GetLength(0) - 1 && board[downIndexCounter + 1, columnIndex].CharTile != null)
+            {
+                word.Add(board[downIndexCounter + 1, columnIndex]);
+                downIndexCounter++;
+            }
+            if (word.Count < 2) return null;
+            return word;           
         }
         public static HttpStatusCodeResult GetWordScores(Game game, List<KeyValuePair<string, StringValues>> data)
         {

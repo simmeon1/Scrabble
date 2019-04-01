@@ -14,9 +14,13 @@ namespace Scrabble.Helpers
         public int[] Anchor { get; set; }
         public string Word { get; set; }
         public Dictionary<BoardTile, CharTile> TilesUsed { get; set; }
+        public List<int[]> RackTilesUsedCoordinates { get; set; }
+        public List<List<BoardTile>> ExtraWordsPlayed { get; set; }
         public int Score { get; set; }
+        public BoardTile[,] BoardBeforeMove { get; set; }
+        public BoardTile[,] BoardAfterMove { get; set; }
 
-        public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int[] anchor, Dictionary<BoardTile, CharTile> tilesUsed)
+        public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int[] anchor, Dictionary<BoardTile, CharTile> tilesUsed, BoardTile[,] boardBeforeMove)
         {
             IsHorizontal = isHorizontal;
             StartIndex = startIndex;
@@ -24,6 +28,40 @@ namespace Scrabble.Helpers
             Anchor = anchor;
             TilesUsed = tilesUsed;
             Word = GetWord();
+            BoardBeforeMove = new BoardTile[boardBeforeMove.GetLength(0), boardBeforeMove.GetLength(1)];
+            for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
+            {
+                for (int j = 0; j < BoardBeforeMove.GetLength(1); j++)
+                {
+                    BoardBeforeMove[i, j] = new BoardTile
+                    {
+                        BoardLocationX = boardBeforeMove[i, j].BoardLocationX,
+                        BoardLocationY = boardBeforeMove[i, j].BoardLocationY,
+                        BoardTileType = boardBeforeMove[i, j].BoardTileType,
+                        CharTile = boardBeforeMove[i, j].CharTile
+                    };
+                }
+            }
+            RackTilesUsedCoordinates = new List<int[]>();
+            ExtraWordsPlayed = new List<List<BoardTile>>();
+            foreach (var tileUsed in TilesUsed)
+            {
+                for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
+                {
+                    for (int j = 0; j < BoardBeforeMove.GetLength(1); j++)
+                    {
+                        if (BoardBeforeMove[i,j].BoardLocationX == tileUsed.Key.BoardLocationX
+                            && BoardBeforeMove[i, j].BoardLocationY == tileUsed.Key.BoardLocationY
+                            && BoardBeforeMove[i, j].CharTile == null)
+                        {
+                            RackTilesUsedCoordinates.Add(new int[] { i, j });
+                            BoardBeforeMove[i,j].CharTile = tileUsed.Value;
+
+                        }
+                    }
+                }
+            }
+            BoardAfterMove = BoardBeforeMove;
             Score = GetScore();
         }
 
@@ -35,7 +73,19 @@ namespace Scrabble.Helpers
             {
                 tilesWithLetters.Add(new BoardTile { CharTile = entry.Value, BoardTileType = entry.Key.BoardTileType });
             }
-            return Helpers.Helper.GetWordScore(tilesWithLetters);
+            foreach (var rackTileCoordinates in RackTilesUsedCoordinates)
+            {
+                var word = Helpers.Helper.GetVerticalPlays(BoardAfterMove, rackTileCoordinates);
+                if (word != null)
+                {
+                    ExtraWordsPlayed.Add(word);
+                }            
+            }
+            foreach (var extraWord in ExtraWordsPlayed)
+            {
+                score += Helper.GetWordScore(extraWord);
+            }
+            return score + Helpers.Helper.GetWordScore(tilesWithLetters);
         }
 
         public string GetWord()
@@ -48,9 +98,25 @@ namespace Scrabble.Helpers
             return word;
         }
 
+        public string GetExtraWordsMessage ()
+        {
+            var extraWordsMessage = "";
+            foreach (var word in ExtraWordsPlayed)
+            {
+                foreach (var letter in word)
+                {
+                    extraWordsMessage += letter.CharTile.Letter;
+                }
+                extraWordsMessage += ";";
+            }
+            return extraWordsMessage;
+        }
+
         public override string ToString()
         {
-            return Word + ", " + (IsHorizontal ? "Horizontal" : "Vertical") + ", " + StartIndex + " to " + EndIndex +
+            
+            return Word + ", " + (IsHorizontal ? "Horizontal" : "Vertical") + ", " + "Extra words: " + GetExtraWordsMessage() + ", "
+                + ", Start Index " + StartIndex + " to " + EndIndex +
                 " anchored at " + Anchor[0] + ", " + Anchor[1] + ", " + Score + " points";
         }
     }
