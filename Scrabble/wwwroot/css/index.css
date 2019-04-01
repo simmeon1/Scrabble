@@ -55,6 +55,10 @@
     /*font-size: 0.9vw;
 }*/
 
+.moveRow {
+    cursor: pointer;
+}
+
 .playerLog {
     margin-top: 0px !important;
     padding-left: 0px;
@@ -160,6 +164,10 @@
 
 .locked {
     background-color: yellow !important;
+}
+
+.moveMarked {
+    background-color: cadetblue !important;
 }
 
 

@@ -5,6 +5,7 @@ $(document).ready(function () {
     var directionOfPlay = "right";
     var anchorsShown = false;
     var anchorUsed = false;
+    var movesTable;
 
     refreshElementSizes();
     $("#validMovesButton").hide();
@@ -34,6 +35,7 @@ $(document).ready(function () {
             return;
         }
         activeTile = $(this);
+        $("*").removeClass("moveMarked");
         $(".grid-item").removeClass("currently-selected-tile");
         $(this).toggleClass("currently-selected-tile");
         $(".grid-item").removeClass("currently-foreseen-tile");
@@ -76,7 +78,7 @@ $(document).ready(function () {
                     }
                     if (blankLetter != null) {
                         blankLetter = blankLetter.toUpperCase();
-                        activeTile.html("<button id=board_" + this.id + "_" + blankLetter + " class= 'btn btn-block btn-secondary board_rack_chartile blank' > <span class='board_rack_chartile_letter'>" + blankLetter + "</span> <span class='board_rack_chartile_score'>" + $(this).find('.rack_chartile_score:first').text() + "</span></button > ");
+                        activeTile.html("<button id=board_" + this.id + "_" + blankLetter + " class= 'btn btn-block btn-secondary board_rack_chartile blank'> <span class='board_rack_chartile_letter'>" + blankLetter + "</span> <span class='board_rack_chartile_score'>" + $(this).find('.rack_chartile_score:first').text() + "</span></button > ");
                         toggleRackCharTileSelection($(this));
                     }
                 }
@@ -194,7 +196,6 @@ $(document).ready(function () {
             $('button').prop('disabled', false);
         });
     });
-
 
     $(document).on("click", "#submit", function () {
 
@@ -478,22 +479,22 @@ $(document).ready(function () {
     }
 
     function populateTable(json) {
-        var table = `<table class="table table-striped table - condensed">
+        var table = `<table id="movesTable" class="table table-striped table-condensed table-hover">
                 <thead>
                     <tr>
                         <th>Word</th>
                         <th>Direction</th>
                         <th>Extra Words</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Anchor</th>
+                        <th>Row/Column Start</th>
+                        <th>Row/Column End</th>
+                        <th>Column/Row Index</th>
                         <th>Score</th>
                     </tr>
                 </thead >
                 <tbody>`
         for (var i = 0; i < json.length; i++) {
             var obj = json[i];
-            table += `<tr>
+            table += `<tr id="move_` + obj["Word"] + "_" + obj["Start"] + "_" + obj["Anchor"] + "_" + obj["End"] + "_" + obj["Direction"] + `" class="moveRow">
                     <td>`+ obj["Word"] + `</td>
                     <td>`+ obj["Direction"] + `</td>
                     <td>`+ obj["Extra Words"] + `</td>
@@ -505,7 +506,27 @@ $(document).ready(function () {
         }
         table += `</tbody></table>`
         $(".modal-body").html(table);
+        movesTable = $('#movesTable').DataTable();
+
+        $('#movesTable').on('click', 'tr', function () {
+            var moveDetails = $(this).attr("id").split("_");
+            var start = parseInt(moveDetails[2]);
+            var secondaryIndex = parseInt(moveDetails[3]);
+            var end = parseInt(moveDetails[4]);
+            var direction = moveDetails[5];
+            $("*").removeClass("moveMarked");
+            for (var i = start; i <= end; i++) {
+                direction == "Horizontal" ? $("#tile_" + secondaryIndex + "_" + i).addClass("moveMarked")
+                    : $("#tile_" + i + "_" + secondaryIndex).addClass("moveMarked");
+            }
+            $('#movesModal').modal('toggle');
+        });
     }
+
+
+    $(document).ready(function () {
+        $('#movesTable').DataTable();
+    });
 
     function refreshElementSizes() {
         $(".grid-item").height($(".grid-item").width());

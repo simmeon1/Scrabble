@@ -262,7 +262,7 @@ namespace Scrabble.Helpers
                                             tilesUsed.Add(boardTile, tileToWorkWith);
                                         }
                                     }
-                                    validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - finalWord.Length, anchor[1], anchor, tilesUsed, boardBeforeMove));
+                                    validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - finalWord.Length + 1, anchor[1], anchor, tilesUsed, boardBeforeMove));
                                 }
                             }
                         }

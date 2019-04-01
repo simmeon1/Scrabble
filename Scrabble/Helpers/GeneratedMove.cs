@@ -28,6 +28,7 @@ namespace Scrabble.Helpers
             Anchor = anchor;
             TilesUsed = tilesUsed;
             Word = GetWord();
+            //BoardBeforeMove = boardBeforeMove;
             BoardBeforeMove = new BoardTile[boardBeforeMove.GetLength(0), boardBeforeMove.GetLength(1)];
             for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
             {
@@ -109,7 +110,7 @@ namespace Scrabble.Helpers
                 }
                 extraWordsMessage += ";";
             }
-            return extraWordsMessage;
+            return extraWordsMessage.Insert(0, ExtraWordsPlayed.Count + " - ");
         }
 
         public override string ToString()
