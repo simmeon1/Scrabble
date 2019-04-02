@@ -37,6 +37,7 @@ namespace Scrabble.Models
             BoardTiles = boardTilesList;
         }
 
+
         public BoardTile[,] ConvertTo2DArray()
         {
             List<BoardTile> boardTilesList = BoardTiles.ToList();

@@ -10,14 +10,14 @@ using Scrabble.Models;
 namespace Scrabble.Migrations
 {
     [DbContext(typeof(ScrabbleContext))]
-    [Migration("20190330142020_Initial")]
+    [Migration("20190401215110_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -563,7 +563,7 @@ namespace Scrabble.Migrations
                         new { ID = 12, CharTileID = 12, Count = 1, PouchID = 1 },
                         new { ID = 13, CharTileID = 13, Count = 4, PouchID = 1 },
                         new { ID = 14, CharTileID = 14, Count = 1, PouchID = 1 },
-                        new { ID = 15, CharTileID = 15, Count = 4, PouchID = 1 },
+                        new { ID = 15, CharTileID = 15, Count = 6, PouchID = 1 },
                         new { ID = 16, CharTileID = 16, Count = 7, PouchID = 1 },
                         new { ID = 17, CharTileID = 17, Count = 1, PouchID = 1 },
                         new { ID = 18, CharTileID = 18, Count = 1, PouchID = 1 },
@@ -634,7 +634,7 @@ namespace Scrabble.Migrations
                         new { ID = 1, CharTileID = 3, Count = 1, RackID = 1 },
                         new { ID = 2, CharTileID = 16, Count = 1, RackID = 1 },
                         new { ID = 3, CharTileID = 10, Count = 1, RackID = 1 },
-                        new { ID = 4, CharTileID = 15, Count = 2, RackID = 1 },
+                        new { ID = 4, CharTileID = 2, Count = 2, RackID = 1 },
                         new { ID = 5, CharTileID = 8, Count = 1, RackID = 1 },
                         new { ID = 7, CharTileID = 4, Count = 1, RackID = 1 },
                         new { ID = 8, CharTileID = 7, Count = 1, RackID = 2 },
@@ -718,7 +718,7 @@ namespace Scrabble.Migrations
             modelBuilder.Entity("Scrabble.Models.Move", b =>
                 {
                     b.HasOne("Scrabble.Models.Game", "Game")
-                        .WithMany()
+                        .WithMany("Moves")
                         .HasForeignKey("GameID")
                         .OnDelete(DeleteBehavior.Cascade);
 

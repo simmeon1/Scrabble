@@ -129,7 +129,7 @@ namespace Scrabble.Helpers
                             && (!validCrossChecks.Any(c => c.Key == boardArray[anchor[0], anchor[1]])
                             || validCrossChecks.Any(c => c.Key == boardArray[anchor[0], anchor[1]]
                             && c.Value.Any(x => x.Letter == entry.Letter)))
-                            && anchor[1] < boardArray.GetLength(1))
+                            && anchor[1] < boardArray.GetLength(1) - 1)
                         {
                             var tile = RackOfCurrentPlayer.SubstractFromRack(entry.Letter);
                             boardArray[anchor[0], anchor[1]].CharTile = tile;
@@ -343,7 +343,7 @@ namespace Scrabble.Helpers
                 {
                     labelsOfDawgEdges.Add(word.Key.Substring((partialWord + tile.Letter).Length));
                 }
-                if (labelsOfDawgEdges.Any() && anchor[1] < boardArray.GetLength(1))
+                if (labelsOfDawgEdges.Any() && anchor[1] < boardArray.GetLength(1) - 1)
                 {
                     ExtendRight(partialWord + tile.Letter, new int[] { anchor[0], anchor[1] + 1 }, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove, tile);
                 }

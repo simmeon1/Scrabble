@@ -98,6 +98,7 @@ $(document).ready(function () {
             $("#" + parentId).html('<span id="board_chartile_0"><br/></span >');
             toggleRackCharTileSelection($(this));
         }
+        refreshElementSizes();
     });
 
     $(document).on("click", "#clearPlacements", function () {

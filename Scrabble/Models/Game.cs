@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scrabble.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -45,6 +46,7 @@ namespace Scrabble.Models
         public virtual Pouch_CharTile Pouch_CharTile { get; set; }*/
 
         public virtual ICollection<Rack> Racks { get; set; }
+        public virtual ICollection<Move> Moves { get; set; }
 
         /*public int Rack_Pouch_CharTileID { get; set; }
         [ForeignKey("Rack_Pouch_CharTileID")]
@@ -128,8 +130,9 @@ namespace Scrabble.Models
             player.Score += score;
         }
 
-        public void SwitchToNextPlayer ()
+        public void SwitchToNextPlayer()
         {
+            Player newPlayerAtHand = null;
             List<Player> playersList = Players.ToList();
             for (int i = 0; i < playersList.Count; i++)
             {
@@ -139,11 +142,71 @@ namespace Scrabble.Models
                     if (i == playersList.Count - 1)
                     {
                         playersList[0].AtHand = true;
-                    } else playersList[i + 1].AtHand = true;
-                    return;
+                        newPlayerAtHand = playersList[0];
+                    }
+                    else
+                    {
+                        playersList[i + 1].AtHand = true;
+                        newPlayerAtHand = playersList[i + 1];
+                    }
+                    break;
                 }
             }
+            if (!newPlayerAtHand.IsHuman)
+            {
+                var moveGenerator = Helper.GetMoveGenerator(this, Moves.Where(m => m.GameID == ID).ToList(), 5);
+                var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
+                var validTransposedMovesList = moveGenerator.GetValidMoves(false);
+                var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
+                var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
+                if (allValidMovesSorted.Count > 0) MakeGeneratedMove(allValidMovesSorted[0]);
+                SwitchToNextPlayer();
+            }
             Players = playersList;
+        }
+
+        public void MakeGeneratedMove(GeneratedMove move)
+        {
+            var board = move.IsHorizontal ? Board.ConvertTo2DArray() : Board.Transpose2DArray(Board.ConvertTo2DArray());
+            var playerAtHand = GetPlayerAtHand();
+            var playedWordTiles = move.TilesUsed;
+            var playedExtraWords = move.ExtraWordsPlayed;
+            var rackTilesUsed = move.RackTilesUsedCoordinates;
+            List<BoardTile> playedWordBoardTiles = new List<BoardTile>();
+            var playedWord = "";
+            for (int i = 0; i < playedWordTiles.Count; i++)
+            {
+                var boardTileFromMove = playedWordTiles.Keys.ElementAt(i);
+                var charTileFromMove = playedWordTiles.Values.ElementAt(i);
+                var boardTileOnBoard = Board.BoardTiles.Where(t => t.BoardLocationX == boardTileFromMove.BoardLocationX && t.BoardLocationY == boardTileFromMove.BoardLocationY).FirstOrDefault();
+                if (boardTileOnBoard.CharTile == null)
+                {
+                    boardTileOnBoard.CharTile = charTileFromMove;
+                }
+                playedWord += boardTileFromMove.CharTile.Letter;
+                playedWordBoardTiles.Add(boardTileFromMove);
+                boardTileOnBoard.CharTile = charTileFromMove;
+            }
+            playerAtHand.Moves.Add(new Move { PlayerID = playerAtHand.ID, GameID = ID, Word = playedWord, Score = Helper.GetWordScore(playedWordBoardTiles) });
+
+            List<string> listOfWords = new List<string>();
+            foreach(var extraWord in playedExtraWords)
+            {
+                var word = "";
+                foreach (var boardTile in extraWord)
+                {
+                    word += boardTile.CharTile.Letter;
+                }
+                playerAtHand.Moves.Add(new Move { PlayerID = playerAtHand.ID, GameID = ID, Word = word, Score = Helper.GetWordScore(extraWord) });
+            }
+            AddScoreToPlayer(playerAtHand, move.Score);
+
+            foreach (var rackTileUsed in rackTilesUsed)
+            {
+                playerAtHand.Rack.SubstractFromRack(board[rackTileUsed[0], rackTileUsed[1]].CharTile);
+                playerAtHand.Rack.RefillRackFromPouch();
+            }
+            playerAtHand.Rack.RefillRackFromPouch();
         }
     }
 }
