@@ -332,7 +332,7 @@ namespace Scrabble.Models
             modelBuilder.Entity<Pouch>().HasData(new Pouch { ID = 1, GameID = 1 });
 
             modelBuilder.Entity<Player>().HasData(new Player { ID = 1, IsHuman = true, Score = 0, GameID = 1, RackID = 1, PouchID = 1, AtHand = true });
-            modelBuilder.Entity<Player>().HasData(new Player { ID = 2, IsHuman = false, Score = 0, GameID = 1, RackID = 2, PouchID = 1, AtHand = false });
+            modelBuilder.Entity<Player>().HasData(new Player { ID = 2, IsHuman = true, Score = 0, GameID = 1, RackID = 2, PouchID = 1, AtHand = false });
 
             modelBuilder.Entity<Rack>().HasData(new Rack { ID = 1, PouchID = 1, RackSize = 7, GameID = 1, PlayerID = 1 });
             modelBuilder.Entity<Rack>().HasData(new Rack { ID = 2, PouchID = 1, RackSize = 7, GameID = 1, PlayerID = 2 });                          

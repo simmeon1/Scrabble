@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Scrabble.Helpers
@@ -11,20 +12,22 @@ namespace Scrabble.Helpers
         public bool IsHorizontal { get; set; }
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
-        public int[] Anchor { get; set; }
+        public int[] AnchorCoordinates { get; set; }
+        public BoardTile Anchor { get; set; }
         public string Word { get; set; }
         public Dictionary<BoardTile, CharTile> TilesUsed { get; set; }
-        public List<int[]> RackTilesUsedCoordinates { get; set; }
+        public List<BoardTile> RackTilesUsed { get; set; }
         public List<List<BoardTile>> ExtraWordsPlayed { get; set; }
         public int Score { get; set; }
         public BoardTile[,] BoardBeforeMove { get; set; }
         public BoardTile[,] BoardAfterMove { get; set; }
 
-        public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int[] anchor, Dictionary<BoardTile, CharTile> tilesUsed, BoardTile[,] boardBeforeMove)
+        public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int[] anchorCoordinates, BoardTile anchor, Dictionary<BoardTile, CharTile> tilesUsed, BoardTile[,] boardBeforeMove)
         {
             IsHorizontal = isHorizontal;
             StartIndex = startIndex;
             EndIndex = endIndex;
+            AnchorCoordinates = anchorCoordinates;
             Anchor = anchor;
             TilesUsed = tilesUsed;
             Word = GetWord();
@@ -42,7 +45,7 @@ namespace Scrabble.Helpers
                     };
                 }
             }
-            RackTilesUsedCoordinates = new List<int[]>();
+            RackTilesUsed = new List<BoardTile>();
             ExtraWordsPlayed = new List<List<BoardTile>>();
             foreach (var tileUsed in TilesUsed)
             {
@@ -54,7 +57,7 @@ namespace Scrabble.Helpers
                             && BoardBeforeMove[i, j].BoardLocationY == tileUsed.Key.BoardLocationY
                             && BoardBeforeMove[i, j].CharTile == null)
                         {
-                            RackTilesUsedCoordinates.Add(new int[] { i, j });
+                            RackTilesUsed.Add(BoardBeforeMove[i, j]);
                             BoardBeforeMove[i,j].CharTile = tileUsed.Value;
 
                         }
@@ -73,9 +76,9 @@ namespace Scrabble.Helpers
             {
                 tilesWithLetters.Add(new BoardTile { CharTile = entry.Value, BoardTileType = entry.Key.BoardTileType });
             }
-            foreach (var rackTileCoordinates in RackTilesUsedCoordinates)
+            foreach (var rackTile in RackTilesUsed)
             {
-                var word = Helpers.Helper.GetVerticalPlays(BoardAfterMove, rackTileCoordinates);
+                var word = Helpers.Helper.GetVerticalPlay(BoardAfterMove, rackTile);
                 if (word != null)
                 {
                     ExtraWordsPlayed.Add(word);
@@ -90,26 +93,27 @@ namespace Scrabble.Helpers
 
         public string GetWord()
         {
-            string word = "";
+            StringBuilder sb = new StringBuilder();
             foreach (var entry in TilesUsed)
             {
-                word += entry.Value.Letter;
+                sb.Append(entry.Value.Letter);
             }
-            return word;
+            return sb.ToString();
         }
 
         public string GetExtraWordsMessage ()
         {
-            var extraWordsMessage = "";
+            StringBuilder sb = new StringBuilder();
             foreach (var word in ExtraWordsPlayed)
             {
                 foreach (var letter in word)
                 {
-                    extraWordsMessage += letter.CharTile.Letter;
+                    sb.Append(letter.CharTile.Letter);
                 }
-                extraWordsMessage += ";";
+                sb.Append(";");
             }
-            return extraWordsMessage.Insert(0, ExtraWordsPlayed.Count + " - ");
+            sb.Insert(0, ExtraWordsPlayed.Count + " - ");
+            return sb.ToString();
         }
 
         public override string ToString()
@@ -117,7 +121,7 @@ namespace Scrabble.Helpers
             
             return Word + ", " + (IsHorizontal ? "Horizontal" : "Vertical") + ", " + "Extra words: " + GetExtraWordsMessage() + ", "
                 + ", Start Index " + StartIndex + " to " + EndIndex +
-                " anchored at " + Anchor[0] + ", " + Anchor[1] + ", " + Score + " points";
+                " anchored at " + AnchorCoordinates[0] + ", " + AnchorCoordinates[1] + ", " + Score + " points";
         }
     }
 }

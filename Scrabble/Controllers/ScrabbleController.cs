@@ -153,10 +153,10 @@ namespace Scrabble.Controllers
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
 
-            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 10);
+            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 5);
             var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
             var validTransposedMovesList = moveGenerator.GetValidMoves(false);
-            //var validTransposedMovesList = new HashSet<GeneratedMove>();
+            //var validUntransposedMovesList = new HashSet<GeneratedMove>(new GeneratedMoveEqualityComparer());
             var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
             var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
             List<Dictionary<string, string>> allValidMovesJson = new List<Dictionary<string, string>>();
@@ -168,7 +168,7 @@ namespace Scrabble.Controllers
                 entry.Add("Extra Words", move.GetExtraWordsMessage());
                 entry.Add("Start", move.StartIndex.ToString());
                 entry.Add("End",  move.EndIndex.ToString());
-                entry.Add("Anchor", move.Anchor[0].ToString());
+                entry.Add("Anchor", move.AnchorCoordinates[0].ToString());
                 entry.Add("Score", move.Score.ToString());
                 allValidMovesJson.Add(entry);
             }
