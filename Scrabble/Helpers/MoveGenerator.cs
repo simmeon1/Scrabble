@@ -90,10 +90,11 @@ namespace Scrabble.Helpers
             Stopwatch.Start();
             for (int i = 0; i < listOfValidAnchorCoordinates.Count; i++)
             {
-                if (retriesForCurrentAnchor == 0) {
+                if (retriesForCurrentAnchor == 0)
+                {
                     retriesForCurrentAnchor = retriesPerAnchor;
                     continue;
-                }          
+                }
                 var anchor = listOfValidAnchorCoordinates[i];
                 var crossCheckEntry = validCrossChecks.Where(c => c.Key == boardArray[anchor[0], anchor[1]]).FirstOrDefault().Value;
                 if (crossCheckEntry != null && crossCheckEntry.Count == 0) continue;
@@ -165,7 +166,7 @@ namespace Scrabble.Helpers
                         TimeLimit = originalTimeLimit;
                         Stopwatch.Reset();
                         return validMovesList;
-                    }                    
+                    }
                 }
 
             }
@@ -232,10 +233,7 @@ namespace Scrabble.Helpers
                         {
                             boardArray[anchor[0], anchor[1] - partialWord.Length - 1 + i].CharTile = null;
                         }
-                        if (Helper.CheckIfTimeLimitIsReached(Stopwatch, TimeLimit) && validMovesList.Count > 0)
-                        {
-                            return;
-                        }
+
                     }
                 }
             }
@@ -326,10 +324,7 @@ namespace Scrabble.Helpers
                         }
                         RackOfCurrentPlayer.AddToRack(tileToWorkWith);
                         boardArray[anchor[0], anchor[1]].CharTile = null;
-                        if (Helper.CheckIfTimeLimitIsReached(Stopwatch, TimeLimit) && validMovesList.Count > 0)
-                        {
-                            return;
-                        }
+
 
                     }
                 }

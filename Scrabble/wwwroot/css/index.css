@@ -134,6 +134,10 @@
     border-color: black;
 }
 
+.btn-secondary {
+    background-color: lightslategray;
+}
+
 .board_row {
     overflow: auto;
 }
@@ -153,13 +157,14 @@
 }
 
 .currently-selected-tile {
-    background-color: lightgray !important;
-    /*border: 1px yellow;*/
+    background-color: darkgray !important;
 }
 
+.currently-foreseen-tile {
+    background-color: lightgray !important;
+}
 .anchor {
     background-color: lightgreen !important;
-    /*border: 1px yellow;*/
 }
 
 .locked {
@@ -171,9 +176,6 @@
 }
 
 
-/*.currently-foreseen-tile {
-    background-color: lightgray;
-}*/
 
 .DoubleLetter {
     background-color: lightblue;
@@ -193,4 +195,23 @@
 
 .Start {
     background-color: plum;
+}
+
+.loadingSpinner {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba( 255, 255, 255, .8 ) url('https://www.drupal.org/files/issues/throbber_12.gif') 50% 50% no-repeat;
+}
+
+body.loading .loadingSpinner {
+    overflow: hidden;
+}
+
+body.loading .loadingSpinner {
+    display: block;
 }

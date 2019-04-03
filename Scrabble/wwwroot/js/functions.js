@@ -1,6 +1,7 @@
 $(document).ready(function () {
 
     var activeTile = "";
+    var originallySelectedTile = "";
     var foreseenTile = "";
     var directionOfPlay = "right";
     var anchorsShown = false;
@@ -9,6 +10,11 @@ $(document).ready(function () {
 
     refreshElementSizes();
     $("#validMovesButton").hide();
+
+    $(document).on({
+        ajaxStart: function () { $("body").addClass("loading"); },
+        ajaxStop: function () { $("body").removeClass("loading"); }
+    });
 
     $(window).on('resize', function () {
         $(".grid-item").height($(".grid-item").width());
@@ -31,32 +37,48 @@ $(document).ready(function () {
     }).resize();
 
     $(document).on("click", ".grid-item", function () {
-        if ($(this).hasClass("locked")) {
+        if ($(this).hasClass("locked") || $(this).children().first().hasClass("board_rack_chartile") ) {
             return;
+        }
+        if ($(".board_rack_chartile").length == 0) {
+            originallySelectedTile = $(this);
         }
         activeTile = $(this);
         $("*").removeClass("moveMarked");
-        $(".grid-item").removeClass("currently-selected-tile");
-        $(this).toggleClass("currently-selected-tile");
         $(".grid-item").removeClass("currently-foreseen-tile");
-        var tileCoordinates = activeTile.attr("id").split("_");
+        $('.emptyBoardTile').each(function () {
+            $(this).html("<br>");
+        });
+        var tileCoordinates = $(this).attr("id").split("_");
         var x = parseInt(tileCoordinates[1]);
         var y = parseInt(tileCoordinates[2]);
-        //switch (directionOfPlay) {
-        //    case "up":
-        //        foreseenTile = $('#tile_' + (x - 1) + "_" + y);
-        //        break;
-        //    case "left":
-        //        foreseenTile = $('#tile_' + x + "_" + (y - 1));
-        //        break;
-        //    case "down":
-        //        foreseenTile = $('#tile_' + (x + 1) + "_" + y);
-        //        break;
-        //    case "right":
-        //        foreseenTile = $('#tile_' + x + "_" + (y + 1));
-        //        break;
-        //}
-        //foreseenTile.toggleClass("currently-foreseen-tile");
+        if ($(this).hasClass("currently-selected-tile")) {
+            switch (directionOfPlay) {
+                case "down":
+                    foreseenTile = $('#tile_' + x + "_" + (y + 1));
+                    $(this).children().first(".emptyBoardTile").html('<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>');
+                    directionOfPlay = "right";
+                    break;
+                case "right":
+                    foreseenTile = $('#tile_' + (x + 1) + "_" + y);
+                    $(this).children().first(".emptyBoardTile").html('<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>');
+                    directionOfPlay = "down";
+                    break;
+            }
+        } else {
+            switch (directionOfPlay) {
+                case "down":
+                    foreseenTile = $('#tile_' + (x + 1) + "_" + y);
+                    break;
+                case "right":
+                    foreseenTile = $('#tile_' + x + "_" + (y + 1));
+                    break;
+            }
+            $(this).children().first(".emptyBoardTile").html('<span class="glyphicon glyphicon-arrow-' + directionOfPlay + '" aria-hidden="true"></span>');
+        }
+        $(".grid-item").removeClass("currently-selected-tile");
+        $(this).toggleClass("currently-selected-tile");
+        foreseenTile.toggleClass("currently-foreseen-tile");
     });
 
     $(document).on("click", ".rack_chartile", function () {
@@ -70,7 +92,7 @@ $(document).ready(function () {
                     var rack_chartile = activeTile.children(":first").attr("id");
                     rack_chartile = rack_chartile.replace("board_", "");
                     toggleRackCharTileSelection($("#" + rack_chartile));
-                }               
+                }
                 if (parseInt(rack_chartile_details[3]) == 1) {
                     var blankLetter = prompt("Please enter a single letter for blank tile");
                     while (blankLetter != null && (blankLetter.length != 1 || Number.isInteger(parseInt(blankLetter)))) {
@@ -86,6 +108,19 @@ $(document).ready(function () {
                     activeTile.html("<button id=board_" + this.id + " class='btn btn-block btn-secondary board_rack_chartile'><span class='board_rack_chartile_letter'>" + $(this).find('.rack_chartile_letter:first').text() + "</span><span class='board_rack_chartile_score'>" + $(this).find('.rack_chartile_score:first').text() + "</span></button>");
                     toggleRackCharTileSelection($(this));
                 }
+                var activeTileCoordinates = activeTile.attr("id").split("_");
+                var x = parseInt(activeTileCoordinates[1]);
+                var y = parseInt(activeTileCoordinates[2]);
+                switch (directionOfPlay) {
+                    case "down":
+                        foreseenTile = $('#tile_' + (x + 1) + "_" + y);
+                        break;
+                    case "right":
+                        foreseenTile = $('#tile_' + x + "_" + (y + 1));
+                        break;
+                }
+                var nextTile = getNextAvailableTile(activeTile, directionOfPlay);
+                nextTile.trigger("click");
             }
         } else {
             var parentId = null;
@@ -94,21 +129,93 @@ $(document).ready(function () {
             } else {
                 parentId = $("#board_" + this.id).parent().attr("id");
             }
-            $("#board_" + this.id).remove();           
-            $("#" + parentId).html('<span id="board_chartile_0"><br/></span >');
+            $("#board_" + this.id).remove();
+            $("#" + parentId).html('<span id="board_chartile_0 class="emptyBoardTile"><br/></span >');           
             toggleRackCharTileSelection($(this));
         }
         refreshElementSizes();
     });
 
+    $("body").keydown(function (e) {
+        var input = e.key.toUpperCase();
+        var letters = /^[A-Za-z]+$/;
+        if (activeTile == "") {
+            updateStatusMessage("Please select a tile.", "danger");
+            return;
+        }
+        var activeTileCoordinates = activeTile.attr("id").split("_");
+        var x = parseInt(activeTileCoordinates[1]);
+        var y = parseInt(activeTileCoordinates[2]);
+        if (input == "BACKSPACE") {
+            $("#clearPlacements").trigger("click");
+            return;
+        }
+        if (input == " ") {
+            activeTile.trigger("click");
+            return;
+        }
+        if (input == "ARROWRIGHT") {
+            var nextTile = getNextAvailableTile(activeTile, "right");
+            nextTile.trigger("click");
+            return;
+        }
+        if (input == "ARROWLEFT") {
+            var nextTile = getNextAvailableTile(activeTile, "left");
+            nextTile.trigger("click");
+            return;
+        }
+        if (input == "ARROWUP") {
+            var nextTile = getNextAvailableTile(activeTile, "up");
+            nextTile.trigger("click");
+            return;
+        }
+        if (input == "ARROWDOWN") {
+            var nextTile = getNextAvailableTile(activeTile, "down");
+            nextTile.trigger("click");
+            return;
+        }
+        if (input == "ENTER") {
+            $("#submit").trigger("click");
+            return;
+        }
+        var rackTileExists = false;
+        if (!input.match(letters)) {
+            updateStatusMessage("You can only type letters.", "danger");
+            return;
+        }
+        $('.rack_chartile').each(function () {
+            if ($(this).children().first(".rack_chartile_letter").text() == input && !$(this).hasClass("btn-secondary")) {
+                $(this).trigger("click");
+                rackTileExists = true;                
+                return false;
+            }
+        });
+        if (!rackTileExists) {
+            $('.rack_chartile').each(function () {
+                if ($(this).children().first(".rack_chartile_letter").text() == "*") {
+                    $(this).trigger("click");
+                    rackTileExists = true;
+                    return false;
+                }
+            });
+        }
+        if (!rackTileExists && input.match(letters)) {
+            updateStatusMessage("You do not have the letter in possesion", "danger");
+            return;
+        }
+    });
+
     $(document).on("click", "#clearPlacements", function () {
+        var tilesReturned = 0;
         $('*[id*=board_rack_chartile]:visible').each(function () {
             var rackCharTileId = $(this).attr("id").replace("board_", "");
             var parentId = $(this).parent().attr("id");
             $("#board_" + this.id).remove();
-            $("#" + parentId).html('<span id="board_chartile_0"><br/></span >');
-            toggleRackCharTileSelection($(".rack_chartile"));
+            $("#" + parentId).html('<span id="board_chartile_0" class="emptyBoardTile"><br/></span >');
+            tilesReturned++;
         });
+        toggleRackCharTileSelection($(".rack_chartile"));
+        if (tilesReturned > 0) originallySelectedTile.trigger("click");
     });
 
     $(document).on("click", "#getMoves", function () {
@@ -351,8 +458,15 @@ $(document).ready(function () {
     }
 
     function toggleRackCharTileSelection(tile) {
-        tile.toggleClass("btn-default");
-        tile.toggleClass("btn-secondary");
+        if (tile.length > 1) {
+            tile.removeClass("btn-secondary");
+            tile.removeClass("btn-default");
+            tile.addClass("btn-default");
+        } else {
+            tile.toggleClass("btn-default");
+            tile.toggleClass("btn-secondary");
+
+        }
         anchorUsed = false;
     }
 
@@ -536,5 +650,42 @@ $(document).ready(function () {
         $(".playerLog").height($("#board").height() / 2);
         $("#rowIndexes").height($("#board").height());
         $(".rowIndex").height($(".grid-item").height() + 1);
+    }
+
+    function getNextAvailableTile(tile, direction) {
+        var currentTileCoordinates = tile.attr("id").split("_");
+        var x = parseInt(currentTileCoordinates[1]);
+        var y = parseInt(currentTileCoordinates[2]);
+        var targetTile = null;
+        var scannedTile = null;
+        while (true) {
+            switch (direction) {
+                case "up":
+                    x--;
+                    break;
+                case "right":
+                    y++;
+                    break;
+                case "down":
+                    x++;
+                    break;
+                case "left":
+                    y--;
+                    break;
+            }
+            scannedTile = $("#tile_" + x + "_" + y);
+            if (checkIfTileIsEmpty(scannedTile) || scannedTile == null) {
+                targetTile = scannedTile;
+                break;
+            }
+        }
+        if (targetTile.length == 0) return tile;
+        else return targetTile;
+    }
+
+    function checkIfTileIsEmpty(tile) {
+        if (tile != null && !tile.hasClass("locked") && !tile.children().first().hasClass("board_rack_chartile")) {
+            return true;
+        } return false;
     }
 });

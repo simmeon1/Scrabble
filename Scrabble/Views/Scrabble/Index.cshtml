@@ -170,7 +170,7 @@
                             else
                             {
                                 <div id="tile_@(boardAs2DArray[i,j].BoardLocationX)_@(boardAs2DArray[i,j].BoardLocationY)" class="grid-item @(boardAs2DArray[i,j].BoardTileType.Type)">
-                                    <span id="board_chartile_0">
+                                    <span id="board_chartile_0" class="emptyBoardTile">
                                         <br />
                                     </span>
                                 </div>
@@ -222,6 +222,7 @@
             </div>
             <div id="statusMessage" class="col-xs-12">
             </div>
+            <div class="loadingSpinner"></div>
         </div>
     </div>
 </body>
