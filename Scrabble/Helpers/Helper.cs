@@ -420,6 +420,7 @@ namespace Scrabble.Helpers
             var playedWords = GetPlayedWords(data);
             var playedRackTiles = GetPlayedRackTiles(data);
             string logBuilder = "Player" + playerAtHand.ID + " played ";
+            playerAtHand.Moves = playerAtHand.Moves.Select(c => { c.IsNew = false; return c; }).ToList();
             for (int i = 0; i < playedWords.Length; i++)
             {
                 var playedWord = playedWords[i];
@@ -451,9 +452,14 @@ namespace Scrabble.Helpers
                     return new HttpStatusCodeResult(400, playedWordString + " is not a legal word.");
                 }
                 currentScoreOfMove = GetWordScore(usedBoardTiles);
+                var isHorizontal = usedBoardTiles[0].BoardLocationX == usedBoardTiles[1].BoardLocationX ? true : false;
+                var start = isHorizontal ? usedBoardTiles[0].BoardLocationY : usedBoardTiles[0].BoardLocationX;
+                var end = isHorizontal ? usedBoardTiles[usedBoardTiles.Count-1].BoardLocationY : usedBoardTiles[usedBoardTiles.Count - 1].BoardLocationX;
+                var index = isHorizontal ? usedBoardTiles[0].BoardLocationX : usedBoardTiles[0].BoardLocationY;
                 playedWordString = playedWordString.ToUpper();
                 game.AddScoreToPlayer(playerAtHand, currentScoreOfMove);
-                playerAtHand.Moves.Add(new Move { PlayerID = playerAtHand.ID, GameID = game.ID, Word = playedWordString, Score = currentScoreOfMove });
+                playerAtHand.Moves.Add(new Move { PlayerID = playerAtHand.ID, GameID = game.ID, Word = playedWordString, Score = currentScoreOfMove,
+                    IsHorizontal = isHorizontal, Index = index, Start = start, End = end, IsNew = true });
                 logBuilder += playedWordString + " for " + currentScoreOfMove + " points";
                 if (i == playedWords.Length - 1)
                 {

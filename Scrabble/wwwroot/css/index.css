@@ -59,6 +59,11 @@
     cursor: pointer;
 }
 
+.newMove {
+    font-weight: bold;
+    background-color: antiquewhite !important;
+}
+
 .playerLog {
     margin-top: 0px !important;
     padding-left: 0px;
@@ -81,7 +86,7 @@
     }
 
     .board_chartile_letter, .board_rack_chartile_letter {
-        font-size: 3.3vw;
+        font-size: 2.9vw;
     }
 
     .board_chartile_score, .board_rack_chartile_score {
@@ -96,7 +101,7 @@
     }
 
     .board_chartile_letter, .board_rack_chartile_letter {
-        font-size: 2.5vw;
+        font-size: 2.1vw;
     }
 
     .board_chartile_score, .board_rack_chartile_score {

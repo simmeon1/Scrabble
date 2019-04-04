@@ -249,8 +249,13 @@ namespace Scrabble.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    IsHorizontal = table.Column<bool>(nullable: false),
+                    Start = table.Column<int>(nullable: false),
+                    End = table.Column<int>(nullable: false),
+                    Index = table.Column<int>(nullable: false),
                     Word = table.Column<string>(nullable: true),
                     Score = table.Column<int>(nullable: false),
+                    IsNew = table.Column<bool>(nullable: false),
                     PlayerID = table.Column<int>(nullable: false),
                     GameID = table.Column<int>(nullable: false)
                 },

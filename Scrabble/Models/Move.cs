@@ -9,8 +9,13 @@ namespace Scrabble.Models
     public class Move
     {
         public int ID { get; set; }
+        public bool IsHorizontal { get; set; }
+        public int Start { get; set; }
+        public int End { get; set; }
+        public int Index { get; set; }
         public string Word { get; set; }
         public int Score { get; set; }
+        public bool IsNew { get; set; }
 
         public int PlayerID { get; set; }
         [ForeignKey("PlayerID")]
@@ -19,5 +24,10 @@ namespace Scrabble.Models
         public int GameID { get; set; }
         [ForeignKey("GameID")]
         public virtual Game Game { get; set; }
+
+        public string GetStringForPage()
+        {
+            return IsHorizontal + "_" + IsNew + "_" + Start + "_" + End + "_" + Index + "_" + Word + "_" + Score;
+        }
     }
 }

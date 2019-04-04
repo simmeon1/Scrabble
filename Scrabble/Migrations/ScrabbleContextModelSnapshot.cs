@@ -455,11 +455,21 @@ namespace Scrabble.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("End");
+
                     b.Property<int>("GameID");
+
+                    b.Property<int>("Index");
+
+                    b.Property<bool>("IsHorizontal");
+
+                    b.Property<bool>("IsNew");
 
                     b.Property<int>("PlayerID");
 
                     b.Property<int>("Score");
+
+                    b.Property<int>("Start");
 
                     b.Property<string>("Word");
 

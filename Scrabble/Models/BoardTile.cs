@@ -20,24 +20,9 @@ namespace Scrabble.Models
         [ForeignKey("CharTileID")]
         public virtual CharTile CharTile { get; set; }
 
-        /*public BoardTile ()
+        public override string ToString()
         {
-            /*BoardLocationX = -1;
-            BoardLocationY = -1;
-            ID = "" + BoardLocationX + "&" + BoardLocationY;
-            //WordDictionary = new WordDictionary(Language.English);
-            LetterTile = null;
-            BoardTileType = BoardTileTypes.Type.None;
+            return "X" + BoardLocationX + ", Y" + BoardLocationY + ", " + (CharTile == null ? "_" : CharTile.Letter.ToString());
         }
-
-        public BoardTile(int boardLocationX, int boardLocationY, CharTile charTile = null)
-        {
-            BoardLocationX = boardLocationX;
-            BoardLocationY = boardLocationY;
-            ID = "" + BoardLocationX + "&" + BoardLocationY;
-            //WordDictionary = new WordDictionary(Language.English);
-            CharTile = charTile;
-            BoardTileType = BoardTileType.None;
-        }*/
     }
 }

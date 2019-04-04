@@ -130,7 +130,7 @@
                                         @{ var moves = player.Moves.ToList();}
                                         @for (int i = 0; i < moves.Count; i++)
                                         {
-                                            <tr>
+                                            <tr id="@moves[moves.Count - 1 - i].GetStringForPage()" class="moveRowFromHistory @(moves[moves.Count - 1 - i].IsNew ? "newMove" : "")">
                                                 <td>@moves[moves.Count - 1 - i].Word</td>
                                                 <td>@moves[moves.Count - 1 - i].Score</td>
                                             </tr>
@@ -208,7 +208,7 @@
                                         @{ var moves = player.Moves.ToList();}
                                         @for (int i = 0; i < moves.Count; i++)
                                         {
-                                            <tr>
+                                            <tr id="@moves[moves.Count - 1 - i].GetStringForPage()" class="moveRowFromHistory @(moves[moves.Count - 1 - i].IsNew ? "newMove" : "")">
                                                 <td>@moves[moves.Count - 1 - i].Word</td>
                                                 <td>@moves[moves.Count - 1 - i].Score</td>
                                             </tr>

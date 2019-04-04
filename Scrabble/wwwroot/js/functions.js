@@ -22,6 +22,26 @@ $(document).ready(function () {
         $(".board_rack_chartile").height($(".board_rack_chartile").parent().height() - 2);
     });
 
+
+    $(".moveRowFromHistory").hover(function () {
+        
+    });
+
+
+    $(document).on("mouseover", ".moveRowFromHistory", function () {
+        var moveDetails = $(this).closest("tr").attr("id").split("_");
+        var direction = moveDetails[0];
+        direction = direction == "True" ? "Horizontal" : "Vertical";
+        var start = parseInt(moveDetails[2]);
+        var end = parseInt(moveDetails[3]);
+        var secondaryIndex = parseInt(moveDetails[4]);
+        $("*").removeClass("moveMarked");
+        for (var i = start; i <= end; i++) {
+            direction == "Horizontal" ? $("#tile_" + secondaryIndex + "_" + i).addClass("moveMarked")
+                : $("#tile_" + i + "_" + secondaryIndex).addClass("moveMarked");
+        }
+    });
+
     // / );
     //$("#statusMessage").hide();
 
@@ -138,9 +158,11 @@ $(document).ready(function () {
 
     $("body").keydown(function (e) {
         var input = e.key.toUpperCase();
+        //if (input != "BACKSPACE" || input != "ENTER" || input != "ARROWRIGHT" || input != "ARROWLEFT" || input != "ARROWUP" || input != "ARROWDOWN"
+        //    || !input.match(letters))
         var letters = /^[A-Za-z]+$/;
         if (activeTile == "") {
-            updateStatusMessage("Please select a tile.", "danger");
+            //updateStatusMessage("Please select a tile.", "danger");
             return;
         }
         var activeTileCoordinates = activeTile.attr("id").split("_");
@@ -180,7 +202,7 @@ $(document).ready(function () {
         }
         var rackTileExists = false;
         if (!input.match(letters)) {
-            updateStatusMessage("You can only type letters.", "danger");
+            //updateStatusMessage("You can only type letters.", "danger");
             return;
         }
         $('.rack_chartile').each(function () {
@@ -420,6 +442,7 @@ $(document).ready(function () {
                 view.lastIndexOf("<body>"),
                 view.lastIndexOf("</body>")
             );
+            $("*").removeClass("newMove");
             //$("#validMovesButton").replaceWith($("#getMoves"));
             $("#validMovesButton").hide();
             animateHtmlUpdates($("body"), viewBody);
