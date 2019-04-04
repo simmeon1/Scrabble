@@ -155,7 +155,7 @@ namespace Scrabble.Helpers
                     {
                         if (retriesForCurrentAnchor != 0)
                         {
-                            TimeLimit += 5;
+                            TimeLimit += 3;
                             retriesForCurrentAnchor--;
                             i--;
                             Stopwatch.Restart();

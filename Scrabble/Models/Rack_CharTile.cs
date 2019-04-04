@@ -18,22 +18,6 @@ namespace Scrabble.Models
         [ForeignKey("CharTileID")]
         public virtual CharTile CharTile { get; set; }
 
-        /*public int Pouch_CharTileID { get; set; }
-        [ForeignKey("Pouch_CharTileID")]
-        public Pouch_CharTile Pouch_CharTile { get; set; }*/
-
-        /*public int GameID { get; set; }
-        [ForeignKey("GameID")]
-        public Game Game { get; set; }*/
-
         public int Count { get; set; }
-
-        //public Rack_CharTile (int id, int rackId, int charTileId)
-        //{
-        //    ID = id;
-        //    RackID = rackId;
-        //    CharTileID = charTileId;
-        //    Count = 1;
-        //}
     }
 }

@@ -12,18 +12,13 @@ namespace Scrabble.Models
 
         public int GameLanguageID { get; set; }
         public virtual GameLanguage GameLanguage { get; set; }
-        //public int RackSize { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
-        //public virtual ICollection<Rack> Racks { get; set; }
-
 
         public int BoardID { get; set; }
-        //[ForeignKey("BoardID")]
         public virtual Board Board { get; set; }
 
         public int PouchID { get; set; }
-        //[ForeignKey("PouchID")]
         public virtual Pouch Pouch { get; set; }
 
         public int WordDictionaryID { get; set; }
@@ -78,7 +73,7 @@ namespace Scrabble.Models
             }
             if (!newPlayerAtHand.IsHuman)
             {
-                var moveGenerator = Helper.GetMoveGenerator(this, Moves.Where(m => m.GameID == ID).ToList(), 10);
+                var moveGenerator = Helper.GetMoveGenerator(this, Moves.Where(m => m.GameID == ID).ToList(), 1);
                 var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
                 var validTransposedMovesList = moveGenerator.GetValidMoves(false);
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();

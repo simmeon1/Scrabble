@@ -1,15 +1,4 @@
-﻿//namespace Scrabble.Models
-//{
-//    public class GameLanguages
-//    {
-//        public enum Language
-//        {
-//            English
-//        }
-//    }
-//}
-
-namespace Scrabble.Models
+﻿namespace Scrabble.Models
 {
     public class GameLanguage
     {

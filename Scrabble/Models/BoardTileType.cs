@@ -1,12 +1,4 @@
-﻿//namespace Scrabble.Models
-//{
-//    public enum BoardTileType
-//    {
-//        None, DL, TL, DW, TW, Start
-//    }
-//}
-
-namespace Scrabble.Models
+﻿namespace Scrabble.Models
 {
     public class BoardTileType
     {

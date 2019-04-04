@@ -43,7 +43,7 @@ namespace Scrabble.Models
             var tileEntryInDb = rackTiles.Where(c => c.CharTileID == tile.ID).FirstOrDefault();
             if (tileEntryInDb == null)
             {
-                tileEntryInDb = rackTiles.Where(x => x.ID == 1).FirstOrDefault();
+                tileEntryInDb = rackTiles.Where(x => x.CharTile.ID == 1).FirstOrDefault();
             }
             if (tileEntryInDb.Count == 1)
             {
@@ -60,7 +60,7 @@ namespace Scrabble.Models
             var tileEntryInDb = rackTiles.Where(t => t.CharTile.Letter == c && t.CharTile.Score != 0).FirstOrDefault();
             if (tileEntryInDb == null)
             {
-                tileEntryInDb = rackTiles.Where(x => x.ID == 1).FirstOrDefault();
+                tileEntryInDb = rackTiles.Where(x => x.CharTile.ID == 1).FirstOrDefault();
             }
             tile = tileEntryInDb.CharTile;
             if (tileEntryInDb.Count == 1)
@@ -80,7 +80,7 @@ namespace Scrabble.Models
             var tileEntryInDb = rackTiles.Where(t => t.CharTile.Letter == c && t.CharTile.Score != 0).FirstOrDefault();
             if (tileEntryInDb == null)
             {
-                tileEntryInDb = rackTiles.Where(x => x.ID == 1).FirstOrDefault();
+                tileEntryInDb = rackTiles.Where(x => x.CharTile.ID == 1).FirstOrDefault();
             }
             tile = tileEntryInDb.CharTile;
             return tile;
@@ -94,8 +94,6 @@ namespace Scrabble.Models
             {
                 tileCount += entry.Count;
             }
-            //if (tileCount < RackSize)
-            //{
                 var tileEntryInDb = rackTiles.Where(c => c.CharTileID == tile.ID).FirstOrDefault();
                 if (tileEntryInDb == null)
                 {
@@ -103,21 +101,7 @@ namespace Scrabble.Models
                 }
                 else tileEntryInDb.Count++;
                 Rack_CharTiles = rackTiles;
-            //}          
         }
-
-        //public void AddToRack(char x)
-        //{
-        //    List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
-        //    var tileEntryInDb = rackTiles.Where(c => c.CharTile.Letter == x).FirstOrDefault();
-        //    if (tileEntryInDb == null)
-        //    {
-        //        rackTiles.Add(new Rack_CharTile { CharTileID = Game.WordDictionary.CharTiles.Where(c => c.Letter == x).FirstOrDefault().ID,
-        //            RackID = ID, Count = 1 });
-        //    }
-        //    else tileEntryInDb.Count++;
-        //    Rack_CharTiles = rackTiles;
-        //}
 
         public bool CheckIfTileIsInRack(char c, bool includingBlanks)
         {

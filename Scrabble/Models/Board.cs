@@ -52,27 +52,6 @@ namespace Scrabble.Models
 
         public BoardTile[,] Transpose2DArray(BoardTile[,] boardArray)
         {
-            //List<BoardTile[]> rotatedArrayList = new List<BoardTile[]>();
-            //for (var i = 0; i < boardArray.GetLength(1); i++)
-            //{
-            //    var boardColumnAsARow = new List<BoardTile>();
-            //    for (var j = 0; j < boardArray.GetLength(0); j++)
-            //    {
-            //        boardColumnAsARow.Add(boardArray[j, i]);
-            //    }
-            //    rotatedArrayList.Add(boardColumnAsARow.ToArray());
-            //}
-            //rotatedArrayList.Reverse();
-            //var rotatedArray = rotatedArrayList.ToArray();
-            //BoardTile[,] resultArray = new BoardTile[boardArray.GetLength(1), boardArray.GetLength(0)];
-            //for (int i = 0; i < resultArray.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < resultArray.GetLength(1); j++)
-            //    {
-            //        resultArray[i, j] = rotatedArray[i][j];
-            //    }
-            //}
-            //return resultArray;
             int w = boardArray.GetLength(0);
             int h = boardArray.GetLength(1);
 
@@ -92,14 +71,6 @@ namespace Scrabble.Models
         public List<int[]> GetAnchors(BoardTile[,] boardArray)
         {
             List<int[]> listOfValidAnchorCoordinates = new List<int[]>();
-            //bool[,] arrayWithAnchors = new bool[Rows, Columns];
-            //for (int i = 0; i < arrayWithAnchors.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < arrayWithAnchors.GetLength(1); j++)
-            //    {
-            //        arrayWithAnchors[i, j] = false;
-            //    }
-            //}
             for (int i = 0; i < boardArray.GetLength(0); i++)
             {
                 for (int j = 0; j < boardArray.GetLength(1); j++)
@@ -114,7 +85,6 @@ namespace Scrabble.Models
                     {
                         if (i > 0 && boardArray[i - 1, j].CharTile == null)
                         {
-                            //arrayWithAnchors[i - 1, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i - 1, j };
@@ -125,7 +95,6 @@ namespace Scrabble.Models
                         
                         if (i < boardArray.GetLength(0) - 1 && boardArray[i + 1, j].CharTile == null)
                         {
-                            //arrayWithAnchors[i + 1, j] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i + 1, j };
@@ -135,7 +104,6 @@ namespace Scrabble.Models
                         
                         if (j > 0 && boardArray[i, j - 1].CharTile == null)
                         {
-                            //arrayWithAnchors[i, j - 1] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i, j - 1 };
@@ -145,7 +113,6 @@ namespace Scrabble.Models
                         
                         if (j < boardArray.GetLength(1) - 1 && boardArray[i, j + 1].CharTile == null)
                         {
-                            //arrayWithAnchors[i, j + 1] = true;
                             if (listOfValidAnchorCoordinates != null)
                             {
                                 var coordinates = new int[] { i, j + 1 };
@@ -177,11 +144,6 @@ namespace Scrabble.Models
                 int tileX = Int32.Parse(tileDetails[0]);
                 int tileY = Int32.Parse(tileDetails[1]);
                 int tileCharTileId = Int32.Parse(tileDetails[2]);
-                //var anchors = GetAnchors(boardArray);
-                //if (anchors[tileX, tileY] == true)
-                //{
-                //    return true;
-                //}
             }
             return false;
         }

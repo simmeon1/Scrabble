@@ -99,7 +99,6 @@ namespace Scrabble.Helpers
             }
             return words.Split(";");
         }
-
         public static Dictionary<BoardTile, List<CharTile>> GetValidCrossChecksOneWay(BoardTile[,] boardArray, WordDictionary dictionary)
         {
             var dawg = LoadDawg(dictionary.GameLanguage);
@@ -162,7 +161,6 @@ namespace Scrabble.Helpers
             }
             return validCrossChecks;
         }
-
         public static Dictionary<BoardTile, List<CharTile>> GetValidCrossChecksCombined(Dictionary<BoardTile, List<CharTile>> validUntransposedCossChecks, Dictionary<BoardTile, List<CharTile>> validTransposedCrossChecks)
         {
             Dictionary<BoardTile, List<CharTile>> validCrossChecks = new Dictionary<BoardTile, List<CharTile>>();
@@ -227,7 +225,6 @@ namespace Scrabble.Helpers
             }
             return tiles.Split(",");
         }
-
         public static void GetBoardArrayFromHtml(List<KeyValuePair<string, StringValues>> data)
         {
             string boardArrayString = "";
@@ -517,7 +514,6 @@ namespace Scrabble.Helpers
                 list[n] = value;
             }
         }
-
         public static void InsertInArray(object[] array, int index, object val)
         {
             for (int i = index; i < array.Length; i++)
