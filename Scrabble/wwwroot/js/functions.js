@@ -327,6 +327,17 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", "#shuffle", function () {
+        shuffleRack();
+    });
+
+    //$(document).on("click", "#showPremiums", function () {
+    //    var color = $('.DoubleLetter').css('background-color');
+    //    if (color != "none") {
+    //        $(".DoubleLetter").css('background-color', 'none');
+    //    }
+    //});
+
     $(document).on("click", "#submit", function () {
 
         showAnchors(true);
@@ -710,5 +721,14 @@ $(document).ready(function () {
         if (tile != null && !tile.hasClass("locked") && !tile.children().first().hasClass("board_rack_chartile")) {
             return true;
         } return false;
+    }
+
+    function shuffleRack() {
+        var parent = $("#rack p");
+        var tiles = parent.children();
+        while (tiles.length) {
+            parent.append(tiles.splice(Math.floor(Math.random() * tiles.length), 1)[0]);
+        }
+        refreshElementSizes();
     }
 });

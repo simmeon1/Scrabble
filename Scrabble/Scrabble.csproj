@@ -63,6 +63,16 @@
     <Compile Remove="Migrations\20190401215110_Initial.Designer.cs" />
     <Compile Remove="Migrations\20190403212359_Initial.cs" />
     <Compile Remove="Migrations\20190403212359_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190403222443_Initial.cs" />
+    <Compile Remove="Migrations\20190403222443_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190405131748_Initial.cs" />
+    <Compile Remove="Migrations\20190405131748_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190405132001_Initial.cs" />
+    <Compile Remove="Migrations\20190405132001_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190405133138_Initial.cs" />
+    <Compile Remove="Migrations\20190405133138_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190405140938_Initial.cs" />
+    <Compile Remove="Migrations\20190405140938_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

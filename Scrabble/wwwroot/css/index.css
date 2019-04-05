@@ -183,19 +183,19 @@
 
 
 .DoubleLetter {
-    background-color: lightblue;
+    background-color: lightblue !important;
 }
 
 .TripleLetter {
-    background-color: royalblue;
+    background-color: royalblue !important;
 }
 
 .DoubleWord {
-    background-color: orange;
+    background-color: orange !important;
 }
 
 .TripleWord {
-    background-color: orangered;
+    background-color: orangered !important;
 }
 
 .Start {

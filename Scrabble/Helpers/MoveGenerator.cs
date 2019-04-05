@@ -200,7 +200,7 @@ namespace Scrabble.Helpers
                         }
                         else
                         {
-                            tileToWorkWith = Dictionary.CharTiles.Where(c => c.ID == 1).FirstOrDefault();
+                            tileToWorkWith = Dictionary.CharTiles.Where(c => c.Letter == '*').FirstOrDefault();
                         }
                         for (int i = 0; i < partialWord.Length; i++)
                         {
@@ -289,7 +289,7 @@ namespace Scrabble.Helpers
                         }
                         else
                         {
-                            tileToWorkWith = Dictionary.CharTiles.Where(c => c.ID == 1).FirstOrDefault();
+                            tileToWorkWith = Dictionary.CharTiles.Where(c => c.Letter == '*').FirstOrDefault();
                         }
                         RackOfCurrentPlayer.SubstractFromRack(tileToWorkWith);
                         boardArray[anchor[0], anchor[1]].CharTile = Dictionary.CharTiles.Where(c => c.Letter == label[0] && c.Score == tileToWorkWith.Score).FirstOrDefault();

@@ -52,7 +52,7 @@
 
                                     @for (int i = 0; i < c.Count; i++)
                                     {
-                                        <button id="rack_chartile_@(rackIndex)_@(c.CharTileID)" class="btn btn-default btn rack_chartile">
+                                        <button id="rack_chartile_@(rackIndex)_@(c.CharTileID)" class="btn btn-default rack_chartile">
                                             <span class="rack_chartile_letter">@(c.CharTile.Letter)</span>
                                             <span class="rack_chartile_score">@(c.CharTile.Score)</span>
                                         </button>
@@ -67,7 +67,9 @@
             </div>
             <div id="controls">
                 <p>
-                    <button id="showAnchors" class="btn btn-default btn-sm"><span>Anchors</span></button>
+                    @*<button id="showAnchors" class="btn btn-default btn-sm"><span>Anchors</span></button>*@
+                    @*<button id="showPremiums" class="btn btn-default btn-sm"><span>Show Premiums</span></button>*@
+                    <button id="shuffle" class="btn btn-default btn-sm"><span>Shuffle</span></button>
                     <button id="clearPlacements" class="btn btn-default btn-sm"><span>Clear</span></button>
                     <button id="submit" class="btn btn-primary btn-sm"><span>Submit</span></button>
                     <button id="getMoves" class="btn btn-default btn-sm"><span>Get Moves</span></button>

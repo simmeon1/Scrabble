@@ -27,6 +27,11 @@ namespace Scrabble.Controllers
         public IActionResult Index()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            foreach (var p in game.Players)
+            {
+                p.Rack.RefillRackFromPouch();
+            }
+            _scrabbleContext.SaveChanges();
             if (TempData["FlipBoard"] != null)
             {
                 ViewBag.FlipBoard = TempData["FlipBoard"].ToString();

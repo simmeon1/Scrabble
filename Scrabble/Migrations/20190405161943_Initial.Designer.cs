@@ -10,7 +10,7 @@ using Scrabble.Models;
 namespace Scrabble.Migrations
 {
     [DbContext(typeof(ScrabbleContext))]
-    [Migration("20190403222443_Initial")]
+    [Migration("20190405161943_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,8 @@ namespace Scrabble.Migrations
                     b.ToTable("Boards");
 
                     b.HasData(
-                        new { ID = 1, Columns = 15, GameID = 1, Rows = 15 }
+                        new { ID = 1, Columns = 15, GameID = 1, Rows = 15 },
+                        new { ID = 2, Columns = 15, GameID = 2, Rows = 15 }
                     );
                 });
 
@@ -296,7 +297,232 @@ namespace Scrabble.Migrations
                         new { ID = 222, BoardID = 1, BoardLocationX = 11, BoardLocationY = 14, BoardTileTypeID = 2 },
                         new { ID = 223, BoardID = 1, BoardLocationX = 12, BoardLocationY = 14, BoardTileTypeID = 1 },
                         new { ID = 224, BoardID = 1, BoardLocationX = 13, BoardLocationY = 14, BoardTileTypeID = 1 },
-                        new { ID = 225, BoardID = 1, BoardLocationX = 14, BoardLocationY = 14, BoardTileTypeID = 5 }
+                        new { ID = 225, BoardID = 1, BoardLocationX = 14, BoardLocationY = 14, BoardTileTypeID = 5 },
+                        new { ID = 226, BoardID = 2, BoardLocationX = 0, BoardLocationY = 0, BoardTileTypeID = 5 },
+                        new { ID = 227, BoardID = 2, BoardLocationX = 1, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 228, BoardID = 2, BoardLocationX = 2, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 229, BoardID = 2, BoardLocationX = 3, BoardLocationY = 0, BoardTileTypeID = 2 },
+                        new { ID = 230, BoardID = 2, BoardLocationX = 4, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 231, BoardID = 2, BoardLocationX = 5, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 232, BoardID = 2, BoardLocationX = 6, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 233, BoardID = 2, BoardLocationX = 7, BoardLocationY = 0, BoardTileTypeID = 5 },
+                        new { ID = 234, BoardID = 2, BoardLocationX = 8, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 235, BoardID = 2, BoardLocationX = 9, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 236, BoardID = 2, BoardLocationX = 10, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 237, BoardID = 2, BoardLocationX = 11, BoardLocationY = 0, BoardTileTypeID = 2 },
+                        new { ID = 238, BoardID = 2, BoardLocationX = 12, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 239, BoardID = 2, BoardLocationX = 13, BoardLocationY = 0, BoardTileTypeID = 1 },
+                        new { ID = 240, BoardID = 2, BoardLocationX = 14, BoardLocationY = 0, BoardTileTypeID = 5 },
+                        new { ID = 241, BoardID = 2, BoardLocationX = 0, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 242, BoardID = 2, BoardLocationX = 1, BoardLocationY = 1, BoardTileTypeID = 4 },
+                        new { ID = 243, BoardID = 2, BoardLocationX = 2, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 244, BoardID = 2, BoardLocationX = 3, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 245, BoardID = 2, BoardLocationX = 4, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 246, BoardID = 2, BoardLocationX = 5, BoardLocationY = 1, BoardTileTypeID = 3 },
+                        new { ID = 247, BoardID = 2, BoardLocationX = 6, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 248, BoardID = 2, BoardLocationX = 7, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 249, BoardID = 2, BoardLocationX = 8, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 250, BoardID = 2, BoardLocationX = 9, BoardLocationY = 1, BoardTileTypeID = 3 },
+                        new { ID = 251, BoardID = 2, BoardLocationX = 10, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 252, BoardID = 2, BoardLocationX = 11, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 253, BoardID = 2, BoardLocationX = 12, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 254, BoardID = 2, BoardLocationX = 13, BoardLocationY = 1, BoardTileTypeID = 4 },
+                        new { ID = 255, BoardID = 2, BoardLocationX = 14, BoardLocationY = 1, BoardTileTypeID = 1 },
+                        new { ID = 256, BoardID = 2, BoardLocationX = 0, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 257, BoardID = 2, BoardLocationX = 1, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 258, BoardID = 2, BoardLocationX = 2, BoardLocationY = 2, BoardTileTypeID = 4 },
+                        new { ID = 259, BoardID = 2, BoardLocationX = 3, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 260, BoardID = 2, BoardLocationX = 4, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 261, BoardID = 2, BoardLocationX = 5, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 262, BoardID = 2, BoardLocationX = 6, BoardLocationY = 2, BoardTileTypeID = 2 },
+                        new { ID = 263, BoardID = 2, BoardLocationX = 7, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 264, BoardID = 2, BoardLocationX = 8, BoardLocationY = 2, BoardTileTypeID = 2 },
+                        new { ID = 265, BoardID = 2, BoardLocationX = 9, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 266, BoardID = 2, BoardLocationX = 10, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 267, BoardID = 2, BoardLocationX = 11, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 268, BoardID = 2, BoardLocationX = 12, BoardLocationY = 2, BoardTileTypeID = 4 },
+                        new { ID = 269, BoardID = 2, BoardLocationX = 13, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 270, BoardID = 2, BoardLocationX = 14, BoardLocationY = 2, BoardTileTypeID = 1 },
+                        new { ID = 271, BoardID = 2, BoardLocationX = 0, BoardLocationY = 3, BoardTileTypeID = 2 },
+                        new { ID = 272, BoardID = 2, BoardLocationX = 1, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 273, BoardID = 2, BoardLocationX = 2, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 274, BoardID = 2, BoardLocationX = 3, BoardLocationY = 3, BoardTileTypeID = 4 },
+                        new { ID = 275, BoardID = 2, BoardLocationX = 4, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 276, BoardID = 2, BoardLocationX = 5, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 277, BoardID = 2, BoardLocationX = 6, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 278, BoardID = 2, BoardLocationX = 7, BoardLocationY = 3, BoardTileTypeID = 2 },
+                        new { ID = 279, BoardID = 2, BoardLocationX = 8, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 280, BoardID = 2, BoardLocationX = 9, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 281, BoardID = 2, BoardLocationX = 10, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 282, BoardID = 2, BoardLocationX = 11, BoardLocationY = 3, BoardTileTypeID = 4 },
+                        new { ID = 283, BoardID = 2, BoardLocationX = 12, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 284, BoardID = 2, BoardLocationX = 13, BoardLocationY = 3, BoardTileTypeID = 1 },
+                        new { ID = 285, BoardID = 2, BoardLocationX = 14, BoardLocationY = 3, BoardTileTypeID = 2 },
+                        new { ID = 286, BoardID = 2, BoardLocationX = 0, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 287, BoardID = 2, BoardLocationX = 1, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 288, BoardID = 2, BoardLocationX = 2, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 289, BoardID = 2, BoardLocationX = 3, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 290, BoardID = 2, BoardLocationX = 4, BoardLocationY = 4, BoardTileTypeID = 4 },
+                        new { ID = 291, BoardID = 2, BoardLocationX = 5, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 292, BoardID = 2, BoardLocationX = 6, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 293, BoardID = 2, BoardLocationX = 7, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 294, BoardID = 2, BoardLocationX = 8, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 295, BoardID = 2, BoardLocationX = 9, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 296, BoardID = 2, BoardLocationX = 10, BoardLocationY = 4, BoardTileTypeID = 4 },
+                        new { ID = 297, BoardID = 2, BoardLocationX = 11, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 298, BoardID = 2, BoardLocationX = 12, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 299, BoardID = 2, BoardLocationX = 13, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 300, BoardID = 2, BoardLocationX = 14, BoardLocationY = 4, BoardTileTypeID = 1 },
+                        new { ID = 301, BoardID = 2, BoardLocationX = 0, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 302, BoardID = 2, BoardLocationX = 1, BoardLocationY = 5, BoardTileTypeID = 3 },
+                        new { ID = 303, BoardID = 2, BoardLocationX = 2, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 304, BoardID = 2, BoardLocationX = 3, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 305, BoardID = 2, BoardLocationX = 4, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 306, BoardID = 2, BoardLocationX = 5, BoardLocationY = 5, BoardTileTypeID = 3 },
+                        new { ID = 307, BoardID = 2, BoardLocationX = 6, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 308, BoardID = 2, BoardLocationX = 7, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 309, BoardID = 2, BoardLocationX = 8, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 310, BoardID = 2, BoardLocationX = 9, BoardLocationY = 5, BoardTileTypeID = 3 },
+                        new { ID = 311, BoardID = 2, BoardLocationX = 10, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 312, BoardID = 2, BoardLocationX = 11, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 313, BoardID = 2, BoardLocationX = 12, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 314, BoardID = 2, BoardLocationX = 13, BoardLocationY = 5, BoardTileTypeID = 3 },
+                        new { ID = 315, BoardID = 2, BoardLocationX = 14, BoardLocationY = 5, BoardTileTypeID = 1 },
+                        new { ID = 316, BoardID = 2, BoardLocationX = 0, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 317, BoardID = 2, BoardLocationX = 1, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 318, BoardID = 2, BoardLocationX = 2, BoardLocationY = 6, BoardTileTypeID = 2 },
+                        new { ID = 319, BoardID = 2, BoardLocationX = 3, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 320, BoardID = 2, BoardLocationX = 4, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 321, BoardID = 2, BoardLocationX = 5, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 322, BoardID = 2, BoardLocationX = 6, BoardLocationY = 6, BoardTileTypeID = 2 },
+                        new { ID = 323, BoardID = 2, BoardLocationX = 7, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 324, BoardID = 2, BoardLocationX = 8, BoardLocationY = 6, BoardTileTypeID = 2 },
+                        new { ID = 325, BoardID = 2, BoardLocationX = 9, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 326, BoardID = 2, BoardLocationX = 10, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 327, BoardID = 2, BoardLocationX = 11, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 328, BoardID = 2, BoardLocationX = 12, BoardLocationY = 6, BoardTileTypeID = 2 },
+                        new { ID = 329, BoardID = 2, BoardLocationX = 13, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 330, BoardID = 2, BoardLocationX = 14, BoardLocationY = 6, BoardTileTypeID = 1 },
+                        new { ID = 331, BoardID = 2, BoardLocationX = 0, BoardLocationY = 7, BoardTileTypeID = 5 },
+                        new { ID = 332, BoardID = 2, BoardLocationX = 1, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 333, BoardID = 2, BoardLocationX = 2, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 334, BoardID = 2, BoardLocationX = 3, BoardLocationY = 7, BoardTileTypeID = 2 },
+                        new { ID = 335, BoardID = 2, BoardLocationX = 4, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 336, BoardID = 2, BoardLocationX = 5, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 337, BoardID = 2, BoardLocationX = 6, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 338, BoardID = 2, BoardLocationX = 7, BoardLocationY = 7, BoardTileTypeID = 6 },
+                        new { ID = 339, BoardID = 2, BoardLocationX = 8, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 340, BoardID = 2, BoardLocationX = 9, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 341, BoardID = 2, BoardLocationX = 10, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 342, BoardID = 2, BoardLocationX = 11, BoardLocationY = 7, BoardTileTypeID = 2 },
+                        new { ID = 343, BoardID = 2, BoardLocationX = 12, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 344, BoardID = 2, BoardLocationX = 13, BoardLocationY = 7, BoardTileTypeID = 1 },
+                        new { ID = 345, BoardID = 2, BoardLocationX = 14, BoardLocationY = 7, BoardTileTypeID = 5 },
+                        new { ID = 346, BoardID = 2, BoardLocationX = 0, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 347, BoardID = 2, BoardLocationX = 1, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 348, BoardID = 2, BoardLocationX = 2, BoardLocationY = 8, BoardTileTypeID = 2 },
+                        new { ID = 349, BoardID = 2, BoardLocationX = 3, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 350, BoardID = 2, BoardLocationX = 4, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 351, BoardID = 2, BoardLocationX = 5, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 352, BoardID = 2, BoardLocationX = 6, BoardLocationY = 8, BoardTileTypeID = 2 },
+                        new { ID = 353, BoardID = 2, BoardLocationX = 7, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 354, BoardID = 2, BoardLocationX = 8, BoardLocationY = 8, BoardTileTypeID = 2 },
+                        new { ID = 355, BoardID = 2, BoardLocationX = 9, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 356, BoardID = 2, BoardLocationX = 10, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 357, BoardID = 2, BoardLocationX = 11, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 358, BoardID = 2, BoardLocationX = 12, BoardLocationY = 8, BoardTileTypeID = 2 },
+                        new { ID = 359, BoardID = 2, BoardLocationX = 13, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 360, BoardID = 2, BoardLocationX = 14, BoardLocationY = 8, BoardTileTypeID = 1 },
+                        new { ID = 361, BoardID = 2, BoardLocationX = 0, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 362, BoardID = 2, BoardLocationX = 1, BoardLocationY = 9, BoardTileTypeID = 3 },
+                        new { ID = 363, BoardID = 2, BoardLocationX = 2, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 364, BoardID = 2, BoardLocationX = 3, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 365, BoardID = 2, BoardLocationX = 4, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 366, BoardID = 2, BoardLocationX = 5, BoardLocationY = 9, BoardTileTypeID = 3 },
+                        new { ID = 367, BoardID = 2, BoardLocationX = 6, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 368, BoardID = 2, BoardLocationX = 7, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 369, BoardID = 2, BoardLocationX = 8, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 370, BoardID = 2, BoardLocationX = 9, BoardLocationY = 9, BoardTileTypeID = 3 },
+                        new { ID = 371, BoardID = 2, BoardLocationX = 10, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 372, BoardID = 2, BoardLocationX = 11, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 373, BoardID = 2, BoardLocationX = 12, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 374, BoardID = 2, BoardLocationX = 13, BoardLocationY = 9, BoardTileTypeID = 3 },
+                        new { ID = 375, BoardID = 2, BoardLocationX = 14, BoardLocationY = 9, BoardTileTypeID = 1 },
+                        new { ID = 376, BoardID = 2, BoardLocationX = 0, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 377, BoardID = 2, BoardLocationX = 1, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 378, BoardID = 2, BoardLocationX = 2, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 379, BoardID = 2, BoardLocationX = 3, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 380, BoardID = 2, BoardLocationX = 4, BoardLocationY = 10, BoardTileTypeID = 4 },
+                        new { ID = 381, BoardID = 2, BoardLocationX = 5, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 382, BoardID = 2, BoardLocationX = 6, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 383, BoardID = 2, BoardLocationX = 7, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 384, BoardID = 2, BoardLocationX = 8, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 385, BoardID = 2, BoardLocationX = 9, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 386, BoardID = 2, BoardLocationX = 10, BoardLocationY = 10, BoardTileTypeID = 4 },
+                        new { ID = 387, BoardID = 2, BoardLocationX = 11, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 388, BoardID = 2, BoardLocationX = 12, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 389, BoardID = 2, BoardLocationX = 13, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 390, BoardID = 2, BoardLocationX = 14, BoardLocationY = 10, BoardTileTypeID = 1 },
+                        new { ID = 391, BoardID = 2, BoardLocationX = 0, BoardLocationY = 11, BoardTileTypeID = 2 },
+                        new { ID = 392, BoardID = 2, BoardLocationX = 1, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 393, BoardID = 2, BoardLocationX = 2, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 394, BoardID = 2, BoardLocationX = 3, BoardLocationY = 11, BoardTileTypeID = 4 },
+                        new { ID = 395, BoardID = 2, BoardLocationX = 4, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 396, BoardID = 2, BoardLocationX = 5, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 397, BoardID = 2, BoardLocationX = 6, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 398, BoardID = 2, BoardLocationX = 7, BoardLocationY = 11, BoardTileTypeID = 2 },
+                        new { ID = 399, BoardID = 2, BoardLocationX = 8, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 400, BoardID = 2, BoardLocationX = 9, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 401, BoardID = 2, BoardLocationX = 10, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 402, BoardID = 2, BoardLocationX = 11, BoardLocationY = 11, BoardTileTypeID = 4 },
+                        new { ID = 403, BoardID = 2, BoardLocationX = 12, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 404, BoardID = 2, BoardLocationX = 13, BoardLocationY = 11, BoardTileTypeID = 1 },
+                        new { ID = 405, BoardID = 2, BoardLocationX = 14, BoardLocationY = 11, BoardTileTypeID = 2 },
+                        new { ID = 406, BoardID = 2, BoardLocationX = 0, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 407, BoardID = 2, BoardLocationX = 1, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 408, BoardID = 2, BoardLocationX = 2, BoardLocationY = 12, BoardTileTypeID = 4 },
+                        new { ID = 409, BoardID = 2, BoardLocationX = 3, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 410, BoardID = 2, BoardLocationX = 4, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 411, BoardID = 2, BoardLocationX = 5, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 412, BoardID = 2, BoardLocationX = 6, BoardLocationY = 12, BoardTileTypeID = 2 },
+                        new { ID = 413, BoardID = 2, BoardLocationX = 7, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 414, BoardID = 2, BoardLocationX = 8, BoardLocationY = 12, BoardTileTypeID = 2 },
+                        new { ID = 415, BoardID = 2, BoardLocationX = 9, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 416, BoardID = 2, BoardLocationX = 10, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 417, BoardID = 2, BoardLocationX = 11, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 418, BoardID = 2, BoardLocationX = 12, BoardLocationY = 12, BoardTileTypeID = 4 },
+                        new { ID = 419, BoardID = 2, BoardLocationX = 13, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 420, BoardID = 2, BoardLocationX = 14, BoardLocationY = 12, BoardTileTypeID = 1 },
+                        new { ID = 421, BoardID = 2, BoardLocationX = 0, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 422, BoardID = 2, BoardLocationX = 1, BoardLocationY = 13, BoardTileTypeID = 4 },
+                        new { ID = 423, BoardID = 2, BoardLocationX = 2, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 424, BoardID = 2, BoardLocationX = 3, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 425, BoardID = 2, BoardLocationX = 4, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 426, BoardID = 2, BoardLocationX = 5, BoardLocationY = 13, BoardTileTypeID = 3 },
+                        new { ID = 427, BoardID = 2, BoardLocationX = 6, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 428, BoardID = 2, BoardLocationX = 7, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 429, BoardID = 2, BoardLocationX = 8, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 430, BoardID = 2, BoardLocationX = 9, BoardLocationY = 13, BoardTileTypeID = 3 },
+                        new { ID = 431, BoardID = 2, BoardLocationX = 10, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 432, BoardID = 2, BoardLocationX = 11, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 433, BoardID = 2, BoardLocationX = 12, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 434, BoardID = 2, BoardLocationX = 13, BoardLocationY = 13, BoardTileTypeID = 4 },
+                        new { ID = 435, BoardID = 2, BoardLocationX = 14, BoardLocationY = 13, BoardTileTypeID = 1 },
+                        new { ID = 436, BoardID = 2, BoardLocationX = 0, BoardLocationY = 14, BoardTileTypeID = 5 },
+                        new { ID = 437, BoardID = 2, BoardLocationX = 1, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 438, BoardID = 2, BoardLocationX = 2, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 439, BoardID = 2, BoardLocationX = 3, BoardLocationY = 14, BoardTileTypeID = 2 },
+                        new { ID = 440, BoardID = 2, BoardLocationX = 4, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 441, BoardID = 2, BoardLocationX = 5, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 442, BoardID = 2, BoardLocationX = 6, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 443, BoardID = 2, BoardLocationX = 7, BoardLocationY = 14, BoardTileTypeID = 5 },
+                        new { ID = 444, BoardID = 2, BoardLocationX = 8, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 445, BoardID = 2, BoardLocationX = 9, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 446, BoardID = 2, BoardLocationX = 10, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 447, BoardID = 2, BoardLocationX = 11, BoardLocationY = 14, BoardTileTypeID = 2 },
+                        new { ID = 448, BoardID = 2, BoardLocationX = 12, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 449, BoardID = 2, BoardLocationX = 13, BoardLocationY = 14, BoardTileTypeID = 1 },
+                        new { ID = 450, BoardID = 2, BoardLocationX = 14, BoardLocationY = 14, BoardTileTypeID = 5 }
                     );
                 });
 
@@ -399,7 +625,68 @@ namespace Scrabble.Migrations
                         new { ID = 50, GameLanguageID = 1, Letter = "W", Score = 0, WordDictionaryID = 1 },
                         new { ID = 51, GameLanguageID = 1, Letter = "X", Score = 0, WordDictionaryID = 1 },
                         new { ID = 52, GameLanguageID = 1, Letter = "Y", Score = 0, WordDictionaryID = 1 },
-                        new { ID = 53, GameLanguageID = 1, Letter = "Z", Score = 0, WordDictionaryID = 1 }
+                        new { ID = 53, GameLanguageID = 1, Letter = "Z", Score = 0, WordDictionaryID = 1 },
+                        new { ID = 54, GameLanguageID = 2, Letter = "*", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 55, GameLanguageID = 2, Letter = "А", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 56, GameLanguageID = 2, Letter = "Б", Score = 2, WordDictionaryID = 2 },
+                        new { ID = 57, GameLanguageID = 2, Letter = "В", Score = 2, WordDictionaryID = 2 },
+                        new { ID = 58, GameLanguageID = 2, Letter = "Г", Score = 3, WordDictionaryID = 2 },
+                        new { ID = 59, GameLanguageID = 2, Letter = "Д", Score = 2, WordDictionaryID = 2 },
+                        new { ID = 60, GameLanguageID = 2, Letter = "Е", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 61, GameLanguageID = 2, Letter = "Ж", Score = 4, WordDictionaryID = 2 },
+                        new { ID = 62, GameLanguageID = 2, Letter = "З", Score = 4, WordDictionaryID = 2 },
+                        new { ID = 63, GameLanguageID = 2, Letter = "И", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 64, GameLanguageID = 2, Letter = "Й", Score = 5, WordDictionaryID = 2 },
+                        new { ID = 65, GameLanguageID = 2, Letter = "К", Score = 2, WordDictionaryID = 2 },
+                        new { ID = 66, GameLanguageID = 2, Letter = "Л", Score = 2, WordDictionaryID = 2 },
+                        new { ID = 67, GameLanguageID = 2, Letter = "М", Score = 2, WordDictionaryID = 2 },
+                        new { ID = 68, GameLanguageID = 2, Letter = "Н", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 69, GameLanguageID = 2, Letter = "О", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 70, GameLanguageID = 2, Letter = "П", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 71, GameLanguageID = 2, Letter = "Р", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 72, GameLanguageID = 2, Letter = "С", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 73, GameLanguageID = 2, Letter = "Т", Score = 1, WordDictionaryID = 2 },
+                        new { ID = 74, GameLanguageID = 2, Letter = "У", Score = 5, WordDictionaryID = 2 },
+                        new { ID = 75, GameLanguageID = 2, Letter = "Ф", Score = 10, WordDictionaryID = 2 },
+                        new { ID = 76, GameLanguageID = 2, Letter = "Х", Score = 5, WordDictionaryID = 2 },
+                        new { ID = 77, GameLanguageID = 2, Letter = "Ц", Score = 8, WordDictionaryID = 2 },
+                        new { ID = 78, GameLanguageID = 2, Letter = "Ч", Score = 5, WordDictionaryID = 2 },
+                        new { ID = 79, GameLanguageID = 2, Letter = "Ш", Score = 8, WordDictionaryID = 2 },
+                        new { ID = 80, GameLanguageID = 2, Letter = "Щ", Score = 10, WordDictionaryID = 2 },
+                        new { ID = 81, GameLanguageID = 2, Letter = "Ъ", Score = 3, WordDictionaryID = 2 },
+                        new { ID = 82, GameLanguageID = 2, Letter = "Ь", Score = 10, WordDictionaryID = 2 },
+                        new { ID = 83, GameLanguageID = 2, Letter = "Ю", Score = 8, WordDictionaryID = 2 },
+                        new { ID = 84, GameLanguageID = 2, Letter = "Я", Score = 5, WordDictionaryID = 2 },
+                        new { ID = 85, GameLanguageID = 2, Letter = "А", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 86, GameLanguageID = 2, Letter = "Б", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 87, GameLanguageID = 2, Letter = "В", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 88, GameLanguageID = 2, Letter = "Г", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 89, GameLanguageID = 2, Letter = "Д", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 90, GameLanguageID = 2, Letter = "Е", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 91, GameLanguageID = 2, Letter = "Ж", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 92, GameLanguageID = 2, Letter = "З", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 93, GameLanguageID = 2, Letter = "И", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 94, GameLanguageID = 2, Letter = "Й", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 95, GameLanguageID = 2, Letter = "К", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 96, GameLanguageID = 2, Letter = "Л", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 97, GameLanguageID = 2, Letter = "М", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 98, GameLanguageID = 2, Letter = "Н", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 99, GameLanguageID = 2, Letter = "О", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 100, GameLanguageID = 2, Letter = "П", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 101, GameLanguageID = 2, Letter = "Р", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 102, GameLanguageID = 2, Letter = "С", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 103, GameLanguageID = 2, Letter = "Т", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 104, GameLanguageID = 2, Letter = "У", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 105, GameLanguageID = 2, Letter = "Ф", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 106, GameLanguageID = 2, Letter = "Х", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 107, GameLanguageID = 2, Letter = "Ц", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 108, GameLanguageID = 2, Letter = "Ч", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 109, GameLanguageID = 2, Letter = "Ш", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 110, GameLanguageID = 2, Letter = "Щ", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 111, GameLanguageID = 2, Letter = "Ъ", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 112, GameLanguageID = 2, Letter = "Ь", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 113, GameLanguageID = 2, Letter = "Ю", Score = 0, WordDictionaryID = 2 },
+                        new { ID = 114, GameLanguageID = 2, Letter = "Я", Score = 0, WordDictionaryID = 2 }
                     );
                 });
 
@@ -428,7 +715,8 @@ namespace Scrabble.Migrations
                     b.ToTable("Games");
 
                     b.HasData(
-                        new { ID = 1, BoardID = 1, GameLanguageID = 1, Log = "Enjoy the game!", PouchID = 1, WordDictionaryID = 1 }
+                        new { ID = 1, BoardID = 1, GameLanguageID = 1, Log = "Enjoy the game!", PouchID = 1, WordDictionaryID = 1 },
+                        new { ID = 2, BoardID = 2, GameLanguageID = 2, Log = "Enjoy the game!", PouchID = 2, WordDictionaryID = 2 }
                     );
                 });
 
@@ -447,7 +735,8 @@ namespace Scrabble.Migrations
                     b.ToTable("GameLanguages");
 
                     b.HasData(
-                        new { ID = 1, CountOfLetters = 26, Language = "English" }
+                        new { ID = 1, CountOfLetters = 26, Language = "English" },
+                        new { ID = 2, CountOfLetters = 30, Language = "Bulgarian" }
                     );
                 });
 
@@ -514,7 +803,9 @@ namespace Scrabble.Migrations
 
                     b.HasData(
                         new { ID = 1, AtHand = true, GameID = 1, IsHuman = true, PouchID = 1, RackID = 1, Score = 0 },
-                        new { ID = 2, AtHand = false, GameID = 1, IsHuman = false, PouchID = 1, RackID = 2, Score = 0 }
+                        new { ID = 2, AtHand = false, GameID = 1, IsHuman = false, PouchID = 1, RackID = 2, Score = 0 },
+                        new { ID = 3, AtHand = true, GameID = 2, IsHuman = true, PouchID = 2, RackID = 3, Score = 0 },
+                        new { ID = 4, AtHand = false, GameID = 2, IsHuman = false, PouchID = 2, RackID = 4, Score = 0 }
                     );
                 });
 
@@ -534,7 +825,8 @@ namespace Scrabble.Migrations
                     b.ToTable("Pouches");
 
                     b.HasData(
-                        new { ID = 1, GameID = 1 }
+                        new { ID = 1, GameID = 1 },
+                        new { ID = 2, GameID = 2 }
                     );
                 });
 
@@ -585,7 +877,38 @@ namespace Scrabble.Migrations
                         new { ID = 24, CharTileID = 24, Count = 2, PouchID = 1 },
                         new { ID = 25, CharTileID = 25, Count = 1, PouchID = 1 },
                         new { ID = 26, CharTileID = 26, Count = 2, PouchID = 1 },
-                        new { ID = 27, CharTileID = 27, Count = 1, PouchID = 1 }
+                        new { ID = 27, CharTileID = 27, Count = 1, PouchID = 1 },
+                        new { ID = 54, CharTileID = 54, Count = 0, PouchID = 2 },
+                        new { ID = 55, CharTileID = 55, Count = 12, PouchID = 2 },
+                        new { ID = 56, CharTileID = 56, Count = 3, PouchID = 2 },
+                        new { ID = 57, CharTileID = 57, Count = 4, PouchID = 2 },
+                        new { ID = 58, CharTileID = 58, Count = 3, PouchID = 2 },
+                        new { ID = 59, CharTileID = 59, Count = 2, PouchID = 2 },
+                        new { ID = 60, CharTileID = 60, Count = 8, PouchID = 2 },
+                        new { ID = 61, CharTileID = 61, Count = 2, PouchID = 2 },
+                        new { ID = 62, CharTileID = 62, Count = 2, PouchID = 2 },
+                        new { ID = 63, CharTileID = 63, Count = 8, PouchID = 2 },
+                        new { ID = 64, CharTileID = 64, Count = 1, PouchID = 2 },
+                        new { ID = 65, CharTileID = 65, Count = 3, PouchID = 2 },
+                        new { ID = 66, CharTileID = 66, Count = 3, PouchID = 2 },
+                        new { ID = 67, CharTileID = 67, Count = 4, PouchID = 2 },
+                        new { ID = 68, CharTileID = 68, Count = 4, PouchID = 2 },
+                        new { ID = 69, CharTileID = 69, Count = 9, PouchID = 2 },
+                        new { ID = 70, CharTileID = 70, Count = 4, PouchID = 2 },
+                        new { ID = 71, CharTileID = 71, Count = 4, PouchID = 2 },
+                        new { ID = 72, CharTileID = 72, Count = 4, PouchID = 2 },
+                        new { ID = 73, CharTileID = 73, Count = 5, PouchID = 2 },
+                        new { ID = 74, CharTileID = 74, Count = 3, PouchID = 2 },
+                        new { ID = 75, CharTileID = 75, Count = 1, PouchID = 2 },
+                        new { ID = 76, CharTileID = 76, Count = 1, PouchID = 2 },
+                        new { ID = 77, CharTileID = 77, Count = 1, PouchID = 2 },
+                        new { ID = 78, CharTileID = 78, Count = 2, PouchID = 2 },
+                        new { ID = 79, CharTileID = 79, Count = 1, PouchID = 2 },
+                        new { ID = 80, CharTileID = 80, Count = 1, PouchID = 2 },
+                        new { ID = 81, CharTileID = 81, Count = 2, PouchID = 2 },
+                        new { ID = 82, CharTileID = 82, Count = 1, PouchID = 2 },
+                        new { ID = 83, CharTileID = 83, Count = 1, PouchID = 2 },
+                        new { ID = 84, CharTileID = 84, Count = 2, PouchID = 2 }
                     );
                 });
 
@@ -616,7 +939,9 @@ namespace Scrabble.Migrations
 
                     b.HasData(
                         new { ID = 1, GameID = 1, PlayerID = 1, PouchID = 1, RackSize = 7 },
-                        new { ID = 2, GameID = 1, PlayerID = 2, PouchID = 1, RackSize = 7 }
+                        new { ID = 2, GameID = 1, PlayerID = 2, PouchID = 1, RackSize = 7 },
+                        new { ID = 3, GameID = 2, PlayerID = 3, PouchID = 2, RackSize = 7 },
+                        new { ID = 4, GameID = 2, PlayerID = 4, PouchID = 2, RackSize = 7 }
                     );
                 });
 
@@ -639,20 +964,6 @@ namespace Scrabble.Migrations
                     b.HasIndex("RackID");
 
                     b.ToTable("Rack_CharTiles");
-
-                    b.HasData(
-                        new { ID = 1, CharTileID = 3, Count = 1, RackID = 1 },
-                        new { ID = 2, CharTileID = 16, Count = 1, RackID = 1 },
-                        new { ID = 3, CharTileID = 10, Count = 1, RackID = 1 },
-                        new { ID = 4, CharTileID = 2, Count = 2, RackID = 1 },
-                        new { ID = 5, CharTileID = 8, Count = 1, RackID = 1 },
-                        new { ID = 7, CharTileID = 4, Count = 1, RackID = 1 },
-                        new { ID = 8, CharTileID = 7, Count = 1, RackID = 2 },
-                        new { ID = 9, CharTileID = 17, Count = 1, RackID = 2 },
-                        new { ID = 10, CharTileID = 10, Count = 1, RackID = 2 },
-                        new { ID = 11, CharTileID = 14, Count = 1, RackID = 2 },
-                        new { ID = 12, CharTileID = 5, Count = 3, RackID = 2 }
-                    );
                 });
 
             modelBuilder.Entity("Scrabble.Models.WordDictionary", b =>
@@ -670,7 +981,8 @@ namespace Scrabble.Migrations
                     b.ToTable("WordDictionaries");
 
                     b.HasData(
-                        new { ID = 1, GameLanguageID = 1 }
+                        new { ID = 1, GameLanguageID = 1 },
+                        new { ID = 2, GameLanguageID = 2 }
                     );
                 });
 

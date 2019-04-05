@@ -43,7 +43,7 @@ namespace Scrabble.Models
             var tileEntryInDb = rackTiles.Where(c => c.CharTileID == tile.ID).FirstOrDefault();
             if (tileEntryInDb == null)
             {
-                tileEntryInDb = rackTiles.Where(x => x.CharTile.ID == 1).FirstOrDefault();
+                tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == '*').FirstOrDefault();
             }
             if (tileEntryInDb.Count == 1)
             {
@@ -60,7 +60,7 @@ namespace Scrabble.Models
             var tileEntryInDb = rackTiles.Where(t => t.CharTile.Letter == c && t.CharTile.Score != 0).FirstOrDefault();
             if (tileEntryInDb == null)
             {
-                tileEntryInDb = rackTiles.Where(x => x.CharTile.ID == 1).FirstOrDefault();
+                tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == '*').FirstOrDefault();
             }
             tile = tileEntryInDb.CharTile;
             if (tileEntryInDb.Count == 1)
@@ -80,7 +80,7 @@ namespace Scrabble.Models
             var tileEntryInDb = rackTiles.Where(t => t.CharTile.Letter == c && t.CharTile.Score != 0).FirstOrDefault();
             if (tileEntryInDb == null)
             {
-                tileEntryInDb = rackTiles.Where(x => x.CharTile.ID == 1).FirstOrDefault();
+                tileEntryInDb = rackTiles.Where(x => x.CharTile.Letter == '*').FirstOrDefault();
             }
             tile = tileEntryInDb.CharTile;
             return tile;
@@ -111,7 +111,7 @@ namespace Scrabble.Models
             {
                 if (includingBlanks)
                 {
-                    return rackTiles.Any(x => x.CharTile.ID == 1);
+                    return rackTiles.Any(x => x.CharTile.Letter == '*');
                 }
                 return false;
             }
