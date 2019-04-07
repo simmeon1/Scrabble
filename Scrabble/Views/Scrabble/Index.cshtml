@@ -77,6 +77,7 @@
                         <button id="redraw" class="btn btn-default btn-sm"><span>Redraw</span></button>
                         <button id="skip" class="btn btn-default btn-sm"><span>Skip</span></button>
                         <button id="flipBoard" class="btn btn-default btn-sm"><span>Flip</span></button>
+                        <button id="endGame" class="btn btn-default btn-sm"><span>End Game</span></button>
                         <button id="validMovesButton" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#movesModal">Valid Moves</button>
                     </p>
                 </div>
@@ -117,7 +118,7 @@
                                         <th>Score</th>
                                         <th>Highest Play</th>
                                         <th>Avg. Score per Play</th>
-                                        <th>Avg. Tiles Used per Play</th>
+                                        @*<th>Avg. Tiles Used per Play</th>*@
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -127,7 +128,8 @@
                                         var playerMoves = player.Moves;
                                         var lastMoveNumber = playerMoves.Count == 0 ? 0 : playerMoves.OrderByDescending(m => m.MoveNumber).FirstOrDefault().MoveNumber;
                                         var highestScoringPlay = 0;
-                                        var averageScore = lastMoveNumber == 0 ? 0 : player.Score / (lastMoveNumber + player.SkipsOrRedrawsUsed);
+                                        var averageScore = lastMoveNumber == 0 ? 0 : (double) player.Score / (lastMoveNumber + player.SkipsOrRedrawsUsed);
+                                        averageScore = Math.Round(averageScore, 1);
                                         if (lastMoveNumber != 0)
                                         {
                                             for (int j = 1; j <= lastMoveNumber; j++)
@@ -153,7 +155,7 @@
                     {
                         <div id="player-@(player.ID)-log" class="playerLog col-xs-6 col-sm-12 panel panel-@(player.AtHand ? "primary" : "default")">
                             <div class="panel-heading">
-                                <span>@(player.Name != null ? player.Name : ("Player " + player.ID))</span>
+                                <span>@(player.Name != null ? player.Name : ("Player " + player.ID)) @(player.Rack.ToString())</span>
                             </div>
                             <div class="panel-body">
                                 @if (player.Moves.Count == 0)
@@ -231,7 +233,7 @@
                     {
                         <div id="player-@(player.ID)-log" class="playerLog col-xs-6 col-sm-12 panel panel-@(player.AtHand ? "primary" : "default")">
                             <div class="panel-heading">
-                                <span>@(player.Name != null ? player.Name : ("Player " + player.ID))</span>
+                                <span>@(player.Name != null ? player.Name : ("Player " + player.ID)) @(player.Rack.ToString())</span>
                             </div>
                             <div class="panel-body">
                                 @if (player.Moves.Count == 0)

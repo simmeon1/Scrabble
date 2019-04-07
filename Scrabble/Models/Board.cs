@@ -155,5 +155,17 @@ namespace Scrabble.Models
             temp = temp.Replace(',', '.');
             return temp;
         }
+
+        //public void ResetBoardTileTypes()
+        //{
+        //    foreach (var boardTile in BoardTiles)
+        //    {
+        //        if (boardTile.CharTile != null)
+        //        {
+        //            boardTile.BoardTileType.ID = 1;
+        //            boardTile.BoardTileType.Type = "Normal";
+        //        }
+        //    }
+        //}
     }
 }

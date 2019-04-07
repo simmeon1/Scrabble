@@ -217,7 +217,7 @@ $(document).ready(function () {
             });
         }
         if (!rackTileExists && input.match(letters)) {
-            updateStatusMessage("You do not have the letter in possesion", "danger");
+            //updateStatusMessage("You do not have the letter in possesion", "danger");
             return;
         }
     });
@@ -455,6 +455,23 @@ $(document).ready(function () {
             anchorUsed = false;
             updateStatusMessage("Success :)", "success");
             $('.button').prop('disabled', false);            
+        }).fail(function (jqXHR) {
+            updateStatusMessage(jqXHR.responseText, "danger");
+            $('.button').prop('disabled', false);
+        });
+    });
+
+    $(document).on("click", "#endGame", function () {
+        $.ajax({
+            url: '/Scrabble/EndGame',
+            async: true,
+            type: "POST"
+        }).done(function (view) {
+            var viewBody = view.substring(
+                view.lastIndexOf("<body>"),
+                view.lastIndexOf("</body>")
+            );
+            animateHtmlUpdates($("body"), viewBody);
         }).fail(function (jqXHR) {
             updateStatusMessage(jqXHR.responseText, "danger");
             $('.button').prop('disabled', false);
@@ -720,6 +737,7 @@ $(document).ready(function () {
     function checkIfGameIsFinished() {
         if ($(".isFinished").length > 0) {
             $('button').prop('disabled', true);
+            $("#userCommands").hide();
             $("#endResults").show();
         } else {
             $("#endResults").hide();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scrabble.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Scrabble.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public bool IsHuman { get; set; }
+        public BotType? BotType { get; set; }
         public bool AtHand { get; set; }
         public int Score { get; set; }
         public int SkipsOrRedrawsUsed { get; set; }

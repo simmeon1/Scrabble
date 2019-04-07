@@ -263,7 +263,7 @@ namespace Scrabble.Helpers
                     if (!Moves.Any(m => m.Word.Equals(partialWord)))
                     {
                         Dictionary<BoardTile, CharTile> tilesUsed = new Dictionary<BoardTile, CharTile>();
-                        Dictionary<BoardTile, CharTile> rackTilesUsed = new Dictionary<BoardTile, CharTile>();
+                        //Dictionary<BoardTile, CharTile> rackTilesUsed = new Dictionary<BoardTile, CharTile>();
                         for (int i = 0; i < partialWord.Length; i++)
                         {
                             var letter = partialWord[i];
@@ -278,7 +278,7 @@ namespace Scrabble.Helpers
                                 tilesUsed.Add(boardTile, tileExtendedWith);
                             }
                         }
-                        validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - partialWord.Length, anchor[1] - 1, anchor, tilesUsed, boardBeforeMove));
+                        validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - partialWord.Length, anchor[1] - 1, anchor, tilesUsed, boardBeforeMove, RackOfCurrentPlayer));
                     }
                 }
                 HashSet<string> labelsOfDawgEdges = new HashSet<string>(new DawgEdgeEqualityComparer());
@@ -330,7 +330,7 @@ namespace Scrabble.Helpers
                                             tilesUsed.Add(boardTile, tileToWorkWith);
                                         }
                                     }
-                                    validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - finalWord.Length + 1, anchor[1], anchor, tilesUsed, boardBeforeMove));
+                                    validMovesList.Add(new GeneratedMove(boardIsHorizontal, anchor[1] - finalWord.Length + 1, anchor[1], anchor, tilesUsed, boardBeforeMove, RackOfCurrentPlayer));
                                 }
                             }
                         }

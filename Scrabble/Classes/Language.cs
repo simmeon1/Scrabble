@@ -1,4 +1,4 @@
-﻿namespace Scrabble.Models
+﻿namespace Scrabble.Classes
 {
     public enum Language
     {

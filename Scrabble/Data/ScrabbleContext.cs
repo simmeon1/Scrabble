@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Scrabble.Classes;
 
 namespace Scrabble.Models
 {
@@ -25,6 +26,7 @@ namespace Scrabble.Models
         public DbSet<Scrabble.Models.Pouch_CharTile> Pouch_CharTiles { get; set; }
         public DbSet<Scrabble.Models.GameLanguage> GameLanguages { get; set; }
         public DbSet<Scrabble.Models.WordDictionary> WordDictionaries { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -627,9 +629,9 @@ namespace Scrabble.Models
             modelBuilder.Entity<Pouch>().HasData(new Pouch { ID = 2, GameID = 2 });
 
             modelBuilder.Entity<Player>().HasData(new Player { ID = 1, IsHuman = true, Score = 0, GameID = 1, RackID = 1, PouchID = 1, AtHand = true, Name = "Simeon" });
-            modelBuilder.Entity<Player>().HasData(new Player { ID = 2, IsHuman = false, Score = 0, GameID = 1, RackID = 2, PouchID = 1, AtHand = false, Name = "High Scorer Bot" });
+            modelBuilder.Entity<Player>().HasData(new Player { ID = 2, IsHuman = false, Score = 0, GameID = 1, RackID = 2, PouchID = 1, AtHand = false, Name = "High Scorer Bot", BotType = BotType.High_Scorer });
             modelBuilder.Entity<Player>().HasData(new Player { ID = 3, IsHuman = true, Score = 0, GameID = 1, RackID = 3, PouchID = 1, AtHand = false, Name = "Dobromir" });
-            modelBuilder.Entity<Player>().HasData(new Player { ID = 4, IsHuman = false, Score = 0, GameID = 1, RackID = 4, PouchID = 1, AtHand = false, Name = "Rack Balancer Bot" });
+            modelBuilder.Entity<Player>().HasData(new Player { ID = 4, IsHuman = false, Score = 0, GameID = 1, RackID = 4, PouchID = 1, AtHand = false, Name = "Rack Balancer Bot", BotType = BotType.Rack_Balancer });
             modelBuilder.Entity<Player>().HasData(new Player { ID = 5, IsHuman = true, Score = 0, GameID = 2, RackID = 5, PouchID = 2, AtHand = true });
             modelBuilder.Entity<Player>().HasData(new Player { ID = 6, IsHuman = false, Score = 0, GameID = 2, RackID = 6, PouchID = 2, AtHand = false });
 

@@ -783,6 +783,8 @@ namespace Scrabble.Migrations
 
                     b.Property<bool>("AtHand");
 
+                    b.Property<int?>("BotType");
+
                     b.Property<int>("GameID");
 
                     b.Property<bool>("IsHuman");
@@ -807,9 +809,9 @@ namespace Scrabble.Migrations
 
                     b.HasData(
                         new { ID = 1, AtHand = true, GameID = 1, IsHuman = true, Name = "Simeon", PouchID = 1, RackID = 1, Score = 0, SkipsOrRedrawsUsed = 0 },
-                        new { ID = 2, AtHand = false, GameID = 1, IsHuman = false, Name = "High Scorer Bot", PouchID = 1, RackID = 2, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 2, AtHand = false, BotType = 0, GameID = 1, IsHuman = false, Name = "High Scorer Bot", PouchID = 1, RackID = 2, Score = 0, SkipsOrRedrawsUsed = 0 },
                         new { ID = 3, AtHand = false, GameID = 1, IsHuman = true, Name = "Dobromir", PouchID = 1, RackID = 3, Score = 0, SkipsOrRedrawsUsed = 0 },
-                        new { ID = 4, AtHand = false, GameID = 1, IsHuman = false, Name = "Rack Balancer Bot", PouchID = 1, RackID = 4, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 4, AtHand = false, BotType = 1, GameID = 1, IsHuman = false, Name = "Rack Balancer Bot", PouchID = 1, RackID = 4, Score = 0, SkipsOrRedrawsUsed = 0 },
                         new { ID = 5, AtHand = true, GameID = 2, IsHuman = true, PouchID = 2, RackID = 5, Score = 0, SkipsOrRedrawsUsed = 0 },
                         new { ID = 6, AtHand = false, GameID = 2, IsHuman = false, PouchID = 2, RackID = 6, Score = 0, SkipsOrRedrawsUsed = 0 }
                     );

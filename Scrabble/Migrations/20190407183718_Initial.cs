@@ -194,6 +194,7 @@ namespace Scrabble.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     IsHuman = table.Column<bool>(nullable: false),
+                    BotType = table.Column<int>(nullable: true),
                     AtHand = table.Column<bool>(nullable: false),
                     Score = table.Column<int>(nullable: false),
                     SkipsOrRedrawsUsed = table.Column<int>(nullable: false),
@@ -986,15 +987,15 @@ namespace Scrabble.Migrations
 
             migrationBuilder.InsertData(
                 table: "Players",
-                columns: new[] { "ID", "AtHand", "GameID", "IsHuman", "Name", "PouchID", "RackID", "Score", "SkipsOrRedrawsUsed" },
+                columns: new[] { "ID", "AtHand", "BotType", "GameID", "IsHuman", "Name", "PouchID", "RackID", "Score", "SkipsOrRedrawsUsed" },
                 values: new object[,]
                 {
-                    { 5, true, 2, true, null, 2, 5, 0, 0 },
-                    { 6, false, 2, false, null, 2, 6, 0, 0 },
-                    { 2, false, 1, false, "High Scorer Bot", 1, 2, 0, 0 },
-                    { 1, true, 1, true, "Simeon", 1, 1, 0, 0 },
-                    { 4, false, 1, false, "Rack Balancer Bot", 1, 4, 0, 0 },
-                    { 3, false, 1, true, "Dobromir", 1, 3, 0, 0 }
+                    { 5, true, null, 2, true, null, 2, 5, 0, 0 },
+                    { 6, false, null, 2, false, null, 2, 6, 0, 0 },
+                    { 2, false, 0, 1, false, "High Scorer Bot", 1, 2, 0, 0 },
+                    { 1, true, null, 1, true, "Simeon", 1, 1, 0, 0 },
+                    { 4, false, 1, 1, false, "Rack Balancer Bot", 1, 4, 0, 0 },
+                    { 3, false, null, 1, true, "Dobromir", 1, 3, 0, 0 }
                 });
 
             migrationBuilder.InsertData(

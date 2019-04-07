@@ -601,6 +601,8 @@ namespace Scrabble.Helpers
                 game.AddScoreToPlayer(playerAtHand, 50);
             }
 
+            //game.Board.ResetBoardTileTypes();
+
             foreach (var playedRackTile in playedRackTiles)
             {
                 var tileDetails = GetTileDetails(playedRackTile);
@@ -608,7 +610,10 @@ namespace Scrabble.Helpers
                 playerAtHand.Rack.SubstractFromRack(game.WordDictionary.CharTiles.Where(c => c.ID == tileCharTileId).FirstOrDefault());
                 playerAtHand.Rack.RefillRackFromPouch();
             }
-            if (playerAtHand.Rack.Rack_CharTiles.Count == 0) game.IsFinished = true;
+            if (playerAtHand.Rack.Rack_CharTiles.Count == 0)
+            {
+                game.FinalizeResults(playerAtHand);
+            }
 
             game.Log += logBuilder;
             game.Log += "Player" + playerAtHand.ID + " now has " + playerAtHand.Score + " points.";

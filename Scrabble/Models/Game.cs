@@ -1,4 +1,5 @@
-﻿using Scrabble.Helpers;
+﻿using Scrabble.Classes;
+using Scrabble.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -83,14 +84,18 @@ namespace Scrabble.Models
                 var validTransposedMovesList = moveGenerator.GetValidMoves(false);
                 //HashSet<GeneratedMove> validTransposedMovesList = new HashSet<GeneratedMove>();
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
-                var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
+                var allValidMovesSorted = newPlayerAtHand.BotType == BotType.High_Scorer ? allValidMoves.OrderByDescending(m => m.Score).ToList()
+                    : allValidMoves.OrderBy(m => m.RackScore).ToList();
                 if (allValidMovesSorted.Count > 0) MakeGeneratedMove(allValidMovesSorted[0]);
                 else
                 {
                     newPlayerAtHand.SkipsOrRedrawsUsed++;
                     if (newPlayerAtHand.Pouch.Pouch_CharTiles.Count > 0) newPlayerAtHand.Redraw();
                 }
-                if (newPlayerAtHand.Rack.Rack_CharTiles.Count == 0) IsFinished = true;
+                if (newPlayerAtHand.Rack.Rack_CharTiles.Count == 0)
+                {
+                    FinalizeResults(newPlayerAtHand);
+                }
                 SwitchToNextPlayer();
             }
             Players = playersList;
@@ -155,6 +160,8 @@ namespace Scrabble.Models
             }
             AddScoreToPlayer(playerAtHand, (move.Score + (rackTilesUsed.Count == playerAtHand.Rack.RackSize ? 50 : 0)));
 
+            //Board.ResetBoardTileTypes();
+
             foreach (var rackTileUsed in rackTilesUsed)
             {
                 playerAtHand.Rack.SubstractFromRack(board[rackTileUsed[0], rackTileUsed[1]].CharTile);
@@ -163,6 +170,36 @@ namespace Scrabble.Models
             playerAtHand.Rack.RefillRackFromPouch();
             if (playerAtHand.Rack.Rack_CharTiles.Count == 0) IsFinished = true;
 
+        }
+
+        public void FinalizeResults()
+        {
+            IsFinished = true;
+            foreach (var player in Players)
+            {
+                foreach (var tile in player.Rack.Rack_CharTiles)
+                {
+                    var penalty = tile.CharTile.Score * tile.Count;
+                    player.Score -= penalty;
+                }
+            }
+        }
+
+        public void FinalizeResults (Player playerWithFinalPlay)
+        {
+            IsFinished = true;
+            var bonusScore = 0;
+            foreach (var player in Players)
+            {
+                if (player == playerWithFinalPlay) continue;
+                foreach (var tile in player.Rack.Rack_CharTiles)
+                {
+                    var penalty = tile.CharTile.Score * tile.Count;
+                    player.Score -= penalty;
+                    bonusScore += penalty;
+                }
+            }
+            playerWithFinalPlay.Score += bonusScore;
         }
     }
 }

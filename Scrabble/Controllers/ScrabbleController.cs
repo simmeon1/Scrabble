@@ -141,6 +141,14 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult EndGame()
+        {
+            Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            game.FinalizeResults();
+            _scrabbleContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public void MakeEnglishDictionary()
         {
             Helpers.Helper.MakeEnglishDictionary();
