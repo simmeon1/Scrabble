@@ -16,6 +16,7 @@ namespace Scrabble.Models
         public string Word { get; set; }
         public int Score { get; set; }
         public bool IsNew { get; set; }
+        public int MoveNumber { get; set; }
 
         public int PlayerID { get; set; }
         [ForeignKey("PlayerID")]
@@ -27,7 +28,7 @@ namespace Scrabble.Models
 
         public string GetStringForPage()
         {
-            return IsHorizontal + "_" + IsNew + "_" + Start + "_" + End + "_" + Index + "_" + Word + "_" + Score;
+            return IsHorizontal + "_" + IsNew + "_" + Start + "_" + End + "_" + Index + "_" + Word + "_" + Score + "_" + MoveNumber; 
         }
     }
 }

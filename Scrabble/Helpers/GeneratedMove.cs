@@ -19,7 +19,6 @@ namespace Scrabble.Helpers
         public int Score { get; set; }
         public BoardTile[,] BoardBeforeMove { get; set; }
         public BoardTile[,] BoardAfterMove { get; set; }
-
         public GeneratedMove(bool isHorizontal, int startIndex, int endIndex, int[] anchor, Dictionary<BoardTile, CharTile> tilesUsed, BoardTile[,] boardBeforeMove)
         {
             IsHorizontal = isHorizontal;
@@ -29,6 +28,8 @@ namespace Scrabble.Helpers
             TilesUsed = tilesUsed;
             Word = GetWord();
             BoardBeforeMove = new BoardTile[boardBeforeMove.GetLength(0), boardBeforeMove.GetLength(1)];
+            RackTilesUsedCoordinates = new List<int[]>();
+            ExtraWordsPlayed = new List<List<BoardTile>>();
             for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
             {
                 for (int j = 0; j < BoardBeforeMove.GetLength(1); j++)
@@ -40,22 +41,14 @@ namespace Scrabble.Helpers
                         BoardTileType = boardBeforeMove[i, j].BoardTileType,
                         CharTile = boardBeforeMove[i, j].CharTile
                     };
-                }
-            }
-            RackTilesUsedCoordinates = new List<int[]>();
-            ExtraWordsPlayed = new List<List<BoardTile>>();
-            foreach (var tileUsed in TilesUsed)
-            {
-                for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
-                {
-                    for (int j = 0; j < BoardBeforeMove.GetLength(1); j++)
+                    foreach (var tileUsed in TilesUsed)
                     {
-                        if (BoardBeforeMove[i,j].BoardLocationX == tileUsed.Key.BoardLocationX
+                        if (BoardBeforeMove[i, j].BoardLocationX == tileUsed.Key.BoardLocationX
                             && BoardBeforeMove[i, j].BoardLocationY == tileUsed.Key.BoardLocationY
                             && BoardBeforeMove[i, j].CharTile == null)
                         {
                             RackTilesUsedCoordinates.Add(new int[] { i, j });
-                            BoardBeforeMove[i,j].CharTile = tileUsed.Value;
+                            BoardBeforeMove[i, j].CharTile = tileUsed.Value;
 
                         }
                     }
@@ -75,7 +68,7 @@ namespace Scrabble.Helpers
             }
             foreach (var rackTileCoordinates in RackTilesUsedCoordinates)
             {
-                var word = Helpers.Helper.GetVerticalPlays(BoardAfterMove, rackTileCoordinates);
+                var word = Helper.GetVerticalPlays(BoardAfterMove, rackTileCoordinates);
                 if (word != null)
                 {
                     ExtraWordsPlayed.Add(word);
@@ -85,7 +78,8 @@ namespace Scrabble.Helpers
             {
                 score += Helper.GetWordScore(extraWord);
             }
-            return score + Helpers.Helper.GetWordScore(tilesWithLetters);
+            if (RackTilesUsedCoordinates.Count == 7) score += 50;
+            return score + Helper.GetWordScore(tilesWithLetters);
         }
 
         public string GetWord()

@@ -10,7 +10,7 @@ using Scrabble.Models;
 namespace Scrabble.Migrations
 {
     [DbContext(typeof(ScrabbleContext))]
-    [Migration("20190405161943_Initial")]
+    [Migration("20190406235211_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -700,6 +700,8 @@ namespace Scrabble.Migrations
 
                     b.Property<int>("GameLanguageID");
 
+                    b.Property<bool>("IsFinished");
+
                     b.Property<string>("Log");
 
                     b.Property<int>("PouchID");
@@ -715,8 +717,8 @@ namespace Scrabble.Migrations
                     b.ToTable("Games");
 
                     b.HasData(
-                        new { ID = 1, BoardID = 1, GameLanguageID = 1, Log = "Enjoy the game!", PouchID = 1, WordDictionaryID = 1 },
-                        new { ID = 2, BoardID = 2, GameLanguageID = 2, Log = "Enjoy the game!", PouchID = 2, WordDictionaryID = 2 }
+                        new { ID = 1, BoardID = 1, GameLanguageID = 1, IsFinished = false, Log = "Enjoy the game!", PouchID = 1, WordDictionaryID = 1 },
+                        new { ID = 2, BoardID = 2, GameLanguageID = 2, IsFinished = false, Log = "Enjoy the game!", PouchID = 2, WordDictionaryID = 2 }
                     );
                 });
 
@@ -756,6 +758,8 @@ namespace Scrabble.Migrations
 
                     b.Property<bool>("IsNew");
 
+                    b.Property<int>("MoveNumber");
+
                     b.Property<int>("PlayerID");
 
                     b.Property<int>("Score");
@@ -793,6 +797,8 @@ namespace Scrabble.Migrations
 
                     b.Property<int>("Score");
 
+                    b.Property<int>("SkipsOrRedrawsUsed");
+
                     b.HasKey("ID");
 
                     b.HasIndex("GameID");
@@ -802,10 +808,12 @@ namespace Scrabble.Migrations
                     b.ToTable("Players");
 
                     b.HasData(
-                        new { ID = 1, AtHand = true, GameID = 1, IsHuman = true, PouchID = 1, RackID = 1, Score = 0 },
-                        new { ID = 2, AtHand = false, GameID = 1, IsHuman = false, PouchID = 1, RackID = 2, Score = 0 },
-                        new { ID = 3, AtHand = true, GameID = 2, IsHuman = true, PouchID = 2, RackID = 3, Score = 0 },
-                        new { ID = 4, AtHand = false, GameID = 2, IsHuman = false, PouchID = 2, RackID = 4, Score = 0 }
+                        new { ID = 1, AtHand = true, GameID = 1, IsHuman = true, Name = "Simeon", PouchID = 1, RackID = 1, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 2, AtHand = false, GameID = 1, IsHuman = false, Name = "High Scorer Bot", PouchID = 1, RackID = 2, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 3, AtHand = false, GameID = 1, IsHuman = true, Name = "Dobromir", PouchID = 1, RackID = 3, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 4, AtHand = false, GameID = 1, IsHuman = false, Name = "Rack Balancer Bot", PouchID = 1, RackID = 4, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 5, AtHand = true, GameID = 2, IsHuman = true, PouchID = 2, RackID = 5, Score = 0, SkipsOrRedrawsUsed = 0 },
+                        new { ID = 6, AtHand = false, GameID = 2, IsHuman = false, PouchID = 2, RackID = 6, Score = 0, SkipsOrRedrawsUsed = 0 }
                     );
                 });
 
@@ -853,26 +861,26 @@ namespace Scrabble.Migrations
                     b.HasData(
                         new { ID = 1, CharTileID = 1, Count = 0, PouchID = 1 },
                         new { ID = 2, CharTileID = 2, Count = 9, PouchID = 1 },
-                        new { ID = 3, CharTileID = 3, Count = 1, PouchID = 1 },
-                        new { ID = 4, CharTileID = 4, Count = 1, PouchID = 1 },
-                        new { ID = 5, CharTileID = 5, Count = 1, PouchID = 1 },
+                        new { ID = 3, CharTileID = 3, Count = 2, PouchID = 1 },
+                        new { ID = 4, CharTileID = 4, Count = 2, PouchID = 1 },
+                        new { ID = 5, CharTileID = 5, Count = 4, PouchID = 1 },
                         new { ID = 6, CharTileID = 6, Count = 12, PouchID = 1 },
-                        new { ID = 7, CharTileID = 7, Count = 1, PouchID = 1 },
-                        new { ID = 8, CharTileID = 8, Count = 2, PouchID = 1 },
+                        new { ID = 7, CharTileID = 7, Count = 2, PouchID = 1 },
+                        new { ID = 8, CharTileID = 8, Count = 3, PouchID = 1 },
                         new { ID = 9, CharTileID = 9, Count = 2, PouchID = 1 },
-                        new { ID = 10, CharTileID = 10, Count = 7, PouchID = 1 },
+                        new { ID = 10, CharTileID = 10, Count = 9, PouchID = 1 },
                         new { ID = 11, CharTileID = 11, Count = 1, PouchID = 1 },
                         new { ID = 12, CharTileID = 12, Count = 1, PouchID = 1 },
                         new { ID = 13, CharTileID = 13, Count = 4, PouchID = 1 },
-                        new { ID = 14, CharTileID = 14, Count = 1, PouchID = 1 },
+                        new { ID = 14, CharTileID = 14, Count = 2, PouchID = 1 },
                         new { ID = 15, CharTileID = 15, Count = 6, PouchID = 1 },
-                        new { ID = 16, CharTileID = 16, Count = 7, PouchID = 1 },
-                        new { ID = 17, CharTileID = 17, Count = 1, PouchID = 1 },
+                        new { ID = 16, CharTileID = 16, Count = 8, PouchID = 1 },
+                        new { ID = 17, CharTileID = 17, Count = 2, PouchID = 1 },
                         new { ID = 18, CharTileID = 18, Count = 1, PouchID = 1 },
                         new { ID = 19, CharTileID = 19, Count = 6, PouchID = 1 },
                         new { ID = 20, CharTileID = 20, Count = 4, PouchID = 1 },
                         new { ID = 21, CharTileID = 21, Count = 6, PouchID = 1 },
-                        new { ID = 22, CharTileID = 22, Count = 3, PouchID = 1 },
+                        new { ID = 22, CharTileID = 22, Count = 4, PouchID = 1 },
                         new { ID = 23, CharTileID = 23, Count = 2, PouchID = 1 },
                         new { ID = 24, CharTileID = 24, Count = 2, PouchID = 1 },
                         new { ID = 25, CharTileID = 25, Count = 1, PouchID = 1 },
@@ -940,8 +948,10 @@ namespace Scrabble.Migrations
                     b.HasData(
                         new { ID = 1, GameID = 1, PlayerID = 1, PouchID = 1, RackSize = 7 },
                         new { ID = 2, GameID = 1, PlayerID = 2, PouchID = 1, RackSize = 7 },
-                        new { ID = 3, GameID = 2, PlayerID = 3, PouchID = 2, RackSize = 7 },
-                        new { ID = 4, GameID = 2, PlayerID = 4, PouchID = 2, RackSize = 7 }
+                        new { ID = 3, GameID = 1, PlayerID = 3, PouchID = 1, RackSize = 7 },
+                        new { ID = 4, GameID = 1, PlayerID = 4, PouchID = 1, RackSize = 7 },
+                        new { ID = 5, GameID = 2, PlayerID = 5, PouchID = 2, RackSize = 7 },
+                        new { ID = 6, GameID = 2, PlayerID = 6, PouchID = 2, RackSize = 7 }
                     );
                 });
 

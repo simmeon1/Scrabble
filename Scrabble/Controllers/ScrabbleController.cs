@@ -51,8 +51,8 @@ namespace Scrabble.Controllers
             }
             else
             {
-                var playedWords = Helpers.Helper.GetPlayedWords(data);
-                var playedRackTiles = Helpers.Helper.GetPlayedRackTiles(data);
+                var playedWords = Helper.GetPlayedWords(data);
+                var playedRackTiles = Helper.GetPlayedRackTiles(data);
                 var boardArray = game.Board.ConvertTo2DArray();
                 if (playedRackTiles.Length == 0)
                 {
@@ -124,19 +124,8 @@ namespace Scrabble.Controllers
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
             var currentPlayer = game.GetPlayerAtHand();
-            var rack = currentPlayer.Rack.Rack_CharTiles.ToList();
-            var tilesToDraw = 0;
-            for (int i = 0; i < rack.Count; i++)
-            {
-                for (int j = 0; j < rack[i].Count; j++)
-                {
-                    currentPlayer.Rack.Pouch.AddToPouch(rack[i].CharTile);
-                    tilesToDraw++;
-                }
-            }
-            rack.Clear();
-            currentPlayer.Rack.Rack_CharTiles = rack;
-            currentPlayer.Rack.RefillRackFromPouch();
+            currentPlayer.SkipsOrRedrawsUsed++;
+            currentPlayer.Redraw();            
             game.SwitchToNextPlayer();
             _scrabbleContext.SaveChanges();
             return RedirectToAction("Index");
@@ -145,7 +134,10 @@ namespace Scrabble.Controllers
         public IActionResult Skip()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
+            var currentPlayer = game.GetPlayerAtHand();
+            currentPlayer.SkipsOrRedrawsUsed++;
             game.SwitchToNextPlayer();
+            _scrabbleContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -158,7 +150,7 @@ namespace Scrabble.Controllers
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
 
-            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 3);
+            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 1);
             var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
             var validTransposedMovesList = moveGenerator.GetValidMoves(false);
             //var validTransposedMovesList = new HashSet<GeneratedMove>();
@@ -179,14 +171,6 @@ namespace Scrabble.Controllers
             }
             return Json(allValidMovesJson);
 
-        }
-
-        public IActionResult Welcome(string name, int numTimes = 1)
-        {
-            ViewData["Message"] = "Hello " + name;
-            ViewData["NumTimes"] = numTimes;
-
-            return View();
         }
     }
 }

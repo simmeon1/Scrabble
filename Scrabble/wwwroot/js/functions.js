@@ -6,10 +6,11 @@ $(document).ready(function () {
     var directionOfPlay = "right";
     var anchorsShown = false;
     var anchorUsed = false;
-    var movesTable;
 
     refreshElementSizes();
     $("#validMovesButton").hide();
+
+    checkIfGameIsFinished();
 
     $(document).on({
         ajaxStart: function () { $("body").addClass("loading"); },
@@ -21,12 +22,6 @@ $(document).ready(function () {
         $(".rack_chartile").height($(".rack_chartile").width());
         $(".board_rack_chartile").height($(".board_rack_chartile").parent().height() - 2);
     });
-
-
-    $(".moveRowFromHistory").hover(function () {
-        
-    });
-
 
     $(document).on("mouseover", ".moveRowFromHistory", function () {
         var moveDetails = $(this).closest("tr").attr("id").split("_");
@@ -57,7 +52,7 @@ $(document).ready(function () {
     }).resize();
 
     $(document).on("click", ".grid-item", function () {
-        if ($(this).hasClass("locked") || $(this).children().first().hasClass("board_rack_chartile") ) {
+        if ($(this).hasClass("locked") || $(this).children().first().hasClass("board_rack_chartile")) {
             return;
         }
         if ($(".board_rack_chartile").length == 0) {
@@ -150,7 +145,7 @@ $(document).ready(function () {
                 parentId = $("#board_" + this.id).parent().attr("id");
             }
             $("#board_" + this.id).remove();
-            $("#" + parentId).html('<span id="board_chartile_0 class="emptyBoardTile"><br/></span >');           
+            $("#" + parentId).html('<span id="board_chartile_0 class="emptyBoardTile"><br/></span >');
             toggleRackCharTileSelection($(this));
         }
         refreshElementSizes();
@@ -208,7 +203,7 @@ $(document).ready(function () {
         $('.rack_chartile').each(function () {
             if ($(this).children().first(".rack_chartile_letter").text() == input && !$(this).hasClass("btn-secondary")) {
                 $(this).trigger("click");
-                rackTileExists = true;                
+                rackTileExists = true;
                 return false;
             }
         });
@@ -328,15 +323,14 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#shuffle", function () {
-        shuffleRack();
+        var parent = $("#rack p");
+        var tiles = parent.children();
+        while (tiles.length) {
+            parent.append(tiles.splice(Math.floor(Math.random() * tiles.length), 1)[0]);
+        }
+        refreshElementSizes();
     });
 
-    //$(document).on("click", "#showPremiums", function () {
-    //    var color = $('.DoubleLetter').css('background-color');
-    //    if (color != "none") {
-    //        $(".DoubleLetter").css('background-color', 'none');
-    //    }
-    //});
 
     $(document).on("click", "#submit", function () {
 
@@ -460,7 +454,7 @@ $(document).ready(function () {
             //$("#output").height($("#board").height());
             anchorUsed = false;
             updateStatusMessage("Success :)", "success");
-            $('.button').prop('disabled', false);
+            $('.button').prop('disabled', false);            
         }).fail(function (jqXHR) {
             updateStatusMessage(jqXHR.responseText, "danger");
             $('.button').prop('disabled', false);
@@ -486,9 +480,9 @@ $(document).ready(function () {
             jqueryObject.html(message).fadeIn(200, function () {
                 refreshElementSizes();
                 $("#validMovesButton").hide();
+                checkIfGameIsFinished();
             });
         });
-        //$("#output").height($("#board").height());
     }
 
     function toggleRackCharTileSelection(tile) {
@@ -723,12 +717,12 @@ $(document).ready(function () {
         } return false;
     }
 
-    function shuffleRack() {
-        var parent = $("#rack p");
-        var tiles = parent.children();
-        while (tiles.length) {
-            parent.append(tiles.splice(Math.floor(Math.random() * tiles.length), 1)[0]);
+    function checkIfGameIsFinished() {
+        if ($(".isFinished").length > 0) {
+            $('button').prop('disabled', true);
+            $("#endResults").show();
+        } else {
+            $("#endResults").hide();
         }
-        refreshElementSizes();
     }
 });

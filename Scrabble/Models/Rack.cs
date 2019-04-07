@@ -141,7 +141,7 @@ namespace Scrabble.Models
             return playable;
         }
 
-        public void RefillRackFromPouch()
+        public int GetCountOfTilesInRack ()
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
             int countOfRackTiles = 0;
@@ -149,6 +149,13 @@ namespace Scrabble.Models
             {
                 countOfRackTiles += charTileDbEntry.Count;
             }
+            return countOfRackTiles;
+        }
+
+        public void RefillRackFromPouch()
+        {
+            List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
+            int countOfRackTiles = GetCountOfTilesInRack();
             for (int i = countOfRackTiles; i < RackSize; i++)
             {
                 var randomTile = Pouch.PickRandomTile();

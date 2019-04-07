@@ -87,7 +87,14 @@ namespace Scrabble.Helpers
             listOfValidAnchorCoordinates.Shuffle();
             var originalTimeLimit = TimeLimit;
             var retriesForCurrentAnchor = retriesPerAnchor;
+
+
             Stopwatch.Start();
+            //listOfValidAnchorCoordinates = new List<int[]>();
+            //listOfValidAnchorCoordinates.Add(new int[] { 12, 7 });
+            //listOfValidAnchorCoordinates.Add(new int[] { 12, 8 });
+            //listOfValidAnchorCoordinates.Add(new int[] { 12, 9 });
+
             for (int i = 0; i < listOfValidAnchorCoordinates.Count; i++)
             {
                 if (retriesForCurrentAnchor == 0)
@@ -103,26 +110,31 @@ namespace Scrabble.Helpers
                 var wordBeforeAnchor = "";
                 while (columnIndex > 0)
                 {
-                    if (boardArray[anchor[0], columnIndex - 1].CharTile == null)
+                    if (boardArray[anchor[0], columnIndex - 1].CharTile == null && !listOfValidAnchorCoordinates.Any(c => c[0] == anchor[0] && c[1] == columnIndex - 1))
                     {
                         limit++;
+                        columnIndex--;
                     }
                     else if (boardArray[anchor[0], columnIndex - 1].CharTile != null)
                     {
-                        if (limit == 0)
+                        while (columnIndex > 0 && boardArray[anchor[0], columnIndex - 1].CharTile != null)
                         {
                             wordBeforeAnchor = wordBeforeAnchor.Insert(0, boardArray[anchor[0], columnIndex - 1].CharTile.Letter.ToString());
+                            columnIndex--;
                         }
+                        break;
                     }
-                    columnIndex--;
-                    if (columnIndex > 0 && wordBeforeAnchor.Length != 0 && boardArray[anchor[0], columnIndex - 1].CharTile == null)
+                    else if (boardArray[anchor[0], columnIndex - 1].CharTile == null)
                     {
-                        ExtendRight(wordBeforeAnchor, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove);
                         break;
                     }
                 }
+                if (limit == 0)
+                {
+                    ExtendRight(wordBeforeAnchor, anchor, boardArray, validCrossChecks, validMovesList, boardIsHorizontal, boardBeforeMove);
+                }
 
-                if (wordBeforeAnchor.Length == 0)
+                else if (wordBeforeAnchor.Length == 0)
                 {
                     foreach (var entry in Dictionary.CharTiles.Where(d => d.Score != 0))
                     {

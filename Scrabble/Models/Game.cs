@@ -30,6 +30,7 @@ namespace Scrabble.Models
         public virtual ICollection<Rack> Racks { get; set; }
         public virtual ICollection<Move> Moves { get; set; }
 
+        public bool IsFinished { get; set; }
 
         public Player GetPlayerAtHand()
         {
@@ -71,14 +72,25 @@ namespace Scrabble.Models
                     break;
                 }
             }
-            if (!newPlayerAtHand.IsHuman)
+            if (IsFinished && !newPlayerAtHand.IsHuman)
+            {
+                SwitchToNextPlayer();
+            }
+            else if (!newPlayerAtHand.IsHuman)
             {
                 var moveGenerator = Helper.GetMoveGenerator(this, Moves.Where(m => m.GameID == ID).ToList(), 1);
                 var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
                 var validTransposedMovesList = moveGenerator.GetValidMoves(false);
+                //HashSet<GeneratedMove> validTransposedMovesList = new HashSet<GeneratedMove>();
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
                 var allValidMovesSorted = allValidMoves.OrderByDescending(m => m.Score).ToList();
                 if (allValidMovesSorted.Count > 0) MakeGeneratedMove(allValidMovesSorted[0]);
+                else
+                {
+                    newPlayerAtHand.SkipsOrRedrawsUsed++;
+                    if (newPlayerAtHand.Pouch.Pouch_CharTiles.Count > 0) newPlayerAtHand.Redraw();
+                }
+                if (newPlayerAtHand.Rack.Rack_CharTiles.Count == 0) IsFinished = true;
                 SwitchToNextPlayer();
             }
             Players = playersList;
@@ -93,6 +105,7 @@ namespace Scrabble.Models
             var rackTilesUsed = move.RackTilesUsedCoordinates;
             List<BoardTile> playedWordBoardTiles = new List<BoardTile>();
             var playedWord = "";
+            int moveNumber = playerAtHand.Moves.Count == 0 ? 1 : (playerAtHand.Moves.OrderByDescending(m => m.MoveNumber).FirstOrDefault().MoveNumber) + 1;
             for (int i = 0; i < playedWordTiles.Count; i++)
             {
                 var boardTileFromMove = playedWordTiles.Keys.ElementAt(i);
@@ -109,7 +122,7 @@ namespace Scrabble.Models
             playerAtHand.Moves = playerAtHand.Moves.Select(c => { c.IsNew = false; return c; }).ToList();
 
             playerAtHand.Moves.Add(new Move { PlayerID = playerAtHand.ID, GameID = ID, Word = playedWord, Score = Helper.GetWordScore(playedWordBoardTiles),
-                Start = move.StartIndex, End = move.EndIndex, Index = move.Anchor[0], IsHorizontal = move.IsHorizontal, IsNew = true
+                Start = move.StartIndex, End = move.EndIndex, Index = move.Anchor[0], IsHorizontal = move.IsHorizontal, IsNew = true, MoveNumber = moveNumber
             });
 
             List<string> listOfWords = new List<string>();
@@ -136,10 +149,11 @@ namespace Scrabble.Models
                     Start = start,
                     End = end,
                     Index = index,
-                    IsNew = true
+                    IsNew = true,
+                    MoveNumber = moveNumber
                 });
             }
-            AddScoreToPlayer(playerAtHand, move.Score);
+            AddScoreToPlayer(playerAtHand, (move.Score + (rackTilesUsed.Count == playerAtHand.Rack.RackSize ? 50 : 0)));
 
             foreach (var rackTileUsed in rackTilesUsed)
             {
@@ -147,6 +161,8 @@ namespace Scrabble.Models
                 playerAtHand.Rack.RefillRackFromPouch();
             }
             playerAtHand.Rack.RefillRackFromPouch();
+            if (playerAtHand.Rack.Rack_CharTiles.Count == 0) IsFinished = true;
+
         }
     }
 }
