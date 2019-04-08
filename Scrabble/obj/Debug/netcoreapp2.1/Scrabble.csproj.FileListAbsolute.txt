@@ -24,3 +24,4 @@ C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Scrabble.pdb
 C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Scrabble.csproj.CopyComplete
 C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Scrabble\Index.g.cshtml.cs
 C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Views\Scrabble\Welcome.g.cshtml.cs
+C:\Users\Simeon\Desktop\Scrabble\Scrabble\obj\Debug\netcoreapp2.1\Razor\Pages\_ValidationScriptsPartial.g.cshtml.cs

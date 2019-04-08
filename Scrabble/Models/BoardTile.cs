@@ -7,6 +7,7 @@ namespace Scrabble.Models
         public int ID { get; set; }
         public int BoardLocationX { get; set; }
         public int BoardLocationY { get; set; }
+        public bool IsTaken { get; set; }
 
         public int BoardTileTypeID { get; set; }
         [ForeignKey("BoardTileTypeID")]

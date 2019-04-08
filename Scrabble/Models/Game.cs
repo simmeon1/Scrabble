@@ -160,7 +160,10 @@ namespace Scrabble.Models
             }
             AddScoreToPlayer(playerAtHand, (move.Score + (rackTilesUsed.Count == playerAtHand.Rack.RackSize ? 50 : 0)));
 
-            //Board.ResetBoardTileTypes();
+            foreach (var entry in move.TilesUsed)
+            {
+                entry.Key.IsTaken = true;
+            }
 
             foreach (var rackTileUsed in rackTilesUsed)
             {

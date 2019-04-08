@@ -52,26 +52,29 @@ namespace Scrabble.Helpers
             var tripleWordTilesUsed = 0;
             foreach (BoardTile letter in word)
             {
-                switch (letter.BoardTileType.Type)
-                {
-                    case "DoubleLetter":
-                        score += letter.CharTile.Score * 2;
-                        break;
-                    case "TripleLetter":
-                        score += letter.CharTile.Score * 3;
-                        break;
-                    case "DoubleWord":
-                        doubleWordTilesUsed += 1;
-                        score += letter.CharTile.Score;
-                        break;
-                    case "TripleWord":
-                        tripleWordTilesUsed += 1;
-                        score += letter.CharTile.Score;
-                        break;
-                    default:
-                        score += letter.CharTile.Score;
-                        break;
+                if (!letter.IsTaken) {
+                    switch (letter.BoardTileType.Type)
+                    {
+                        case "DoubleLetter":
+                            score += letter.CharTile.Score * 2;
+                            break;
+                        case "TripleLetter":
+                            score += letter.CharTile.Score * 3;
+                            break;
+                        case "DoubleWord":
+                            doubleWordTilesUsed += 1;
+                            score += letter.CharTile.Score;
+                            break;
+                        case "TripleWord":
+                            tripleWordTilesUsed += 1;
+                            score += letter.CharTile.Score;
+                            break;
+                        default:
+                            score += letter.CharTile.Score;
+                            break;
+                    }
                 }
+                else score += letter.CharTile.Score;
             }
             if (doubleWordTilesUsed != 0)
             {
@@ -539,6 +542,7 @@ namespace Scrabble.Helpers
             var playerAtHand = game.GetPlayerAtHand();
             var playedWords = GetPlayedWords(data);
             var playedRackTiles = GetPlayedRackTiles(data);
+            var allUsedBoardTiles = new List<BoardTile>();
             string logBuilder = "Player" + playerAtHand.ID + " played ";
             playerAtHand.Moves = playerAtHand.Moves.Select(c => { c.IsNew = false; return c; }).ToList();
             int moveNumber = playerAtHand.Moves.Count == 0 ? 1 : (playerAtHand.Moves.OrderByDescending(m => m.MoveNumber).FirstOrDefault().MoveNumber) + 1;
@@ -554,6 +558,7 @@ namespace Scrabble.Helpers
                     var tileDetails = GetTileDetails(playedTile);
                     var tileX = Int32.Parse(tileDetails[0]);
                     var tileY = Int32.Parse(tileDetails[1]);
+                    allUsedBoardTiles.Add(game.Board.ConvertTo2DArray()[tileX,tileY]);
                     var tileCharTileId = Int32.Parse(tileDetails[2]);
                     if (tileCharTileId == 1)
                     {
@@ -601,7 +606,10 @@ namespace Scrabble.Helpers
                 game.AddScoreToPlayer(playerAtHand, 50);
             }
 
-            //game.Board.ResetBoardTileTypes();
+            foreach (var boardTile in allUsedBoardTiles)
+            {
+                boardTile.IsTaken = true;
+            }
 
             foreach (var playedRackTile in playedRackTiles)
             {

@@ -31,7 +31,6 @@ namespace Scrabble.Controllers
             {
                 p.Rack.RefillRackFromPouch();
             }
-            _scrabbleContext.SaveChanges();
             if (TempData["FlipBoard"] != null)
             {
                 ViewBag.FlipBoard = TempData["FlipBoard"].ToString();
@@ -43,11 +42,11 @@ namespace Scrabble.Controllers
             }
             catch (Exception e)
             {
-                //continue;
+                return StatusCode(400, e.Message);
             }
             if (data == null)
             {
-                //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
+                return StatusCode(400, "No data entered.");
             }
             else
             {
@@ -71,7 +70,7 @@ namespace Scrabble.Controllers
                 //    return StatusCode(400, "Play is not connected.");
                 //}
 
-                var result = Helpers.Helper.GetWordScores(game, data);
+                var result = Helper.GetWordScores(game, data);
                 if (result.StatusCode != 200)
                 {
                     return StatusCode(result.StatusCode, result.StatusDescription);
@@ -92,11 +91,11 @@ namespace Scrabble.Controllers
             }
             catch (Exception e)
             {
-                //continue;
+                return StatusCode(400, e.Message);
             }
             if (data == null)
             {
-                //return this.Json(new { success = false, message = "Uuups, something went wrong!" });
+                return StatusCode(400, "Something went wrong.");
             }
             else
             {
@@ -105,19 +104,37 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
-        public void ResetBoard()
+        public IActionResult ResetGame()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
             foreach (BoardTile t in game.Board.BoardTiles)
             {
+                if (t.CharTile != null) game.Pouch.AddToPouch(t.CharTile);
                 t.CharTileID = null;
+                t.CharTile = null;
+                t.IsTaken = false;
             }
-            game.Log = "Enjoy the game!";
-            foreach (Player p in game.Players)
+            foreach (var p in game.Players)
             {
+                p.Moves.Clear();
                 p.Score = 0;
+                foreach(var tile in p.Rack.Rack_CharTiles)
+                {
+                    for (int i = 0; i < tile.Count; i++)
+                    {
+                        game.Pouch.AddToPouch(tile.CharTile);
+                    }
+                }
+                p.AtHand = false;
+                p.Rack.Rack_CharTiles.Clear();
+                p.Rack.RefillRackFromPouch();
+                p.SkipsOrRedrawsUsed = 0;
             }
+            game.Players.ElementAt(0).AtHand = true;
+            game.IsFinished = false;
+            game.Moves.Clear();
             _scrabbleContext.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Redraw()
@@ -125,7 +142,23 @@ namespace Scrabble.Controllers
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
             var currentPlayer = game.GetPlayerAtHand();
             currentPlayer.SkipsOrRedrawsUsed++;
-            currentPlayer.Redraw();            
+            List<KeyValuePair<string, StringValues>> data = null;
+            try
+            {
+                data = Request.Form.ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(400, e.Message);
+            }
+            if (data == null)
+            {
+                currentPlayer.Redraw();
+            }
+            else
+            {
+                currentPlayer.Redraw(Helper.GetValueFromAjaxData(data, "lettersToTrade"), Helper.GetValueFromAjaxData(data, "timesToTradeLetters"));
+            }
             game.SwitchToNextPlayer();
             _scrabbleContext.SaveChanges();
             return RedirectToAction("Index");
@@ -151,7 +184,7 @@ namespace Scrabble.Controllers
 
         public void MakeEnglishDictionary()
         {
-            Helpers.Helper.MakeEnglishDictionary();
+            Helper.MakeEnglishDictionary();
         }
 
         public IActionResult GetMoves()
@@ -178,7 +211,6 @@ namespace Scrabble.Controllers
                 allValidMovesJson.Add(entry);
             }
             return Json(allValidMovesJson);
-
         }
     }
 }

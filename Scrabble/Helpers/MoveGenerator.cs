@@ -77,7 +77,8 @@ namespace Scrabble.Helpers
                         BoardID = boardArray[i, j].BoardID,
                         BoardTileTypeID = boardArray[i, j].BoardTileTypeID,
                         CharTileID = boardArray[i, j].CharTileID,
-                        ID = boardArray[i, j].ID
+                        ID = boardArray[i, j].ID,
+                        IsTaken = boardArray[i, j].IsTaken
                     };
                 }
             }
@@ -167,7 +168,7 @@ namespace Scrabble.Helpers
                     {
                         if (retriesForCurrentAnchor != 0)
                         {
-                            TimeLimit += 3;
+                            TimeLimit += 1;
                             retriesForCurrentAnchor--;
                             i--;
                             Stopwatch.Restart();

@@ -45,5 +45,23 @@ namespace Scrabble.Models
             Rack.Rack_CharTiles = rack;
             Rack.RefillRackFromPouch();
         }
+
+        public void Redraw(string letters, string counts)
+        {
+            var lettersArray = letters.Split(",");
+            var countsArray = counts.Split(",");
+            var rack = Rack.Rack_CharTiles.ToList();
+            var tilesToDraw = 0;
+
+            for (int i = 0; i < lettersArray.Length; i++)
+            {
+                for (int j = 0; j < Int32.Parse(countsArray[i]); j++)
+                {
+                    Pouch.AddToPouch(Rack.SubstractFromRack(lettersArray[i][0]));
+                    tilesToDraw++;
+                }
+            }
+            Rack.RefillRackFromPouch();
+        }
     }
 }

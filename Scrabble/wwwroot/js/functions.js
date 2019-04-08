@@ -37,15 +37,16 @@ $(document).ready(function () {
         }
     });
 
-    // / );
-    //$("#statusMessage").hide();
+    $(document).on("mouseleave", ".moveRowFromHistory", function () {
+        $(".grid-item").removeClass("moveMarked");
+    });
+
+
 
     $(window).resize(function () {
-        // This will fire each time the window is resized:
         if ($(window).width() < 768) {
             $("#leftOutput").insertAfter("#board");
         } else if ($(window).width() >= 768 && $(window).width() <= 992) {
-            // if smaller
             $("#leftOutput").insertBefore("#board");
         }
 
@@ -285,11 +286,65 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#redraw", function () {
+        var data = [];
+        var redrawAll = false;
+        var lettersToTrade = prompt("Please enter letters to return to the pouch. Enter * to redraw all.");
+        if (lettersToTrade == null || lettersToTrade == "") return;
+        lettersToTrade = lettersToTrade.slice(0, $(".rack_chartile_letter").length);
+        for (var i = 0; i < lettersToTrade.length; i++) {
+            var currentLetter = lettersToTrade[i].toUpperCase();
+            var letterIsInRack = false;
+            if (currentLetter == '*') {
+                redrawAll = true;
+                break;
+            }
+            $('.rack_chartile_letter').each(function () {
+                if ($(this).text().indexOf(currentLetter) > -1) {
+                    letterIsInRack = true;
+                    var letterIsInDictionary = false;
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i][currentLetter] !== undefined) {
+                            letterIsInDictionary = true;
+                            data[i][currentLetter] = data[i][currentLetter] + 1;
+                            break;
+                        }
+                    }
+                    if (!letterIsInDictionary) {
+                        data.push({ [currentLetter] : 1 });
+                    }
+                    //lettersToTradeArray.push(currentLetter);
+                    return false;
+                }
+            });
+            if (!letterIsInRack && !redrawAll) {
+                updateStatusMessage("Letter " + currentLetter + " is not in rack", "danger");
+                return;
+            }
+        }
+        for (var i = 0; i < data.length; i++) {
+            if ($(".rack_chartile_letter:contains('" + Object.keys(data[i])[0] + "')").length < data[i][Object.keys(data[i])[0]]) {
+                updateStatusMessage("Letter " + Object.keys(data[i])[0] + " is entered more times than it is in rack", "danger");
+                return;
+            }
+        }
         updateStatusMessage("Loading...", "info");
+        var lettersToTrade = [];
+        var timesToTradeLetters = [];
+        for (var i = 0; i < data.length; i++) {
+            lettersToTrade.push(Object.keys(data[i])[0].toString());
+            timesToTradeLetters.push(data[i][Object.keys(data[i])[0]].toString());
+        }
+
+        var dataForAjax = redrawAll ? null : {
+            "lettersToTrade": lettersToTrade,
+            "timesToTradeLetters": timesToTradeLetters
+        };
+
         $('button').prop('disabled', true);
         $.ajax({
             url: '/Scrabble/Redraw',
-            type: "POST"
+            type: "POST",
+            data: dataForAjax
         }).done(function (view) {
             var viewBody = view.substring(
                 view.lastIndexOf("<body>"),
@@ -478,6 +533,23 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", "#resetGame", function () {
+        $.ajax({
+            url: '/Scrabble/ResetGame',
+            async: true,
+            type: "POST"
+        }).done(function (view) {
+            var viewBody = view.substring(
+                view.lastIndexOf("<body>"),
+                view.lastIndexOf("</body>")
+            );
+            animateHtmlUpdates($("body"), viewBody);
+        }).fail(function (jqXHR) {
+            updateStatusMessage(jqXHR.responseText, "danger");
+            $('.button').prop('disabled', false);
+        });
+    });
+
     $(document).on("click", "#showAnchors", function () {
         showAnchors(!anchorsShown);
     });
@@ -488,7 +560,7 @@ $(document).ready(function () {
         if (type == "info") {
             $('#statusMessage').fadeIn(200);
         } else {
-            $('#statusMessage').fadeIn(200).delay(500).fadeOut(200);
+            $('#statusMessage').fadeIn(200).delay(1000).fadeOut(200);
         }
     }
 

@@ -63,7 +63,9 @@ namespace Scrabble.Models
             {
                 output += entry.ToString();
             }
-            return output;
+            char[] a = output.ToCharArray();
+            Array.Sort(a);
+            return new string(a);
         }
     }
 }
