@@ -78,7 +78,7 @@ namespace Scrabble.Helpers
                         BoardTileTypeID = boardArray[i, j].BoardTileTypeID,
                         CharTileID = boardArray[i, j].CharTileID,
                         ID = boardArray[i, j].ID,
-                        IsTaken = boardArray[i, j].IsTaken
+                        IsFilled = boardArray[i, j].IsFilled
                     };
                 }
             }

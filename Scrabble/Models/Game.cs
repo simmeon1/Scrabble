@@ -11,7 +11,7 @@ namespace Scrabble.Models
     {
         public int ID { get; set; }
 
-        public int GameLanguageID { get; set; }
+        public LanguageEnum GameLanguageID { get; set; }
         public virtual GameLanguage GameLanguage { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
@@ -84,7 +84,7 @@ namespace Scrabble.Models
                 var validTransposedMovesList = moveGenerator.GetValidMoves(false);
                 //HashSet<GeneratedMove> validTransposedMovesList = new HashSet<GeneratedMove>();
                 var allValidMoves = validUntransposedMovesList.Concat(validTransposedMovesList).ToList();
-                var allValidMovesSorted = newPlayerAtHand.BotType == BotType.High_Scorer ? allValidMoves.OrderByDescending(m => m.Score).ToList()
+                var allValidMovesSorted = newPlayerAtHand.BotTypeID == BotTypeEnum.High_Scorer ? allValidMoves.OrderByDescending(m => m.Score).ToList()
                     : allValidMoves.OrderBy(m => m.RackScore).ToList();
                 if (allValidMovesSorted.Count > 0) MakeGeneratedMove(allValidMovesSorted[0]);
                 else
@@ -162,7 +162,7 @@ namespace Scrabble.Models
 
             foreach (var entry in move.TilesUsed)
             {
-                entry.Key.IsTaken = true;
+                entry.Key.IsFilled = true;
             }
 
             foreach (var rackTileUsed in rackTilesUsed)

@@ -1,15 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Scrabble.Classes;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents a board tile on a board
+    /// </summary>
     public class BoardTile
     {
         public int ID { get; set; }
         public int BoardLocationX { get; set; }
         public int BoardLocationY { get; set; }
-        public bool IsTaken { get; set; }
+        public bool IsFilled { get; set; }
 
-        public int BoardTileTypeID { get; set; }
+        public BoardTileTypeEnum BoardTileTypeID { get; set; }
         [ForeignKey("BoardTileTypeID")]
         public virtual BoardTileType BoardTileType { get; set; }
 

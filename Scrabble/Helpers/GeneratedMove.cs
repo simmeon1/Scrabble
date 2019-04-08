@@ -42,7 +42,7 @@ namespace Scrabble.Helpers
                         BoardLocationY = boardBeforeMove[i, j].BoardLocationY,
                         BoardTileType = boardBeforeMove[i, j].BoardTileType,
                         CharTile = boardBeforeMove[i, j].CharTile,
-                        IsTaken = boardBeforeMove[i, j].IsTaken
+                        IsFilled = boardBeforeMove[i, j].IsFilled
                     };
                     foreach (var tileUsed in TilesUsed)
                     {
@@ -124,7 +124,7 @@ namespace Scrabble.Helpers
             foreach (var entry in TilesUsed)
             {
                 tilesWithLetters.Add(new BoardTile { CharTile = entry.Value, BoardTileType = entry.Key.BoardTileType,
-                    BoardLocationX = entry.Key.BoardLocationX, BoardLocationY = entry.Key.BoardLocationY, IsTaken = entry.Key.IsTaken });
+                    BoardLocationX = entry.Key.BoardLocationX, BoardLocationY = entry.Key.BoardLocationY, IsFilled = entry.Key.IsFilled });
             }
             foreach (var rackTileCoordinates in RackTilesUsedCoordinates)
             {

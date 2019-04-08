@@ -42,11 +42,11 @@ namespace Scrabble.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(400, e.Message);
+                //return StatusCode(400, e.Message);
             }
             if (data == null)
             {
-                return StatusCode(400, "No data entered.");
+                //return StatusCode(400, "No data entered.");
             }
             else
             {
@@ -76,8 +76,8 @@ namespace Scrabble.Controllers
                     return StatusCode(result.StatusCode, result.StatusDescription);
                 }
                 game.SwitchToNextPlayer();
-                _scrabbleContext.SaveChanges();
             }
+            _scrabbleContext.SaveChanges();
             return View(game);
         }
 
@@ -95,7 +95,7 @@ namespace Scrabble.Controllers
             }
             if (data == null)
             {
-                return StatusCode(400, "Something went wrong.");
+                //return StatusCode(400, "Something went wrong.");
             }
             else
             {
@@ -112,7 +112,7 @@ namespace Scrabble.Controllers
                 if (t.CharTile != null) game.Pouch.AddToPouch(t.CharTile);
                 t.CharTileID = null;
                 t.CharTile = null;
-                t.IsTaken = false;
+                t.IsFilled = false;
             }
             foreach (var p in game.Players)
             {
@@ -149,7 +149,7 @@ namespace Scrabble.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(400, e.Message);
+                //return StatusCode(400, e.Message);
             }
             if (data == null)
             {

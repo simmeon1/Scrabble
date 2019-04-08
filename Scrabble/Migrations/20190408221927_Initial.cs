@@ -8,24 +8,34 @@ namespace Scrabble.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BoardTileType",
+                name: "BoardTileTypes",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ID = table.Column<int>(nullable: false),
                     Type = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BoardTileType", x => x.ID);
+                    table.PrimaryKey("PK_BoardTileTypes", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BotTypes",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false),
+                    Type = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BotTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "GameLanguages",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ID = table.Column<int>(nullable: false),
                     Language = table.Column<string>(nullable: true),
                     CountOfLetters = table.Column<int>(nullable: false)
                 },
@@ -159,7 +169,7 @@ namespace Scrabble.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BoardLocationX = table.Column<int>(nullable: false),
                     BoardLocationY = table.Column<int>(nullable: false),
-                    IsTaken = table.Column<bool>(nullable: false),
+                    IsFilled = table.Column<bool>(nullable: false),
                     BoardTileTypeID = table.Column<int>(nullable: false),
                     BoardID = table.Column<int>(nullable: false),
                     CharTileID = table.Column<int>(nullable: true)
@@ -174,9 +184,9 @@ namespace Scrabble.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_BoardTiles_BoardTileType_BoardTileTypeID",
+                        name: "FK_BoardTiles_BoardTileTypes_BoardTileTypeID",
                         column: x => x.BoardTileTypeID,
-                        principalTable: "BoardTileType",
+                        principalTable: "BoardTileTypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
@@ -195,7 +205,7 @@ namespace Scrabble.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     IsHuman = table.Column<bool>(nullable: false),
-                    BotType = table.Column<int>(nullable: true),
+                    BotTypeID = table.Column<int>(nullable: true),
                     AtHand = table.Column<bool>(nullable: false),
                     Score = table.Column<int>(nullable: false),
                     SkipsOrRedrawsUsed = table.Column<int>(nullable: false),
@@ -343,16 +353,25 @@ namespace Scrabble.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "BoardTileType",
+                table: "BoardTileTypes",
                 columns: new[] { "ID", "Type" },
                 values: new object[,]
                 {
                     { 1, "Normal" },
-                    { 2, "DoubleLetter" },
-                    { 3, "TripleLetter" },
-                    { 4, "DoubleWord" },
-                    { 5, "TripleWord" },
+                    { 2, "Double_Letter" },
+                    { 3, "Triple_Letter" },
+                    { 4, "Double_Word" },
+                    { 5, "Triple_Word" },
                     { 6, "Start" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "BotTypes",
+                columns: new[] { "ID", "Type" },
+                values: new object[,]
+                {
+                    { 1, "High_Scorer" },
+                    { 2, "Rack_Balancer" }
                 });
 
             migrationBuilder.InsertData(
@@ -524,7 +543,7 @@ namespace Scrabble.Migrations
 
             migrationBuilder.InsertData(
                 table: "BoardTiles",
-                columns: new[] { "ID", "BoardID", "BoardLocationX", "BoardLocationY", "BoardTileTypeID", "CharTileID", "IsTaken" },
+                columns: new[] { "ID", "BoardID", "BoardLocationX", "BoardLocationY", "BoardTileTypeID", "CharTileID", "IsFilled" },
                 values: new object[,]
                 {
                     { 1, 1, 0, 0, 5, null, false },
@@ -830,7 +849,7 @@ namespace Scrabble.Migrations
 
             migrationBuilder.InsertData(
                 table: "BoardTiles",
-                columns: new[] { "ID", "BoardID", "BoardLocationX", "BoardLocationY", "BoardTileTypeID", "CharTileID", "IsTaken" },
+                columns: new[] { "ID", "BoardID", "BoardLocationX", "BoardLocationY", "BoardTileTypeID", "CharTileID", "IsFilled" },
                 values: new object[,]
                 {
                     { 40, 1, 9, 2, 1, null, false },
@@ -988,14 +1007,14 @@ namespace Scrabble.Migrations
 
             migrationBuilder.InsertData(
                 table: "Players",
-                columns: new[] { "ID", "AtHand", "BotType", "GameID", "IsHuman", "Name", "PouchID", "RackID", "Score", "SkipsOrRedrawsUsed" },
+                columns: new[] { "ID", "AtHand", "BotTypeID", "GameID", "IsHuman", "Name", "PouchID", "RackID", "Score", "SkipsOrRedrawsUsed" },
                 values: new object[,]
                 {
                     { 5, true, null, 2, true, null, 2, 5, 0, 0 },
                     { 6, false, null, 2, false, null, 2, 6, 0, 0 },
-                    { 2, false, 0, 1, false, "High Scorer Bot", 1, 2, 0, 0 },
+                    { 2, false, 1, 1, false, "High Scorer Bot", 1, 2, 0, 0 },
                     { 1, true, null, 1, true, "Simeon", 1, 1, 0, 0 },
-                    { 4, false, 1, 1, false, "Rack Balancer Bot", 1, 4, 0, 0 },
+                    { 4, false, 2, 1, false, "Rack Balancer Bot", 1, 4, 0, 0 },
                     { 3, false, null, 1, true, "Dobromir", 1, 3, 0, 0 }
                 });
 
@@ -1192,6 +1211,9 @@ namespace Scrabble.Migrations
                 name: "BoardTiles");
 
             migrationBuilder.DropTable(
+                name: "BotTypes");
+
+            migrationBuilder.DropTable(
                 name: "Moves");
 
             migrationBuilder.DropTable(
@@ -1204,7 +1226,7 @@ namespace Scrabble.Migrations
                 name: "Boards");
 
             migrationBuilder.DropTable(
-                name: "BoardTileType");
+                name: "BoardTileTypes");
 
             migrationBuilder.DropTable(
                 name: "CharTiles");

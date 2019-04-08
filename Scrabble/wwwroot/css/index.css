@@ -203,19 +203,19 @@
     width: auto;
 }
 
-.DoubleLetter {
+.Double_Letter {
     background-color: lightblue;
 }
 
-.TripleLetter {
+.Triple_Letter {
     background-color: royalblue;
 }
 
-.DoubleWord {
+.Double_Word {
     background-color: orange;
 }
 
-.TripleWord {
+.Triple_Word {
     background-color: orangered;
 }
 

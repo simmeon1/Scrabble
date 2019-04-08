@@ -52,20 +52,20 @@ namespace Scrabble.Helpers
             var tripleWordTilesUsed = 0;
             foreach (BoardTile letter in word)
             {
-                if (!letter.IsTaken) {
-                    switch (letter.BoardTileType.Type)
+                if (!letter.IsFilled) {
+                    switch (letter.BoardTileType.ID)
                     {
-                        case "DoubleLetter":
+                        case BoardTileTypeEnum.Double_Letter:
                             score += letter.CharTile.Score * 2;
                             break;
-                        case "TripleLetter":
+                        case BoardTileTypeEnum.Triple_Letter:
                             score += letter.CharTile.Score * 3;
                             break;
-                        case "DoubleWord":
+                        case BoardTileTypeEnum.Double_Word:
                             doubleWordTilesUsed += 1;
                             score += letter.CharTile.Score;
                             break;
-                        case "TripleWord":
+                        case BoardTileTypeEnum.Triple_Word:
                             tripleWordTilesUsed += 1;
                             score += letter.CharTile.Score;
                             break;
@@ -608,7 +608,7 @@ namespace Scrabble.Helpers
 
             foreach (var boardTile in allUsedBoardTiles)
             {
-                boardTile.IsTaken = true;
+                boardTile.IsFilled = true;
             }
 
             foreach (var playedRackTile in playedRackTiles)

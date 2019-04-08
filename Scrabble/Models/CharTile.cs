@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scrabble.Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,7 +11,7 @@ namespace Scrabble.Models
         public char Letter { get; set; }
         public int Score { get; set; }
 
-        public int GameLanguageID { get; set; }
+        public LanguageEnum GameLanguageID { get; set; }
         [ForeignKey("GameLanguageID")]
         public virtual GameLanguage GameLanguage { get; set; }
 

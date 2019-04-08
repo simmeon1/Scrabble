@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Scrabble.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Scrabble.Models
 {
-    public enum BotType
+    public class BotType
     {
-        High_Scorer, Rack_Balancer
+        public BotTypeEnum ID { get; set; }
+
+        public string Type { get; set; }
     }
 }
