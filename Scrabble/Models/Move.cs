@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents a move (play) and it's details
+    /// </summary>
     public class Move
     {
         public int ID { get; set; }
@@ -16,6 +19,8 @@ namespace Scrabble.Models
         public string Word { get; set; }
         public int Score { get; set; }
         public bool IsNew { get; set; }
+
+        //Multiple moves/words can be part of the same play
         public int MoveNumber { get; set; }
 
         public int PlayerID { get; set; }

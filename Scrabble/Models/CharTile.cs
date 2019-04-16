@@ -5,6 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents a tile with a letter
+    /// Can be located in rack or on the board
+    /// </summary>
     public class CharTile
     {
         public int ID { get; set; }

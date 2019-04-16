@@ -5,6 +5,11 @@ using System.Linq;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents pouch
+    /// Contains a collection of char tiles
+    /// Collection is represented as Pouch_CharTile list
+    /// </summary>
     public class Pouch
     {
         public int ID { get; set; }

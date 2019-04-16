@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents BotType
+    /// Can be either High_Scorer or Rack_Balancer
+    /// </summary>
     public class BotType
     {
         public BotTypeEnum ID { get; set; }

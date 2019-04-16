@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Helpers
 {
+    /// <summary>
+    /// Represents a generated move from the Move Generator.
+    /// </summary>
     public class GeneratedMove
     {
         public bool IsHorizontal { get; set; }
@@ -32,6 +35,9 @@ namespace Scrabble.Helpers
             BoardBeforeMove = new BoardTile[boardBeforeMove.GetLength(0), boardBeforeMove.GetLength(1)];
             RackTilesUsedCoordinates = new List<int[]>();
             ExtraWordsPlayed = new List<List<BoardTile>>();
+
+            //Creates a copy of the original board before move generation
+            //Used to get the scores of it and words connected.
             for (int i = 0; i < BoardBeforeMove.GetLength(0); i++)
             {
                 for (int j = 0; j < BoardBeforeMove.GetLength(1); j++)

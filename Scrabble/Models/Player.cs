@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents player
+    /// Can be human or bot
+    /// </summary>
     public class Player
     {
         public int ID { get; set; }
@@ -29,6 +33,9 @@ namespace Scrabble.Models
 
         public virtual ICollection<Move> Moves { get; set; }
 
+        /// <summary>
+        /// Trades all their rack tiles for new ones from the pouch
+        /// </summary>
         public void Redraw()
         {
             var rack = Rack.Rack_CharTiles.ToList();
@@ -46,6 +53,9 @@ namespace Scrabble.Models
             Rack.RefillRackFromPouch();
         }
 
+        /// <summary>
+        /// Trades some of their rack tiles for new ones from the pouch
+        /// </summary>
         public void Redraw(string letters, string counts)
         {
             var lettersArray = letters.Split(",");

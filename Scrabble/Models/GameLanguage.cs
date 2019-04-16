@@ -2,6 +2,9 @@
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represents Game languages 
+    /// </summary>
     public class GameLanguage
     {
         public LanguageEnum ID { get; set; }

@@ -10,7 +10,7 @@ using Scrabble.Models;
 namespace Scrabble.Migrations
 {
     [DbContext(typeof(ScrabbleContext))]
-    [Migration("20190408221927_Initial")]
+    [Migration("20190409014728_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

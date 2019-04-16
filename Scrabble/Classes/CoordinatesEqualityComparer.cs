@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Classes
 {
+    /// <summary>
+    /// Used for HashSet. Object already exists if the int arrays added have the same values as an existing one.
+    /// </summary>
     public class CoordinatesEqualityComparer : IEqualityComparer<int[]>
     {
         public bool Equals(int[] x, int[] y)

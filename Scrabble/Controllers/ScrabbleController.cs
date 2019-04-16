@@ -24,6 +24,11 @@ namespace Scrabble.Controllers
             _scrabbleContext = context;
         }
 
+        /// <summary>
+        /// Home page. If data is provided, it means user has played words and pressed Submit.
+        /// In that case, returns an updated game object. Otherwise returns a currently existing one.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -81,6 +86,11 @@ namespace Scrabble.Controllers
             return View(game);
         }
 
+        /// <summary>
+        /// Transposes board
+        /// Used mainly for testing.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult FlipBoard()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -104,6 +114,10 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Resets all relevant game information.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ResetGame()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -137,6 +151,11 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Trades rack tiles for new ones. If no data is provided, all are traded
+        /// Otherwise the sepcified ones are traded.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Redraw()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -164,6 +183,10 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Skips a turn
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Skip()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -174,6 +197,10 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Finalizez game.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult EndGame()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
@@ -182,11 +209,15 @@ namespace Scrabble.Controllers
             return RedirectToAction("Index");
         }
 
-        public void MakeEnglishDictionary()
-        {
-            Helper.MakeEnglishDictionary();
-        }
+        //public void MakeEnglishDictionary()
+        //{
+        //    Helper.MakeEnglishDictionary();
+        //}
 
+        /// <summary>
+        /// Creates a Move Generator and gets as many moves as it can for the time limit given the current rack and board.
+        /// </summary>
+        /// <returns></returns>
         public IActionResult GetMoves()
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);

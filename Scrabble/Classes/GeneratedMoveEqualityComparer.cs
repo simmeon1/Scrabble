@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Classes
 {
+    /// <summary>
+    /// Used for HashSet. Generated moves are the same if all their details are the same as an existing one.
+    /// </summary>
     public class GeneratedMoveEqualityComparer : IEqualityComparer<GeneratedMove>
     {
         public bool Equals(GeneratedMove x, GeneratedMove y)

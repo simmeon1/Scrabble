@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// Represent tile inforamtion in a Pouch
+    /// Example: Pouch IIISA has 3 entries:
+    /// I: 3, S: 1 and A: 1
+    /// </summary>
     public class Pouch_CharTile
     {
         public int ID { get; set; }

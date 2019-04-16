@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Scrabble.Classes
 {
+    /// <summary>
+    /// Used for HashSet. Objects are the same if they start with the same letter.
+    /// </summary>
     public class DawgEdgeEqualityComparer : IEqualityComparer<string>
     {
         public bool Equals(string x, string y)

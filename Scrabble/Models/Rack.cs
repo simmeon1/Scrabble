@@ -7,6 +7,10 @@ namespace Scrabble.Models
 {
     public class Rack
     {
+        /// <summary>
+        /// Represents Rack of player
+        /// Tiles are represented as Rack_CharTiles list
+        /// </summary>
         public int ID { get; set; }
         public int RackSize { get; set; }
 
@@ -37,6 +41,10 @@ namespace Scrabble.Models
             return temp;
         }
 
+        /// <summary>
+        /// Remoces tile from rack
+        /// </summary>
+        /// <param name="tile">Tile object to remove</param>
         public void SubstractFromRack(CharTile tile)
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
@@ -53,6 +61,12 @@ namespace Scrabble.Models
             Rack_CharTiles = rackTiles;
         }
 
+        /// <summary>
+        /// Removes tile with letter from rack
+        /// If no such tile is available, a blank tile is removed
+        /// </summary>
+        /// <param name="c">Letter of tile to remove</param>
+        /// <returns></returns>
         public CharTile SubstractFromRack(char c)
         {
             CharTile tile = null;
@@ -73,6 +87,12 @@ namespace Scrabble.Models
             return tile;
         }
 
+        /// <summary>
+        /// Gets a tile with given letter
+        /// If not available, retrieves a blank
+        /// </summary>
+        /// <param name="c">Letter of tile to pick</param>
+        /// <returns></returns>
         public CharTile GetTile(char c)
         {
             CharTile tile = null;
@@ -86,6 +106,10 @@ namespace Scrabble.Models
             return tile;
         }
 
+        /// <summary>
+        /// Adds tile to rack
+        /// </summary>
+        /// <param name="tile">Tile to add</param>
         public void AddToRack(CharTile tile)
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
@@ -103,6 +127,12 @@ namespace Scrabble.Models
                 Rack_CharTiles = rackTiles;
         }
 
+        /// <summary>
+        /// Checks if a tile is in the rack
+        /// </summary>
+        /// <param name="c">Letter of tile to look for</param>
+        /// <param name="includingBlanks">If there is no tile with letter c, true is returned if a blank is available, otherwise false</param>
+        /// <returns></returns>
         public bool CheckIfTileIsInRack(char c, bool includingBlanks)
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
@@ -118,6 +148,11 @@ namespace Scrabble.Models
             return true;
         }
 
+        /// <summary>
+        /// Given a rack, checks if a word is playable
+        /// </summary>
+        /// <param name="word">Word to try and check</param>
+        /// <returns></returns>
         public bool CheckIfWordIsPlayable(string word)
         {
             bool playable = true;
@@ -141,6 +176,10 @@ namespace Scrabble.Models
             return playable;
         }
 
+        /// <summary>
+        /// Gets total tiles in rack
+        /// </summary>
+        /// <returns></returns>
         public int GetCountOfTilesInRack ()
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();
@@ -152,6 +191,9 @@ namespace Scrabble.Models
             return countOfRackTiles;
         }
 
+        /// <summary>
+        /// Refills rack up to its maximum size
+        /// </summary>
         public void RefillRackFromPouch()
         {
             List<Rack_CharTile> rackTiles = Rack_CharTiles.ToList();

@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Scrabble.Models
 {
+    /// <summary>
+    /// REpresents dictionary of a game
+    /// </summary>
     public class WordDictionary
     {
         public int ID { get; set; }
