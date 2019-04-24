@@ -10,7 +10,7 @@ using Scrabble.Models;
 namespace Scrabble.Migrations
 {
     [DbContext(typeof(ScrabbleContext))]
-    [Migration("20190409014728_Initial")]
+    [Migration("20190424030410_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -829,7 +829,7 @@ namespace Scrabble.Migrations
                         new { ID = 3, AtHand = false, GameID = 1, IsHuman = true, Name = "Dobromir", PouchID = 1, RackID = 3, Score = 0, SkipsOrRedrawsUsed = 0 },
                         new { ID = 4, AtHand = false, BotTypeID = 2, GameID = 1, IsHuman = false, Name = "Rack Balancer Bot", PouchID = 1, RackID = 4, Score = 0, SkipsOrRedrawsUsed = 0 },
                         new { ID = 5, AtHand = true, GameID = 2, IsHuman = true, PouchID = 2, RackID = 5, Score = 0, SkipsOrRedrawsUsed = 0 },
-                        new { ID = 6, AtHand = false, GameID = 2, IsHuman = false, PouchID = 2, RackID = 6, Score = 0, SkipsOrRedrawsUsed = 0 }
+                        new { ID = 6, AtHand = false, BotTypeID = 1, GameID = 2, IsHuman = false, Name = "High Scorer Bot", PouchID = 2, RackID = 6, Score = 0, SkipsOrRedrawsUsed = 0 }
                     );
                 });
 

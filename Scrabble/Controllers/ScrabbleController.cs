@@ -222,7 +222,7 @@ namespace Scrabble.Controllers
         {
             Game game = _scrabbleContext.Games.Single(g => g.ID == 1);
 
-            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 1);
+            var moveGenerator = Helper.GetMoveGenerator(game, _scrabbleContext.Moves.Where(m => m.GameID == game.ID).ToList(), 2);
             var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
             var validTransposedMovesList = moveGenerator.GetValidMoves(false);
             //var validTransposedMovesList = new HashSet<GeneratedMove>();

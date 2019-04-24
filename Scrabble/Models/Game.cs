@@ -95,7 +95,7 @@ namespace Scrabble.Models
             {
                 //Creates move generator and gets possible horizontal and vertical moves
                 //Stops as soon as it can and is past the timer of 1 second
-                var moveGenerator = Helper.GetMoveGenerator(this, Moves.Where(m => m.GameID == ID).ToList(), 1);
+                var moveGenerator = Helper.GetMoveGenerator(this, Moves.Where(m => m.GameID == ID).ToList(), 2);
                 var validUntransposedMovesList = moveGenerator.GetValidMoves(true);
                 var validTransposedMovesList = moveGenerator.GetValidMoves(false);
                 //HashSet<GeneratedMove> validTransposedMovesList = new HashSet<GeneratedMove>();

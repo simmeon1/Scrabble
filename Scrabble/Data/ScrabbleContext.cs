@@ -637,8 +637,8 @@ namespace Scrabble.Models
             modelBuilder.Entity<Player>().HasData(new Player { ID = 2, IsHuman = false, Score = 0, GameID = 1, RackID = 2, PouchID = 1, AtHand = false, Name = "High Scorer Bot", BotTypeID = BotTypeEnum.High_Scorer });
             modelBuilder.Entity<Player>().HasData(new Player { ID = 3, IsHuman = true, Score = 0, GameID = 1, RackID = 3, PouchID = 1, AtHand = false, Name = "Dobromir" });
             modelBuilder.Entity<Player>().HasData(new Player { ID = 4, IsHuman = false, Score = 0, GameID = 1, RackID = 4, PouchID = 1, AtHand = false, Name = "Rack Balancer Bot", BotTypeID = BotTypeEnum.Rack_Balancer });
-            modelBuilder.Entity<Player>().HasData(new Player { ID = 5, IsHuman = true, Score = 0, GameID = 2, RackID = 5, PouchID = 2, AtHand = true });
-            modelBuilder.Entity<Player>().HasData(new Player { ID = 6, IsHuman = false, Score = 0, GameID = 2, RackID = 6, PouchID = 2, AtHand = false });
+            modelBuilder.Entity<Player>().HasData(new Player { ID = 5, IsHuman = true, Score = 0, GameID = 2, RackID = 5, PouchID = 2, AtHand = true, Name = "Simeon" });
+            modelBuilder.Entity<Player>().HasData(new Player { ID = 6, IsHuman = false, Score = 0, GameID = 2, RackID = 6, PouchID = 2, AtHand = false, Name = "High Scorer Bot", BotTypeID = BotTypeEnum.High_Scorer });
 
             modelBuilder.Entity<Rack>().HasData(new Rack { ID = 1, PouchID = 1, RackSize = 7, GameID = 1, PlayerID = 1 });
             modelBuilder.Entity<Rack>().HasData(new Rack { ID = 2, PouchID = 1, RackSize = 7, GameID = 1, PlayerID = 2 });

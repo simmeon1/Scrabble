@@ -62,7 +62,8 @@ namespace Scrabble.Helpers
             Moves = moves;
 
             //Sets equal limit for untransposed and transposed checks
-            TimeLimit = (timeLimit / 2) + 1;
+            TimeLimit = timeLimit / 2;
+            if (TimeLimit == 0 && timeLimit == 1) TimeLimit = 1;
             Stopwatch = new Stopwatch();
             Stopwatch.Reset();
         }

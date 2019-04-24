@@ -8,6 +8,11 @@
     max-width: 1170px;
 }
 
+#userCommands {
+    background-color: antiquewhite;
+    border-radius: 4px;
+}
+
 #gameAndOutput, #player {
     overflow: auto;
 }
@@ -200,7 +205,7 @@
 
 .modal-dialog {
     overflow: auto;
-    width: auto;
+    /*width: noo;*/
 }
 
 .Double_Letter {

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Scrabble.Models;
+//using Scrabble.Helpers;
 
 namespace Scrabble
 {
@@ -50,6 +51,7 @@ namespace Scrabble
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //app.AddEfDiagrams<ScrabbleContext>();
             }
             else
             {

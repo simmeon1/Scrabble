@@ -385,8 +385,7 @@ $(document).ready(function () {
         }
         refreshElementSizes();
     });
-
-
+   
     $(document).on("click", "#submit", function () {
 
         showAnchors(true);
@@ -471,7 +470,14 @@ $(document).ready(function () {
             var startTileDetails = $("body").find(".Start").first().attr("id").split("_");
             var startTileX = parseInt(startTileDetails[1]);
             var startTileY = parseInt(startTileDetails[2]);
-            if (!(listOfWordsMadeNow[0][0].startsWith(startTileX + "_" + startTileY)) && (listOfWordsMadeNow[0][0].endsWith("_rack"))) {
+            var startTileUsed = false;
+            for (var i = 0; i < listOfWordsMadeNow[0].length; i++) {
+                if (listOfWordsMadeNow[0][i].startsWith("7_7")) {
+                    startTileUsed = true;
+                    break;
+                }
+            }
+            if (!startTileUsed) {
                 updateStatusMessage("Invalid starting move.", "danger");
                 return;
             }
@@ -552,6 +558,10 @@ $(document).ready(function () {
 
     $(document).on("click", "#showAnchors", function () {
         showAnchors(!anchorsShown);
+    });
+
+    $(document).on("click", "#stats", function () {
+        $("#endResults").toggle();
     });
 
     function updateStatusMessage(message, type) {
@@ -809,7 +819,8 @@ $(document).ready(function () {
     function checkIfGameIsFinished() {
         if ($(".isFinished").length > 0) {
             $('button').prop('disabled', true);
-            $("#userCommands").hide();
+            $('#resetGame').prop('disabled', false);
+            //$("#userCommands").hide();
             $("#endResults").show();
         } else {
             $("#endResults").hide();

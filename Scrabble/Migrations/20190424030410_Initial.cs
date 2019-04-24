@@ -1011,7 +1011,7 @@ namespace Scrabble.Migrations
                 values: new object[,]
                 {
                     { 5, true, null, 2, true, null, 2, 5, 0, 0 },
-                    { 6, false, null, 2, false, null, 2, 6, 0, 0 },
+                    { 6, false, 1, 2, false, "High Scorer Bot", 2, 6, 0, 0 },
                     { 2, false, 1, 1, false, "High Scorer Bot", 1, 2, 0, 0 },
                     { 1, true, null, 1, true, "Simeon", 1, 1, 0, 0 },
                     { 4, false, 2, 1, false, "Rack Balancer Bot", 1, 4, 0, 0 },
