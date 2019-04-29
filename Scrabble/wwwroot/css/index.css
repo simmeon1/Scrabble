@@ -205,7 +205,7 @@
 
 .modal-dialog {
     overflow: auto;
-    /*width: noo;*/
+    width: auto;
 }
 
 .Double_Letter {
