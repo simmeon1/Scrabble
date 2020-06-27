@@ -38,7 +38,7 @@ namespace Scrabble.Helpers
         /// <returns></returns>
         public static Dawg<bool> LoadDawg(GameLanguage language)
         {
-            Stream fs = File.Open(@"C:\Users\Simeon\Desktop\Scrabble\Scrabble\Helpers\" + language.Language + "Dawg.bin", FileMode.Open, FileAccess.Read);
+            Stream fs = File.Open(language.Language + "Dawg.bin", FileMode.Open, FileAccess.Read);
             var dawg = Dawg<bool>.Load(fs);
             return dawg;
         }
