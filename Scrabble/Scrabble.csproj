@@ -17,5 +17,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
